@@ -37,29 +37,3 @@ Class = BaseStructure(
 Class.class_of_reference = Class
 Object.class_of_reference = Class
 Top.class_of_reference = Class
-
-#= Next step: Hand define ComplexNumber =#
-
-#= TODO:
-    - Function to compute class_precedence_list
-    - Way to get slots (slots = direct_slots + superclasses.slots)
-        - Verify conflicts
-    - Slot access (get_property)
-    - class_of
-    - Class Options
-        - Define Metaclass
-        - set reader
-        - set writer
-        - set init_form
-    - print object (needs generic function and methods) 
-    - auto generate getters and setters
-    - Multiple inheritance
-    - Built in classes
-    - Introspection
-        - class_name
-        - class_direct_slots
-        - class_slots
-        - class_direct_superclasses
-        - class_cpl (class_precedence_list)
-    - new(...) 
-    - Multiple metaclass inheritance =#
