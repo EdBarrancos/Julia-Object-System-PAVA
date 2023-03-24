@@ -12,4 +12,4 @@ This project was made for the course "Advanced Programming" by:
 
 - Eduardo Barrancos
 - Juliana Yang
-- Xin Zheng
+- Liliana Zheng
