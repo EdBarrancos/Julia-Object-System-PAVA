@@ -1,18 +1,19 @@
+using Printf
+
 mutable struct BaseStructure
     class_of_reference::Any #= Supposed to be another BaseStructure =#
     slots::Dict{Symbol, Any}
 end
 
-
 Top = BaseStructure(
-        nothing,
-        Dict(
-            :name=>:Top,
-            :direct_superclasses=>[], 
-            :direct_slots=>[],
-            :class_precedence_list=>[],
-            :slots=>[],
-        ))
+    nothing,
+    Dict(
+        :name=>:Top,
+        :direct_superclasses=>[], 
+        :direct_slots=>[],
+        :class_precedence_list=>[],
+        :slots=>[],
+    ))
 
 Object = BaseStructure(
     nothing,
@@ -37,3 +38,29 @@ Class = BaseStructure(
 Class.class_of_reference = Class
 Object.class_of_reference = Class
 Top.class_of_reference = Class
+
+#= Generic Functions and Methods =#
+
+GenericFunction = BaseStructure(
+    Class,
+    Dict(
+        :name=>:GenericFunction,
+        :direct_superclasses=>[], 
+        :direct_slots=>[:lambda_list, :methods],
+        :class_precedence_list=>[],
+        :slots=>[:lambda_list, :methods]
+    )
+)
+
+MultiMethod = BaseStructure(
+    Class,
+    Dict(
+        :name=>:MultiMethod,
+        :direct_superclasses=>[], 
+        :direct_slots=>[:specializers, :procedure, :generic_function],
+        :class_precedence_list=>[],
+        :slots=>[:specializers, :procedure, :generic_function]
+    )
+)
+
+class_of(class) = getfield(class, :class_of_reference)
