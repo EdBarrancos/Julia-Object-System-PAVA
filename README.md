@@ -13,8 +13,39 @@ This project was made for the course "Advanced Programming" by:
 - Eduardo Barrancos
 - Juliana Yang
 - Liliana Zheng
+- Miguel Faria
 
 ## Development
+
+### Doubts
+
+- What should be the result of `class_of(class_of(draw))`?
+- Check if `class_of` is correctly implemented
+
+### Current State
+
+- [x] 2.1
+- [x] 2.2
+- [ ] 2.3 - Juliana
+- [ ] 2.4 - Edu
+- [ ] 2.5 - Miguel
+- [ ] 2.6 - Liliana
+- [ ] 2.7
+- [ ] 2.8
+- [ ] 2.9
+- [ ] 2.10
+- [ ] 2.11
+- [ ] 2.12
+- [ ] 2.13
+- [ ] 2.14
+- [ ] 2.15
+- [ ] 2.16
+- [ ] 2.16.1
+- [ ] 2.16.2
+- [ ] 2.16.3
+- [ ] 2.16.4
+- [ ] 2.17
+- [ ] 2.18
 
 ### Edu - Notes
 
@@ -27,28 +58,3 @@ It has two fields. One for a reference to another `BaseStructure` which represen
 Then I defined, Top, Object and Class (Base Metaclass) and created the circular relations between those.
 
 In the next step I will try to create, by hand (without a macro), the ComplexNumber class
-
-Possible TODOs:
-
-- [ ] Function to compute class_precedence_list
-- [ ] Way to get slots (slots = direct_slots + superclasses.slots)
-  - [ ] Verify conflicts
-- [ ] Slot access (get_property)
-- [ ] class_of
-- [ ] Class Options
-  - [ ] Define Metaclass
-  - [ ] set reader
-  - [ ] set writer
-  - [ ] set init_form
-- [ ] print object (needs generic function and methods)
-- [ ] auto generate getters and setters
-- [ ] Multiple inheritance
-- [ ] Built in classes
-- [ ] Introspection
-  - [ ] class_name
-  - [ ] class_direct_slots
-  - [ ] class_slots
-  - [ ] class_direct_superclasses
-  - [ ] class_cpl (class_precedence_list)
-- [ ] new(...)
-- [ ] Multiple metaclass inheritance
