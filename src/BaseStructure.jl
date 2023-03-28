@@ -35,9 +35,9 @@ Class = BaseStructure(
         :slots=>[:name, :direct_superclasses, :class_precedence_list, :slots, :direct_subclasses, :direct_methods]
     ))
 
-Class.class_of_reference = Class
-Object.class_of_reference = Class
-Top.class_of_reference = Class
+setfield!(Class, :class_of_reference, Class)
+setfield!(Object, :class_of_reference, Class)
+setfield!(Top, :class_of_reference, Class)
 
 #= Generic Functions and Methods =#
 
