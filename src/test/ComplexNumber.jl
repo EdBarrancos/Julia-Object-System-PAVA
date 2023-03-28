@@ -11,6 +11,8 @@ ComplexNumber = BaseStructure(
     )
 )
 
+pushfirst!(getfield(ComplexNumber, :slots)[:class_precedence_list], ComplexNumber)
+
 c1 = BaseStructure(
     ComplexNumber,
     Dict(

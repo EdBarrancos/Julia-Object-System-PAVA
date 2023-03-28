@@ -44,7 +44,7 @@ end
 function is_method_applicable(method::BaseStructure, x) 
     for i in range(1, length(x) - 1)
         if !any(
-                (elem) -> elem == getfield(method, :slots)[:specializers][i], 
+                ==(getfield(method, :slots)[:specializers][i]), 
                 getfield(getfield(x[i], :class_of_reference),:slots)[:class_precedence_list]
             )
 
@@ -56,6 +56,26 @@ function is_method_applicable(method::BaseStructure, x)
 end
 
 function is_method_more_specific(method1::BaseStructure, method2::BaseStructure)
+    for i in range(len(getfield(method1, :slots)[:specializers]))
+        index_spec1 = findfirst(
+            ==(getfield(method1, :slots)[:specializers][i]),
+            getfield(getfield(method2, :slots)[:specializers], :class_precedence_list))
+
+        index_spec2 = findfirst(
+            ==(getfield(method2, :slots)[:specializers][i]),
+            getfield(getfield(method1, :slots)[:specializers], :class_precedence_list))
+        
+        if isnothing(index_spec2)
+            return true
+        elseif isnothing(index_spec1)
+            return false
+        elseif index_spec1 != index_spec2
+            return index_spec1 <= index_spec2 
+        end
+    end
+
+    #= Their the same =#
+    return true
 end
 
 function compute_effective_method(f::BaseStructure, x)
@@ -70,7 +90,7 @@ function compute_effective_method(f::BaseStructure, x)
         return missing
     end
 
-    return applicable_methods
+    return sort(applicable_methods, lt=is_method_more_specific)
 end
 
 function create_method(
@@ -78,6 +98,7 @@ function create_method(
     new_method::BaseStructure)
 
     #= TODO: Check if has some signature =#
+    #= TODO: Check if method was already defined and if it is replace =#
 
     push!(getfield(parent_generic_function, :slots)[:methods], new_method)
 end

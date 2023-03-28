@@ -26,6 +26,8 @@ This project was made for the course "Advanced Programming" by:
   - We do not need to worry about it too much. But, currently, we are throwing a "Not a function" error, which is fine
 - [x] Do Generic Functions and MultiMethods have super classes? Top?
   - No need. At best Object
+- [x] How to deal with methods with the same signature
+  - Redefine them
 
 ### Current State
 
@@ -51,6 +53,10 @@ This project was made for the course "Advanced Programming" by:
 - [ ] 2.16.4
 - [ ] 2.17
 - [ ] 2.18
+
+#### Extra TODOs
+
+- [ ] Not allow methods with th esame signature
 
 ### Edu - Notes
 
