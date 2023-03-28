@@ -52,7 +52,7 @@ function is_method_applicable(method::BaseStructure, x)
     for i in range(1, length(x) - 1)
         if !any(
                 ==(getfield(method, :slots)[:specializers][i]), 
-                getfield(getfield(x[i], :class_of_reference),:slots)[:class_precedence_list]
+                getfield(class_of(x[i]),:slots)[:class_precedence_list]
             )
 
             return false
@@ -86,7 +86,7 @@ function is_method_more_specific(method1::BaseStructure, method2::BaseStructure)
 end
 
 function compute_effective_method(f::BaseStructure, x)
-    if (getfield(f, :class_of_reference) != GenericFunction)
+    if class_of(f) != GenericFunction
         error("Not a Function")
     end
 
@@ -106,7 +106,7 @@ function create_method(
     new_method::BaseStructure)
 
     if !(GenericFunction in getfield(
-        getfield(parent_generic_function, :class_of_reference), 
+        class_of(parent_generic_function), 
         :slots)[:class_precedence_list])
 
         #= TODO: call an appropriate generic function =#
@@ -114,7 +114,7 @@ function create_method(
     end
 
     if !(MultiMethod in getfield(
-        getfield(new_method, :class_of_reference), 
+        class_of(new_method), 
         :slots)[:class_precedence_list])
 
         #= TODO: call an appropriate generic function =#
