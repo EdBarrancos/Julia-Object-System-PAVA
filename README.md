@@ -19,10 +19,13 @@ This project was made for the course "Advanced Programming" by:
 
 ### Doubts
 
-- What should be the result of `class_of(class_of(draw))`?
-- Check if `class_of` is correctly implemented
-- What should appear if someone tries to call an instance as if it was a function?
-- Do Generic Functions and MultiMethods have super classes? Top?
+- [x] What should be the result of `class_of(class_of(draw))`?
+  - Class
+- [ ] Check if `class_of` is correctly implemented
+- [x] What should appear if someone tries to call an instance as if it was a function?
+  - We do not need to worry about it too much. But, currently, we are throwing a "Not a function" error, which is fine
+- [x] Do Generic Functions and MultiMethods have super classes? Top?
+  - No need. At best Object
 
 ### Current State
 
