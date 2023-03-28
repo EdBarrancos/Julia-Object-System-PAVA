@@ -5,23 +5,27 @@ GenericFunction = BaseStructure(
     Class,
     Dict(
         :name=>:GenericFunction,
-        :direct_superclasses=>[], 
+        :direct_superclasses=>[Object], 
         :direct_slots=>[:name, :lambda_list, :methods],
-        :class_precedence_list=>[],
+        :class_precedence_list=>[Object, Top],
         :slots=>[:name, :lambda_list, :methods]
     )
 )
+
+pushfirst!(getfield(GenericFunction, :slots)[:class_precedence_list], GenericFunction)
 
 MultiMethod = BaseStructure(
     Class,
     Dict(
         :name=>:MultiMethod,
-        :direct_superclasses=>[], 
+        :direct_superclasses=>[Object], 
         :direct_slots=>[:specializers, :procedure, :generic_function],
-        :class_precedence_list=>[],
+        :class_precedence_list=>[Object, Top],
         :slots=>[:specializers, :procedure, :generic_function]
     )
 )
+
+pushfirst!(getfield(MultiMethod, :slots)[:class_precedence_list], MultiMethod)
 
 function (f::BaseStructure)(x...)
     if (getfield(f,:class_of_reference) != GenericFunction)
@@ -86,7 +90,9 @@ function compute_effective_method(f::BaseStructure, x)
         error("Not a Function")
     end
 
-    applicable_methods = filter(method -> is_method_applicable(method, x), getfield(f, :slots)[:methods])
+    applicable_methods = filter(
+        method -> is_method_applicable(method, x), 
+        getfield(f, :slots)[:methods])
 
     if length(applicable_methods) == 0
         return missing
@@ -99,8 +105,40 @@ function create_method(
     parent_generic_function::BaseStructure, 
     new_method::BaseStructure)
 
-    #= TODO: Check if has some signature =#
-    #= TODO: Check if method was already defined and if it is replace =#
+    if !(GenericFunction in getfield(
+        getfield(parent_generic_function, :class_of_reference), 
+        :slots)[:class_precedence_list])
 
+        #= TODO: call an appropriate generic function =#
+        error("Given 'generic function' is not a generic function")
+    end
+
+    if !(MultiMethod in getfield(
+        getfield(new_method, :class_of_reference), 
+        :slots)[:class_precedence_list])
+
+        #= TODO: call an appropriate generic function =#
+        error("Given 'method' is not a method")
+    end
+
+    if !isequal(
+        length(getfield(new_method, :slots)[:specializers]),
+        length(getfield(parent_generic_function, :slots)[:lambda_list]))
+
+        #= TODO: call an appropriate generic function =#
+        error("Method does not correspond to generic function's signature")
+    end
+
+    #= Supposedly there is never more than one repeated, but just in case =#
+    overridden_methods = findall(
+        (elem) -> isequal(
+            getfield(new_method, :slots)[:specializers],
+            getfield(elem, :slots)[:specializers]), 
+        getfield(parent_generic_function, :slots)[:methods])
+    
+    filter!(
+        (method) -> method in overridden_methods,
+        getfield(parent_generic_function, :slots)[:methods])
+        
     push!(getfield(parent_generic_function, :slots)[:methods], new_method)
 end

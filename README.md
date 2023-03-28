@@ -89,11 +89,9 @@ I can handle these following issues next, weither how, I'll leave a note of the 
 - [ ] At the end of the generic function call, we need to call the first most specific method (first on the `effective_methods` list). For this, we may need to inject an extra argument to a method when we define it (the rest of the list). **Addressed in: 2.9 Generic Function Calls**
 - [ ] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
 - [ ] Similar to the first one, but when a non-function instance is called
-
-TODOs I still need to address before closing the branch:
-
-- [ ] When creating a method, check if its signature matches the generic function's signature
-- [ ] If the generic function already has a method with the same signature as the one being defined. Override the old one
+- [ ] Similar, but when defining a method that does not correspond to the generic function's signature
+- [ ] Similar, but when trying to add to a generic function a non-method
+- [ ] Similar, but when trying to add something to NOT a generic function
 
 ##### Issues
 
