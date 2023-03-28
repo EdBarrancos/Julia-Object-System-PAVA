@@ -21,6 +21,8 @@ This project was made for the course "Advanced Programming" by:
 
 - What should be the result of `class_of(class_of(draw))`?
 - Check if `class_of` is correctly implemented
+- What should appear if someone tries to call an instance as if it was a function?
+- Do Generic Functions and MultiMethods have super classes? Top?
 
 ### Current State
 
@@ -58,3 +60,17 @@ It has two fields. One for a reference to another `BaseStructure` which represen
 Then I defined, Top, Object and Class (Base Metaclass) and created the circular relations between those.
 
 In the next step I will try to create, by hand (without a macro), the ComplexNumber class
+
+#### Calling Generic Functions
+
+I did the base structure for us to be able to use BaseStructures as function, for us, in this case, GenericFunctions
+
+It checks if the BaseStructure is of the class `GenericFunction`. Then it also verifies the number of arguments. Finally it computes the effective_method.
+
+First it filters out non-applicable methods (by going through the arguments and their class precedence list and checking if it matches the method's specializer)
+
+Then we arrange the remaining methods in more specific order **To be implemented**
+
+##### Issues
+
+As of right now, the method `is_method_applicable` will not work with native types. Im not sure if this will be fixed when we implement the `Built-in-types`, if not, this functions will need some modifications
