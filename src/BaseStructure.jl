@@ -13,7 +13,10 @@ Top = BaseStructure(
         :direct_slots=>[],
         :class_precedence_list=>[],
         :slots=>[],
-    ))
+    )
+)
+
+pushfirst!(getfield(Top, :slots)[:class_precedence_list], Top)
 
 Object = BaseStructure(
     nothing,
@@ -23,7 +26,10 @@ Object = BaseStructure(
         :direct_slots=>[],
         :class_precedence_list=>[Top],
         :slots=>[]
-    ))
+    )
+)
+
+pushfirst!(getfield(Object, :slots)[:class_precedence_list], Object)
 
 Class = BaseStructure(
     nothing,
@@ -33,10 +39,13 @@ Class = BaseStructure(
         :direct_slots=>[:name, :direct_superclasses, :class_precedence_list, :slots, :direct_subclasses, :direct_methods],
         :class_precedence_list=>[Object, Top],
         :slots=>[:name, :direct_superclasses, :class_precedence_list, :slots, :direct_subclasses, :direct_methods]
-    ))
+    )
+)
 
-Class.class_of_reference = Class
-Object.class_of_reference = Class
-Top.class_of_reference = Class
+pushfirst!(getfield(Class, :slots)[:class_precedence_list], Class)
+
+setfield!(Class, :class_of_reference, Class)
+setfield!(Object, :class_of_reference, Class)
+setfield!(Top, :class_of_reference, Class)
 
 class_of(class) = getfield(class, :class_of_reference)
