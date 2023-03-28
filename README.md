@@ -21,7 +21,7 @@ This project was made for the course "Advanced Programming" by:
 
 - [x] What should be the result of `class_of(class_of(draw))`?
   - Class
-- [ ] Check if `class_of` is correctly implemented
+- [x] Check if `class_of` is correctly implemented
 - [x] What should appear if someone tries to call an instance as if it was a function?
   - We do not need to worry about it too much. But, currently, we are throwing a "Not a function" error, which is fine
 - [x] Do Generic Functions and MultiMethods have super classes? Top?
@@ -78,7 +78,22 @@ It checks if the BaseStructure is of the class `GenericFunction`. Then it also v
 
 First it filters out non-applicable methods (by going through the arguments and their class precedence list and checking if it matches the method's specializer)
 
-Then we arrange the remaining methods in more specific order **To be implemented**
+Then we arrange the remaining methods in more specific order
+
+#### 2.4 - Generic Functions and Methods
+
+There are some stuff I will leave to be done, as there are further along that address those issues, plus I want you to have access to what I've been doing quickly, so that the branch doesn't diverge too much.
+
+I can handle these following issues next, weither how, I'll leave a note of the issues to be resolved here:
+
+- [ ] At the end of the generic function call, we need to call the first most specific method (first on the `effective_methods` list). For this, we may need to inject an extra argument to a method when we define it (the rest of the list). **Addressed in: 2.9 Generic Function Calls**
+- [ ] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
+- [ ] Similar to the first one, but when a non-function instance is called
+
+TODOs I still need to address before closing the branch:
+
+- [ ] When creating a method, check if its signature matches the generic function's signature
+- [ ] If the generic function already has a method with the same signature as the one being defined. Override the old one
 
 ##### Issues
 

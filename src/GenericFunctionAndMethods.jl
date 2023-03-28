@@ -25,19 +25,22 @@ MultiMethod = BaseStructure(
 
 function (f::BaseStructure)(x...)
     if (getfield(f,:class_of_reference) != GenericFunction)
+        #= TODO: call an appropriate generic function =#
         error("Not a Function")
     end
 
     if length(x) != length(getfield(f, :slots)[:lambda_list])
+        #= TODO: call generic_function non_applicable_method =#
         error("No applicable method for function ", String(getfield(f,:slots)[:name]), " with arguments ",  string(x))
     end
 
     effective_methods = compute_effective_method(f, x)
     if ismissing(effective_methods)
+        #= TODO: call generic_function non_applicable_method =#
         error("No applicable method for function ", String(getfield(f,:slots)[:name]), " with arguments ",  string(x))
     end
 
-    #= TODO: Call first method? =#
+    #= TODO: Call first method, but keeping track of the list, as the method may call call_next_method =#
     return effective_methods
 end
 
@@ -85,7 +88,6 @@ function compute_effective_method(f::BaseStructure, x)
 
     applicable_methods = filter(method -> is_method_applicable(method, x), getfield(f, :slots)[:methods])
 
-    #= TODO: Compute the effective methods =#
     if length(applicable_methods) == 0
         return missing
     end
