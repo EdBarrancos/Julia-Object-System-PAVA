@@ -34,15 +34,15 @@ This project was made for the course "Advanced Programming" by:
 - [x] 2.1 Classes
 - [x] 2.2 Instances
 - [ ] 2.3 Slot Access - **Juliana**
-- [ ] 2.4 Generic Functions and methods - **Edu**
+- [x] 2.4 Generic Functions and methods
 - [ ] 2.5 Pre-defined Generic Functions and Methods - **Miguel**
 - [ ] 2.6 MetaObjects - **Liliana**
 - [ ] 2.7 Class Options
 - [ ] 2.8 Readers and Writers
-- [ ] 2.9 Generic Function Calls
+- [ ] 2.9 Generic Function Calls - **Edu**
 - [ ] 2.10 Multiple Dispatch
 - [ ] 2.11 Multiple Inheritance
-- [ ] 2.12 Class Hierarchy
+- [x] 2.12 Class Hierarchy
 - [ ] 2.13 Class Precedence List
 - [ ] 2.14 Built-In Classes
 - [ ] 2.15 Introspection
