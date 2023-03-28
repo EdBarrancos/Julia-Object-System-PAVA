@@ -31,28 +31,32 @@ This project was made for the course "Advanced Programming" by:
 
 ### Current State
 
-- [x] 2.1
-- [x] 2.2
-- [ ] 2.3 - Juliana
-- [ ] 2.4 - Edu
-- [ ] 2.5 - Miguel
-- [ ] 2.6 - Liliana
-- [ ] 2.7
-- [ ] 2.8
-- [ ] 2.9
-- [ ] 2.10
-- [ ] 2.11
-- [ ] 2.12
-- [ ] 2.13
-- [ ] 2.14
-- [ ] 2.15
-- [ ] 2.16
-- [ ] 2.16.1
-- [ ] 2.16.2
-- [ ] 2.16.3
-- [ ] 2.16.4
-- [ ] 2.17
-- [ ] 2.18
+- [x] 2.1 Classes
+- [x] 2.2 Instances
+- [ ] 2.3 Slot Access - **Juliana**
+- [ ] 2.4 Generic Functions and methods - **Edu**
+- [ ] 2.5 Pre-defined Generic Functions and Methods - **Miguel**
+- [ ] 2.6 MetaObjects - **Liliana**
+- [ ] 2.7 Class Options
+- [ ] 2.8 Readers and Writers
+- [ ] 2.9 Generic Function Calls
+- [ ] 2.10 Multiple Dispatch
+- [ ] 2.11 Multiple Inheritance
+- [ ] 2.12 Class Hierarchy
+- [ ] 2.13 Class Precedence List
+- [ ] 2.14 Built-In Classes
+- [ ] 2.15 Introspection
+- [ ] 2.16 meta-Object Protocols
+- [ ] 2.16.1 Class Instantiation Protocol
+- [ ] 2.16.2 The Compute Slots Protocol
+- [ ] 2.16.3 Slot Access Protocol
+- [ ] 2.16.4 Class Precedence List protocol
+- [ ] 2.17 Multiple Meta-Class Inheritance
+- [ ] 2.18 *Extensions*
+- [ ] 2.18.1 Meta-Objects for slot definitions
+- [ ] 2.18.2 CLOS-like method combination for generic functions
+- [ ] 2.18.3 CLOS or Dylan's strategy for computing the class precedence list
+- [ ] 2.18.4 Additional Metaobject protocols
 
 #### Extra TODOs
 
