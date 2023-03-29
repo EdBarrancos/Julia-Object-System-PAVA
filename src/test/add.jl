@@ -23,6 +23,7 @@ create_method(
     BaseStructure(
         MultiMethod,
         Dict(
+            :lambda_list=>[:a, :b],
             :specializers=>[
                 ComplexNumber, 
                 ComplexNumber], 

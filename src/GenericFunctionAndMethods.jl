@@ -19,7 +19,7 @@ MultiMethod = BaseStructure(
     Dict(
         :name=>:MultiMethod,
         :direct_superclasses=>[Object], 
-        :direct_slots=>[:specializers, :procedure, :generic_function],
+        :direct_slots=>[:specializers, :procedure, :generic_function, :lambda_list],
         :class_precedence_list=>[Object, Top],
         :slots=>[:specializers, :procedure, :generic_function]
     )
@@ -122,7 +122,7 @@ function create_method(
     end
 
     if !isequal(
-        length(getfield(new_method, :slots)[:specializers]),
+        length(getfield(new_method, :slots)[:lambda_list]),
         length(getfield(parent_generic_function, :slots)[:lambda_list]))
 
         #= TODO: call an appropriate generic function =#
