@@ -21,11 +21,16 @@ c1 = BaseStructure(
     )
 )
 
-c1.slots[:real]
+#= #################### 2.3 Slot Access #################### =#
+#c1.slots[:real]
+getproperty(c1, :real)
+c1.real
+setproperty!(c1, :imag, -1)
+c1.imag += 3
 
 class_of(c1) == ComplexNumber
 class_of(class_of(c1)) == Class
-
+#= #################### ENFD 2.3 #################### =#
 
 #= print ComplexNumber:
     - <Metaclass class>  =#

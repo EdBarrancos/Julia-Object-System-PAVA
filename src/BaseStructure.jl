@@ -49,3 +49,17 @@ setfield!(Object, :class_of_reference, Class)
 setfield!(Top, :class_of_reference, Class)
 
 class_of(class) = getfield(class, :class_of_reference)
+
+
+#= #################### 2.3 Slot Access #################### =#
+function Base.getproperty(obj::BaseStructure, sym::Symbol)
+    getfield(obj, :slots)[sym]
+end
+
+function Base.setproperty!(obj::BaseStructure, name::Symbol, x)
+    slots = getfield(obj, :slots)
+    slots[name] = x
+    setfield!(obj, :slots, slots)
+end
+
+#= #################### 2.3 Slot Access #################### =#
