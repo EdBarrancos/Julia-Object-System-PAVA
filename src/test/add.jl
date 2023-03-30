@@ -27,7 +27,16 @@ create_method(
             :specializers=>[
                 ComplexNumber, 
                 ComplexNumber], 
-            :procedure=>[], 
+            :procedure=> 
+                quote
+                    BaseStructure(
+                        ComplexNumber,
+                        Dict(
+                            :real=>getfield(a, :slots)[:real] + getfield(b, :slots)[:real],
+                            :imag=>getfield(a, :slots)[:imag] + getfield(b, :slots)[:imag]
+                        )
+                    )
+                end, 
             :generic_function=>add
         )
     )
@@ -42,6 +51,7 @@ o1 = BaseStructure(
 #= Goal: ERROR: No applicable method for function add with arguments (1, 2) =#
 add(o1, o1)
 
-#= Returns the effective_methods for now =#
-add(c1, c1)
-
+#= Working =#
+c = add(c1, c1)
+println()
+getfield(class_of(c), :slots)[:name]

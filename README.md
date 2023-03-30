@@ -28,6 +28,7 @@ This project was made for the course "Advanced Programming" by:
   - No need. At best Object
 - [x] How to deal with methods with the same signature
   - Redefine them
+- [ ] Result of calling `call_next_method()` when there is no next method to call?
 
 ### Current State
 
@@ -57,10 +58,6 @@ This project was made for the course "Advanced Programming" by:
 - [ ] 2.18.2 CLOS-like method combination for generic functions
 - [ ] 2.18.3 CLOS or Dylan's strategy for computing the class precedence list
 - [ ] 2.18.4 Additional Metaobject protocols
-
-#### Extra TODOs
-
-- [ ] Not allow methods with th esame signature
 
 ### Edu - Notes
 
@@ -99,4 +96,20 @@ I can handle these following issues next, weither how, I'll leave a note of the 
 
 ##### Issues
 
-As of right now, the method `is_method_applicable` will not work with native types. Im not sure if this will be fixed when we implement the `Built-in-types`, if not, this functions will need some modifications
+As of right now, the method `is_method_applicable` will not work with native types. Im not sure if this will be fixed when we implement the `Built-in-types`, if not, this functions will need some modifications.
+
+#### 2.9 - Generic Function Calls
+
+Quick sum up. To call a generic function, we compute the effective method list (Done in the 2.4). Then we need to apply the first method. To apply a method, we need to first bind the arguments to variable names, next we need to bind the `call_next_method` function and finally run the methods body.
+
+##### Concerns
+
+The binding of arguments currently is super ugly. But I'm not sure how to improve it.
+
+Not sure if the binding of `call_next_method` is correct.
+
+##### Extra TODOs
+
+- [ ] Make a function to verify if the argument is of the correct type or throw error
+- [ ] Make access methods
+- [ ] Test `call_next_method`

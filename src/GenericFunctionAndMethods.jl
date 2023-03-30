@@ -28,9 +28,12 @@ MultiMethod = BaseStructure(
 pushfirst!(getfield(MultiMethod, :slots)[:class_precedence_list], MultiMethod)
 
 function (f::BaseStructure)(x...)
-    if (getfield(f,:class_of_reference) != GenericFunction)
+    if !(GenericFunction in getfield(
+        class_of(f), 
+        :slots)[:class_precedence_list])
+
         #= TODO: call an appropriate generic function =#
-        error("Not a Function")
+        error("Given 'generic function' is not a generic function")
     end
 
     if length(x) != length(getfield(f, :slots)[:lambda_list])
@@ -38,14 +41,64 @@ function (f::BaseStructure)(x...)
         error("No applicable method for function ", String(getfield(f,:slots)[:name]), " with arguments ",  string(x))
     end
 
-    effective_methods = compute_effective_method(f, x)
-    if ismissing(effective_methods)
+    apply_methods(f, compute_effective_method(f, x), x)
+end
+
+function apply_methods(generic_function::BaseStructure, effective_method_list::Vector, args::Tuple)
+    if !(GenericFunction in getfield(
+        class_of(generic_function), 
+        :slots)[:class_precedence_list])
+
+        #= TODO: call an appropriate generic function =#
+        error("Given 'generic function' is not a generic function")
+    end
+    
+    if isempty(effective_method_list)
         #= TODO: call generic_function non_applicable_method =#
-        error("No applicable method for function ", String(getfield(f,:slots)[:name]), " with arguments ",  string(x))
+        error(
+            "No applicable method for function ", 
+            String(getfield(generic_function,:slots)[:name]), 
+            " with arguments ",  string(args))
     end
 
-    #= TODO: Call first method, but keeping track of the list, as the method may call call_next_method =#
-    return effective_methods
+    apply_method(popfirst!(effective_method_list), args, effective_method_list, generic_function)
+end
+
+function apply_method(
+    method::BaseStructure, 
+    args::Tuple, 
+    next_methods::Vector, 
+    generic_function::BaseStructure)
+
+    if !(GenericFunction in getfield(
+        class_of(generic_function), 
+        :slots)[:class_precedence_list])
+
+        #= TODO: call an appropriate generic function =#
+        error("Given 'generic function' is not a generic function")
+    end
+
+    if !(MultiMethod in getfield(
+        class_of(method), 
+        :slots)[:class_precedence_list])
+
+        #= TODO: call an appropriate generic function =#
+        error("Given 'method' is not a method")
+    end
+
+    let
+        call_next_method = () -> apply_methods(generic_function, next_methods, args)
+
+        for i in range(1, length(getfield(method, :slots)[:lambda_list]), step=1)
+            eval(
+                Expr(
+                    :(=), 
+                    getfield(method, :slots)[:lambda_list][i], 
+                    args[i]))
+        end
+
+        eval(getfield(method, :slots)[:procedure])
+    end
 end
 
 function is_method_applicable(method::BaseStructure, x) 
@@ -86,17 +139,17 @@ function is_method_more_specific(method1::BaseStructure, method2::BaseStructure)
 end
 
 function compute_effective_method(f::BaseStructure, x)
-    if class_of(f) != GenericFunction
-        error("Not a Function")
+    if !(GenericFunction in getfield(
+        class_of(f), 
+        :slots)[:class_precedence_list])
+
+        #= TODO: call an appropriate generic function =#
+        error("Given 'generic function' is not a generic function")
     end
 
     applicable_methods = filter(
         method -> is_method_applicable(method, x), 
         getfield(f, :slots)[:methods])
-
-    if length(applicable_methods) == 0
-        return missing
-    end
 
     return sort(applicable_methods, lt=is_method_more_specific)
 end
