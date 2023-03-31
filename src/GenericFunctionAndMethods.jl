@@ -92,7 +92,7 @@ function apply_method(
     let 
         call_next_method = () -> apply_methods(generic_function, methods, target_method_index + 1, args)
 
-        getfield(method, :slots)[:procedure](call_next_method, args...)
+        return getfield(method, :slots)[:procedure](call_next_method, args...)
     end
 end
 
