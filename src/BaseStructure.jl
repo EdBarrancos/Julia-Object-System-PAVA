@@ -50,6 +50,11 @@ setfield!(Top, :class_of_reference, Class)
 
 class_of(class) = getfield(class, :class_of_reference)
 
+check_class(instance, targetClass) = begin
+    if !(targetClass in class_of(instance).class_precedence_list)
+        error("Given '", targetClass.name,"' is not a ", targetClass.name)
+    end
+end
 
 #= #################### 2.3 Slot Access #################### =#
 function Base.getproperty(obj::BaseStructure, sym::Symbol)
