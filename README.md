@@ -12,7 +12,7 @@ This project was made for the course "Advanced Programming" by:
 
 - Eduardo Barrancos
 - Juliana Yang
-- Liliana Zheng
+- Xin Zheng
 - Miguel Faria
 
 ## Development
