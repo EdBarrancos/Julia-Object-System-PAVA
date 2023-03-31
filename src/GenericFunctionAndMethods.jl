@@ -28,7 +28,7 @@ MultiMethod = BaseStructure(
 pushfirst!(getfield(MultiMethod, :slots)[:class_precedence_list], MultiMethod)
 
 function (f::BaseStructure)(x...)
-    check_class(f, GenericFunction)
+    check_for_polymorph(f, GenericFunction)
 
     if length(x) != length(f.lambda_list)
         #= TODO: call generic_function non_applicable_method =#
@@ -39,7 +39,7 @@ function (f::BaseStructure)(x...)
 end
 
 function apply_methods(generic_function::BaseStructure, effective_method_list::Vector, target_method_index::Integer,args::Tuple)
-    check_class(generic_function, GenericFunction)
+    check_for_polymorph(generic_function, GenericFunction)
 
     if isempty(effective_method_list) || target_method_index > length(effective_method_list)
         #= TODO: call generic_function non_applicable_method =#
@@ -60,8 +60,8 @@ function apply_method(
     methods::Vector, 
     generic_function::BaseStructure)
 
-    check_class(generic_function, GenericFunction)
-    check_class(methods[target_method_index], MultiMethod)
+    check_for_polymorph(generic_function, GenericFunction)
+    check_for_polymorph(methods[target_method_index], MultiMethod)
 
     method = methods[target_method_index]
 
@@ -109,7 +109,7 @@ function is_method_more_specific(method1::BaseStructure, method2::BaseStructure)
 end
 
 function compute_effective_method(f::BaseStructure, x)
-    check_class(f, GenericFunction)
+    check_for_polymorph(f, GenericFunction)
 
     applicable_methods = filter(
         method -> is_method_applicable(method, x), 
@@ -122,8 +122,8 @@ function create_method(
     parent_generic_function::BaseStructure, 
     new_method::BaseStructure)
 
-    check_class(parent_generic_function, GenericFunction)
-    check_class(new_method, MultiMethod)
+    check_for_polymorph(parent_generic_function, GenericFunction)
+    check_for_polymorph(new_method, MultiMethod)
 
     if !isequal(
         length(parent_generic_function.lambda_list),
