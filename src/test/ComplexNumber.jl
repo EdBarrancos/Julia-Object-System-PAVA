@@ -34,8 +34,8 @@ class_of(class_of(c1)) == Class
 
 #= print ComplexNumber:
     - <Metaclass class>  =#
-@printf("<%s %s>",String(getfield(ComplexNumber, :class_of_reference).name),String(ComplexNumber.name))
+@printf("<%s %s>",String(class_of(ComplexNumber).name),String(ComplexNumber.name))
 
 #= print c1:
     - <Class id> =#
-@printf("<%s %s>",String(getfield(c1, :class_of_reference).name),"ID-PLACEHOLDER")
+@printf("<%s %s>",String(class_of(c1).name),"ID-PLACEHOLDER")

@@ -34,8 +34,8 @@ create_method(
                     BaseStructure(
                         ComplexNumber,
                         Dict(
-                            :real=>getfield(a, :slots)[:real] + getfield(b, :slots)[:real],
-                            :imag=>getfield(a, :slots)[:imag] + getfield(b, :slots)[:imag]
+                            :real=>a.real + b.real,
+                            :imag=>a.imag + b.imag
                         )
                     )
                 end,
