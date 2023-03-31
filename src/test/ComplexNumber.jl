@@ -38,4 +38,8 @@ class_of(class_of(c1)) == Class
 
 #= print c1:
     - <Class id> =#
-@printf("<%s %s>",String(class_of(c1).name),"ID-PLACEHOLDER")
+@printf("<%s %s>",String(getfield(c1, :class_of_reference).name),"ID-PLACEHOLDER")
+
+Class.slots
+ComplexNumber.name
+ComplexNumber.direct_superclasses == [Object]
