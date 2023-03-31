@@ -75,6 +75,7 @@ function Base.setproperty!(obj::BaseStructure, name::Symbol, x)
     slots = getfield(obj, :slots)
     slots[name] = x
     setfield!(obj, :slots, slots)
+    x
 end
 
 #= #################### 2.3 Slot Access #################### =#
