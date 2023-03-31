@@ -64,11 +64,7 @@ end
 
 #= #################### 2.3 Slot Access / 2.6 MetaObjects #################### =#
 function Base.getproperty(obj::BaseStructure, sym::Symbol)
-    if :class_of_reference === Class || :class_of_reference === nothing
-        getfield(obj, :slots)
-    else
-        getfield(obj, :slots)[sym]
-    end
+    getfield(obj, :slots)[sym]
 end
 
 function Base.setproperty!(obj::BaseStructure, name::Symbol, x)
