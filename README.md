@@ -33,6 +33,7 @@ This project was made for the course "Advanced Programming" by:
 
 ### Current State
 
+- [ ] 2.0 Macros (defclass, defgeneric, defmethod)
 - [x] 2.1 Classes
 - [x] 2.2 Instances
 - [x] 2.3 Slot Access - **Juliana**
@@ -41,12 +42,12 @@ This project was made for the course "Advanced Programming" by:
 - [ ] 2.6 MetaObjects - **Liliana**
 - [ ] 2.7 Class Options
 - [ ] 2.8 Readers and Writers
-- [ ] 2.9 Generic Function Calls - **Edu**
+- [x] 2.9 Generic Function Calls
 - [ ] 2.10 Multiple Dispatch
 - [ ] 2.11 Multiple Inheritance
 - [x] 2.12 Class Hierarchy
 - [ ] 2.13 Class Precedence List
-- [ ] 2.14 Built-In Classes
+- [ ] 2.14 Built-In Classes - **Edu**
 - [ ] 2.15 Introspection
 - [ ] 2.16 meta-Object Protocols
 - [ ] 2.16.1 Class Instantiation Protocol
@@ -90,6 +91,7 @@ I can handle these following issues next, weither how, I'll leave a note of the 
 
 - [x] At the end of the generic function call, we need to call the first most specific method (first on the `effective_methods` list). For this, we may need to inject an extra argument to a method when we define it (the rest of the list). **Addressed in: 2.9 Generic Function Calls**
 - [ ] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
+  - Kind of done. But throws an error, because we need built in types first, because it receives a Tuple of Arguments as an argument
 
 ##### Issues
 

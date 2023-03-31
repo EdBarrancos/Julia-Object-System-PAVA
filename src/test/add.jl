@@ -26,6 +26,14 @@ add = new_method(
     end
 )
 
+o1 = BaseStructure(
+    Object,
+    Dict()
+)
+
+#= non_applicable_method =#
+# add(o1, o1) -> Not testable yet, because we need built in classes
+
 add = new_method(
     add,
     :add,
@@ -36,7 +44,7 @@ add = new_method(
     end
 )
 
-@test length(add.methods) = 2
+@test length(add.methods) == 2
 
 add = new_method(
     add,
@@ -49,7 +57,7 @@ add = new_method(
 )
 
 #= Testing override =#
-@test length(add.methods) = 2
+@test length(add.methods) == 2
 
 c = add(c1, c1)
 @test class_of(c) == ComplexNumber

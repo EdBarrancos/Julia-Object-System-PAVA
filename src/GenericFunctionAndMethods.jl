@@ -32,7 +32,7 @@ function (f::BaseStructure)(x...)
 
     if length(x) != length(f.lambda_list)
         #= TODO: call generic_function non_applicable_method =#
-        error("No applicable method for function ", f.name, " with arguments ",  string(x))
+        non_applicable_method(f, x)
     end
 
     apply_methods(f, compute_effective_method(f, x), 1, x)
@@ -43,11 +43,7 @@ function apply_methods(generic_function::BaseStructure, effective_method_list::V
 
     if isempty(effective_method_list) || target_method_index > length(effective_method_list)
         #= TODO: call generic_function non_applicable_method =#
-        error(
-            "No applicable method for function ", 
-            generic_function.name, 
-            " with arguments ",  
-            string(args))
+        non_applicable_method(generic_function, args)
     end
 
     #= Needs improvement in case of multiple calls =#
@@ -144,7 +140,7 @@ function create_method(
     push!(parent_generic_function.methods, new_method)
 end
 
-function new_generic_function(name::Symbol, lambda_list::Vector{Symbol})
+function new_generic_function(name::Symbol, lambda_list::Vector)
     return BaseStructure(
         GenericFunction,
         Dict(
@@ -158,7 +154,7 @@ end
 function new_method(
     generic_function, 
     name::Symbol, 
-    lambda_list::Vector{Symbol}, 
+    lambda_list::Vector, 
     specializers::Vector,
     procedure)
 
@@ -186,3 +182,23 @@ function new_method(
 
     return generic_function
 end
+
+non_applicable_method = new_generic_function(
+    :non_applicable_method,
+    [:generic_function, :args]
+)
+
+non_applicable_method = new_method(
+    non_applicable_method,
+    :non_applicable_method,
+    [:generic_function, :args],
+    [GenericFunction, Top],
+    function (call_next_method, generic_function, args)
+        error(
+            "No applicable method for function ", 
+            generic_function.name, 
+            " with arguments ",  
+            string(args))
+    end
+)
+
