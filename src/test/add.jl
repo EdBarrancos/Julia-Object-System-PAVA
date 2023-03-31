@@ -27,8 +27,10 @@ create_method(
             :specializers=>[
                 ComplexNumber, 
                 ComplexNumber], 
-            :procedure=> 
-                quote
+            :procedure=> function (call_next_method, a, b)
+                    println("COMPLEX ADDING")
+                    call_next_method()
+                    call_next_method()
                     BaseStructure(
                         ComplexNumber,
                         Dict(
@@ -36,11 +38,29 @@ create_method(
                             :imag=>getfield(a, :slots)[:imag] + getfield(b, :slots)[:imag]
                         )
                     )
+                end,
+            :generic_function=>add
+        )
+    )
+)
+
+create_method(
+    add,
+    BaseStructure(
+        MultiMethod,
+        Dict(
+            :lambda_list=>[:a, :b],
+            :specializers=>[
+                Object, 
+                Object], 
+            :procedure=> function (call_next_method, a, b)
+                    println("CALL NEXT METHOD working")
                 end, 
             :generic_function=>add
         )
     )
 )
+
 
 #= For testing =#
 o1 = BaseStructure(
@@ -49,9 +69,6 @@ o1 = BaseStructure(
 )
 
 #= Goal: ERROR: No applicable method for function add with arguments (1, 2) =#
-add(o1, o1)
-
 #= Working =#
+add(o1, o1)
 c = add(c1, c1)
-println()
-getfield(class_of(c), :slots)[:name]

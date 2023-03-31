@@ -28,7 +28,8 @@ This project was made for the course "Advanced Programming" by:
   - No need. At best Object
 - [x] How to deal with methods with the same signature
   - Redefine them
-- [ ] Result of calling `call_next_method()` when there is no next method to call?
+- [x] Result of calling `call_next_method()` when there is no next method to call?
+  - Error
 
 ### Current State
 
