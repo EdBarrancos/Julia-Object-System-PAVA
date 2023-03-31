@@ -88,12 +88,8 @@ There are some stuff I will leave to be done, as there are further along that ad
 
 I can handle these following issues next, weither how, I'll leave a note of the issues to be resolved here:
 
-- [ ] At the end of the generic function call, we need to call the first most specific method (first on the `effective_methods` list). For this, we may need to inject an extra argument to a method when we define it (the rest of the list). **Addressed in: 2.9 Generic Function Calls**
+- [x] At the end of the generic function call, we need to call the first most specific method (first on the `effective_methods` list). For this, we may need to inject an extra argument to a method when we define it (the rest of the list). **Addressed in: 2.9 Generic Function Calls**
 - [ ] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
-- [ ] Similar to the first one, but when a non-function instance is called
-- [ ] Similar, but when defining a method that does not correspond to the generic function's signature
-- [ ] Similar, but when trying to add to a generic function a non-method
-- [ ] Similar, but when trying to add something to NOT a generic function
 
 ##### Issues
 
@@ -111,6 +107,7 @@ Not sure if the binding of `call_next_method` is correct.
 
 ##### Extra TODOs
 
-- [ ] Make a function to verify if the argument is of the correct type or throw error
-- [ ] Make access methods
-- [ ] Test `call_next_method`
+- [x] Make a function to verify if the argument is of the correct type or throw error
+- [x] Make access methods
+- [x] Test `call_next_method`
+- [ ] Make a test module

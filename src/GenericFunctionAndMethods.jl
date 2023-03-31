@@ -19,7 +19,7 @@ MultiMethod = BaseStructure(
     Dict(
         :name=>:MultiMethod,
         :direct_superclasses=>[Object], 
-        :direct_slots=>[:specializers, :procedure, :generic_function, :lambda_list],
+        :direct_slots=>[:specializers, :procedure, :generic_function],
         :class_precedence_list=>[Object, Top],
         :slots=>[:specializers, :procedure, :generic_function]
     )
@@ -28,7 +28,7 @@ MultiMethod = BaseStructure(
 pushfirst!(getfield(MultiMethod, :slots)[:class_precedence_list], MultiMethod)
 
 function (f::BaseStructure)(x...)
-    check_for_polymorph(f, GenericFunction)
+    check_for_polymorph(f, GenericFunction, ArgumentError)
 
     if length(x) != length(f.lambda_list)
         #= TODO: call generic_function non_applicable_method =#
@@ -39,7 +39,7 @@ function (f::BaseStructure)(x...)
 end
 
 function apply_methods(generic_function::BaseStructure, effective_method_list::Vector, target_method_index::Integer,args::Tuple)
-    check_for_polymorph(generic_function, GenericFunction)
+    check_for_polymorph(generic_function, GenericFunction, ArgumentError)
 
     if isempty(effective_method_list) || target_method_index > length(effective_method_list)
         #= TODO: call generic_function non_applicable_method =#
@@ -60,8 +60,8 @@ function apply_method(
     methods::Vector, 
     generic_function::BaseStructure)
 
-    check_for_polymorph(generic_function, GenericFunction)
-    check_for_polymorph(methods[target_method_index], MultiMethod)
+    check_for_polymorph(generic_function, GenericFunction, ArgumentError)
+    check_for_polymorph(methods[target_method_index], MultiMethod, ArgumentError)
 
     method = methods[target_method_index]
 
@@ -109,7 +109,7 @@ function is_method_more_specific(method1::BaseStructure, method2::BaseStructure)
 end
 
 function compute_effective_method(f::BaseStructure, x)
-    check_for_polymorph(f, GenericFunction)
+    check_for_polymorph(f, GenericFunction, ArgumentError)
 
     applicable_methods = filter(
         method -> is_method_applicable(method, x), 
@@ -122,12 +122,12 @@ function create_method(
     parent_generic_function::BaseStructure, 
     new_method::BaseStructure)
 
-    check_for_polymorph(parent_generic_function, GenericFunction)
-    check_for_polymorph(new_method, MultiMethod)
+    check_for_polymorph(parent_generic_function, GenericFunction, ArgumentError)
+    check_for_polymorph(new_method, MultiMethod, ArgumentError)
 
     if !isequal(
         length(parent_generic_function.lambda_list),
-        length(new_method.lambda_list))
+        length(new_method.specializers))
 
         #= TODO: call an appropriate generic function =#
         error("Method does not correspond to generic function's signature")
@@ -142,4 +142,47 @@ function create_method(
         parent_generic_function.methods)
         
     push!(parent_generic_function.methods, new_method)
+end
+
+function new_generic_function(name::Symbol, lambda_list::Vector{Symbol})
+    return BaseStructure(
+        GenericFunction,
+        Dict(
+            :name=>name,
+            :lambda_list=>lambda_list,
+            :methods=>[]
+        )
+    )
+end
+
+function new_method(
+    generic_function, 
+    name::Symbol, 
+    lambda_list::Vector{Symbol}, 
+    specializers::Vector,
+    procedure)
+
+    if isnothing(generic_function)
+        generic_function = new_generic_function(name, lambda_list)
+    end
+
+    for i in range(1, length(specializers), step=1)
+        if ismissing(specializers[i])
+            specializers[i] = Top
+        end
+    end
+
+    create_method(
+        generic_function,
+        BaseStructure(
+            MultiMethod,
+            Dict(
+                :generic_function=>generic_function,
+                :specializers=>specializers,
+                :procedure=>procedure
+            )
+        )
+    )
+
+    return generic_function
 end
