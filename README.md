@@ -35,7 +35,7 @@ This project was made for the course "Advanced Programming" by:
 
 - [x] 2.1 Classes
 - [x] 2.2 Instances
-- [ ] 2.3 Slot Access - **Juliana**
+- [x] 2.3 Slot Access - **Juliana**
 - [x] 2.4 Generic Functions and methods
 - [ ] 2.5 Pre-defined Generic Functions and Methods - **Miguel**
 - [ ] 2.6 MetaObjects - **Liliana**
