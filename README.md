@@ -34,7 +34,7 @@ This project was made for the course "Advanced Programming" by:
 
 ### Current State
 
-- [ ] x Tests
+- [ ] x Tests - **Edu**
 - [ ] 2.0 Macros (defclass, defgeneric, defmethod)
 - [x] 2.1 Classes
 - [x] 2.2 Instances
@@ -49,7 +49,7 @@ This project was made for the course "Advanced Programming" by:
 - [ ] 2.11 Multiple Inheritance
 - [x] 2.12 Class Hierarchy
 - [ ] 2.13 Class Precedence List
-- [ ] 2.14 Built-In Classes - **Edu**
+- [x] 2.14 Built-In Classes
 - [ ] 2.15 Introspection
 - [ ] 2.16 Meta-Object Protocols
 - [ ] 2.16.1 Class Instantiation Protocol
@@ -93,11 +93,6 @@ I can handle these following issues next, weither how, I'll leave a note of the 
 
 - [x] At the end of the generic function call, we need to call the first most specific method (first on the `effective_methods` list). For this, we may need to inject an extra argument to a method when we define it (the rest of the list). **Addressed in: 2.9 Generic Function Calls**
 - [x] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
-  - Kind of done. But throws an error, because we need built in types first, because it receives a Tuple of Arguments as an argument
-
-##### Issues
-
-As of right now, the method `is_method_applicable` will not work with native types. Im not sure if this will be fixed when we implement the `Built-in-types`, if not, this functions will need some modifications.
 
 #### 2.9 - Generic Function Calls
 
@@ -109,3 +104,9 @@ Quick sum up. To call a generic function, we compute the effective method list (
 - [x] Make access methods
 - [x] Test `call_next_method`
 - [ ] Make a test module
+
+#### 2.4 - Built-In Classes
+
+Really simple. Just an override of the `class_of` that, if it is called with one of Julia's built in types it returns the corresponding JOS class.
+
+I've made for Ints, Floats, Bool, Char, String, Vector and Tuple. We may need to add more in the future if we need it.
