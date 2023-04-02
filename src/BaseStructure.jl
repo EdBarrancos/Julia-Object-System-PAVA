@@ -74,4 +74,9 @@ function Base.setproperty!(obj::BaseStructure, name::Symbol, x)
     x
 end
 
-#= #################### 2.3 Slot Access #################### =#
+#= #################### END 2.3 Slot Access #################### =#
+
+#= ###################### 2.15 Introspection ###################### =#
+class_name(class::BaseStructure) = getfield(class, :slots)[:name]
+
+#= #################### END 2.15 Introspection #################### =#
