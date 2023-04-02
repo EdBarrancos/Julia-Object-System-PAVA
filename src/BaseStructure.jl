@@ -80,5 +80,6 @@ end
 class_name(class::BaseStructure) = getfield(class, :slots)[:name]
 class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots]
 class_slots(class::BaseStructure) = getfield(class, :slots)[:slots]
-
+class_direct_superclasses(class::BaseStructure) = getfield(class, :slots)[:direct_superclasses]
+class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list]
 #= #################### END 2.15 Introspection #################### =#

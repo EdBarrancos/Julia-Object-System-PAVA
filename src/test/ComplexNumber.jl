@@ -59,4 +59,5 @@ class_name(ComplexNumber)
 class_direct_slots(ComplexNumber)
 class_slots(ComplexNumber)
 class_direct_superclasses(ComplexNumber)
+class_cpl(ComplexNumber)
 #= ########################################################################################## =#
