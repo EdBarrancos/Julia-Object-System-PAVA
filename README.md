@@ -30,9 +30,11 @@ This project was made for the course "Advanced Programming" by:
   - Redefine them
 - [x] Result of calling `call_next_method()` when there is no next method to call?
   - Error
+- [ ] Which types do we need to support with the built in types? For example, do we need to support Unsigned ints?
 
 ### Current State
 
+- [ ] x Tests
 - [ ] 2.0 Macros (defclass, defgeneric, defmethod)
 - [x] 2.1 Classes
 - [x] 2.2 Instances
@@ -49,7 +51,7 @@ This project was made for the course "Advanced Programming" by:
 - [ ] 2.13 Class Precedence List
 - [ ] 2.14 Built-In Classes - **Edu**
 - [ ] 2.15 Introspection
-- [ ] 2.16 meta-Object Protocols
+- [ ] 2.16 Meta-Object Protocols
 - [ ] 2.16.1 Class Instantiation Protocol
 - [ ] 2.16.2 The Compute Slots Protocol
 - [ ] 2.16.3 Slot Access Protocol
@@ -90,7 +92,7 @@ There are some stuff I will leave to be done, as there are further along that ad
 I can handle these following issues next, weither how, I'll leave a note of the issues to be resolved here:
 
 - [x] At the end of the generic function call, we need to call the first most specific method (first on the `effective_methods` list). For this, we may need to inject an extra argument to a method when we define it (the rest of the list). **Addressed in: 2.9 Generic Function Calls**
-- [ ] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
+- [x] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
   - Kind of done. But throws an error, because we need built in types first, because it receives a Tuple of Arguments as an argument
 
 ##### Issues
@@ -100,12 +102,6 @@ As of right now, the method `is_method_applicable` will not work with native typ
 #### 2.9 - Generic Function Calls
 
 Quick sum up. To call a generic function, we compute the effective method list (Done in the 2.4). Then we need to apply the first method. To apply a method, we need to first bind the arguments to variable names, next we need to bind the `call_next_method` function and finally run the methods body.
-
-##### Concerns
-
-The binding of arguments currently is super ugly. But I'm not sure how to improve it.
-
-Not sure if the binding of `call_next_method` is correct.
 
 ##### Extra TODOs
 

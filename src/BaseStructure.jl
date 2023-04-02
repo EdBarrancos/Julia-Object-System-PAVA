@@ -48,7 +48,7 @@ setfield!(Class, :class_of_reference, Class)
 setfield!(Object, :class_of_reference, Class)
 setfield!(Top, :class_of_reference, Class)
 
-class_of(class) = getfield(class, :class_of_reference)
+class_of(instance::BaseStructure) = getfield(instance, :class_of_reference)
 
 check_for_polymorph(instance, targetClass, exception) = begin
     if !(targetClass in class_of(instance).class_precedence_list)
