@@ -1,4 +1,5 @@
 include("BaseStructure.jl")
+include("BuiltInTypes.jl")
 
 
 GenericFunction = BaseStructure(

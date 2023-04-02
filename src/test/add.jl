@@ -32,7 +32,7 @@ o1 = BaseStructure(
 )
 
 #= non_applicable_method =#
-# add(o1, o1) -> Not testable yet, because we need built in classes
+add(o1, o1)
 
 add = new_method(
     add,
@@ -68,4 +68,4 @@ c = add(c1, c1)
 @test_throws ArgumentError c1(1)
 
 #= Goal: ERROR: No applicable method for function add with arguments (1, 2) =#
-# @test_throws ArgumentError add(1,2)  -> We cant do this because we havent implemented built in types 
+@test_throws ErrorException add(1,2)

@@ -1,7 +1,7 @@
 include("BaseStructure.jl")
 
 new_built_in_type(name::Symbol) = begin
-    BaseStructure(
+    newType = BaseStructure(
         Class,
         Dict(
             :name=>:name,
@@ -11,6 +11,9 @@ new_built_in_type(name::Symbol) = begin
             :slots=>[]
         )
     )
+
+    pushfirst!(getfield(newType, :slots)[:class_precedence_list], newType)
+    return newType
 end
 
 _Int8 = new_built_in_type(:_Int8)
