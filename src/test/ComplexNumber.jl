@@ -56,5 +56,7 @@ c1
 
 #= #################### 2.15 Introspection#################### =#
 class_name(ComplexNumber)
-
+class_direct_slots(ComplexNumber)
+class_slots(ComplexNumber)
+class_direct_superclasses(ComplexNumber)
 #= ########################################################################################## =#
