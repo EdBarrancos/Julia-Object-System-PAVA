@@ -69,3 +69,7 @@ c = add(c1, c1)
 
 #= Goal: ERROR: No applicable method for function add with arguments (1, 2) =#
 # @test_throws ArgumentError add(1,2)  -> We cant do this because we havent implemented built in types 
+
+#= ###################### 2.15 Introspection ###################### =#
+generic_methods(add)
+#= #################### END 2.15 Introspection #################### =#

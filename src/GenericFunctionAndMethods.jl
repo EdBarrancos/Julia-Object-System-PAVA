@@ -248,3 +248,8 @@ function Base.show(io::IO, t::BaseStructure)
    print_object(t)
 end
 #= ########################################################################################## =#
+
+#= ###################### 2.15 Introspection ###################### =#
+generic_methods(method::BaseStructure) = method.methods
+#method_specializers(method::BaseStructure) = method
+#= #################### END 2.15 Introspection #################### =#
