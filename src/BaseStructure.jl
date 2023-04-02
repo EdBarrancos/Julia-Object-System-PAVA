@@ -78,5 +78,7 @@ end
 
 #= ###################### 2.15 Introspection ###################### =#
 class_name(class::BaseStructure) = getfield(class, :slots)[:name]
+class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots]
+class_slots(class::BaseStructure) = getfield(class, :slots)[:slots]
 
 #= #################### END 2.15 Introspection #################### =#
