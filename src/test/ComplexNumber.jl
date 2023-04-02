@@ -1,4 +1,5 @@
 include("../BaseStructure.jl")
+include("../GenericFunctionAndMethods.jl")
 
 ComplexNumber = BaseStructure(
     Class,
@@ -32,14 +33,23 @@ class_of(c1) == ComplexNumber
 class_of(class_of(c1)) == Class
 #= #################### ENFD 2.3 #################### =#
 
-#= print ComplexNumber:
-    - <Metaclass class>  =#
-@printf("<%s %s>",String(class_of(ComplexNumber).name),String(ComplexNumber.name))
 
-#= print c1:
-    - <Class id> =#
-@printf("<%s %s>",String(getfield(c1, :class_of_reference).name),"ID-PLACEHOLDER")
+#= #################### 2.5 Pre-defined Generic Functions and Methods #################### =#
 
-Class.slots
-ComplexNumber.name
-ComplexNumber.direct_superclasses == [Object]
+create_method(
+    print_object,
+    BaseStructure(
+        MultiMethod,
+        Dict(
+            :lambda_list=>[:c],
+            :specializers=>[ComplexNumber],
+            :procedure=> function (call_next_method, c)
+                    print("$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
+                end,
+            :generic_function=>print_object
+        )
+    )
+)
+
+c1
+#= ########################################################################################## =#
