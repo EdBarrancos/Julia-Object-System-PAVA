@@ -61,7 +61,7 @@ new_method(
         
         specializers = "("
         if length(method.specializers) > 0
-            specializers *= String(method.specializers[1].name)
+            specializers *= String(method.specializers[begin].name)
         end
 
         for class in method.specializers[2:end]

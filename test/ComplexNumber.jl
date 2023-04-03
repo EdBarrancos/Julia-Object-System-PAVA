@@ -22,9 +22,18 @@ using Test
         )
     )
 
-    @test class_of(c1) === ComplexNumber
-    @test class_of(class_of(c1)) === Class
-    @test class_of(class_of(class_of(c1))) === Class
+    @testset "Meta Object tests" begin
+        @test class_of(c1) === ComplexNumber
+        @test class_of(class_of(c1)) === Class
+        @test class_of(class_of(class_of(c1))) === Class
+
+        @test ComplexNumber.direct_slots == [:real, :imag]
+        @test Class.slots == [:name, :direct_superclasses, :class_precedence_list, :slots, :direct_subclasses, :direct_methods]
+        @test ComplexNumber.name == :ComplexNumber
+        @test ComplexNumber.direct_superclasses == [Object]
+    end
+
+    
 
     @test getproperty(c1, :real) === c1.real
     @test c1.real == getfield(c1, :slots)[:real]

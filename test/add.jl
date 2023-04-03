@@ -105,6 +105,14 @@ end
     @test class_of(c) == ComplexNumber
     @test c.real == 2
     @test c.imag == 4
+
+    @testset "Meta Object tests" begin
+        @test class_of(add) === GenericFunction
+        @test GenericFunction.slots == [:name, :lambda_list, :methods]
+        @test class_of(add.methods[begin]) === MultiMethod
+        @test MultiMethod.slots == [:specializers, :procedure, :generic_function]
+        @test add.methods[begin].generic_function === add
+    end
     
     @testset "Test Effective method" begin
         new_method(
