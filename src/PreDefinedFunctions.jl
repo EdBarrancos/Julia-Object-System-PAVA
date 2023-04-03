@@ -31,6 +31,50 @@ new_method(
     end
 )
 
+new_method(
+    print_object,
+    :print_object,
+    [:generic_func],
+    [GenericFunction],
+    function (call_next_method, gen)
+        print(
+            "<", 
+            String(getfield(gen, :class_of_reference).name), 
+            " ", 
+            gen.name, 
+            " with ", 
+            length(gen.methods),
+            " methods>")
+    end
+)
+
+new_method(
+    print_object,
+    :print_object,
+    [:method],
+    [MultiMethod],
+    function (call_next_method, method)
+        output_string = "<" * 
+            String(getfield(method, :class_of_reference).name) *
+            " " *
+            String(method.generic_function.name)
+        
+        specializers = "("
+        if length(method.specializers) > 0
+            specializers *= String(method.specializers[1].name)
+        end
+
+        for class in method.specializers[2:end]
+            specializers *= ','
+            specializers *= String(class.name)
+        end
+        specializers *= ")"
+
+        output_string *= specializers * ">"
+        print(output_string)
+    end
+)
+
 function Base.show(io::IO, t::BaseStructure)
    print_object(t)
 end

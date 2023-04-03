@@ -14,9 +14,26 @@ using Test
 
     @testset "Print Classes" begin
         result = @capture_out show(Object)
-        @test result = "<Class Object>"
+        @test result == "<Class Object>"
 
         result = @capture_out show(Class)
-        @test result = "<Class Class>"
+        @test result == "<Class Class>"
+    end
+
+    @testset "Print Generic Functions and Methods" begin
+        gen = new_method(
+            nothing,
+            :gen,
+            [:a],
+            [Object],
+            function (call_next_method, a)
+            end
+        )
+
+        result = @capture_out show(gen)
+        @test result == "<GenericFunction gen with 1 methods>"
+
+        result = @capture_out show(gen.methods[1])
+        @test result == "<MultiMethod gen(Object)>"
     end
 end
