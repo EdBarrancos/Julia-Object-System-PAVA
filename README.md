@@ -34,18 +34,21 @@ This project was made for the course "Advanced Programming" by:
 
 ### Current State
 
-- [x] x Tests - **Edu**
-- [ ] 2.0 Macros (defclass, defgeneric, defmethod)
+- [x] x Tests
+- [ ] 2.0 Macros
+  - [ ] 2.0.1 defclass
+  - [ ] 2.0.2 defgeneric
+  - [ ] 2.0.3 defmethpd
 - [x] 2.1 Classes
 - [x] 2.2 Instances
 - [x] 2.3 Slot Access
 - [x] 2.4 Generic Functions and methods
 - [x] 2.5 Pre-defined Generic Functions and Methods
 - [ ] 2.6 MetaObjects - **Liliana**
-- [ ] 2.7 Class Options
+- [ ] 2.7 Class Options - **Edu**
 - [ ] 2.8 Readers and Writers - **Liliana**
 - [x] 2.9 Generic Function Calls
-- [ ] 2.10 Multiple Dispatch - **Edu**
+- [x] 2.10 Multiple Dispatch
 - [ ] 2.11 Multiple Inheritance
 - [x] 2.12 Class Hierarchy
 - [ ] 2.13 Class Precedence List - **Miguel**
@@ -138,3 +141,7 @@ Made JuliaObjectSystem into a module. And created the file `runtests.jl` that im
 
 Add a file in the `\test` folder. In the `runtests.jl` include the new file.
 Try to use `@testset` to organize it.
+
+#### 2.10 Multiple Dispatch
+
+Done. Simply works. Beautiful
