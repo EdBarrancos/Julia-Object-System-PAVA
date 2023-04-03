@@ -1,5 +1,6 @@
 include("BaseStructure.jl")
 
+export GenericFunction, MultiMethod, new_method, new_generic_function
 
 GenericFunction = BaseStructure(
     Class,
@@ -31,7 +32,6 @@ function (f::BaseStructure)(x...)
     check_for_polymorph(f, GenericFunction, ArgumentError)
 
     if length(x) != length(f.lambda_list)
-        #= TODO: call generic_function non_applicable_method =#
         non_applicable_method(f, x)
     end
 
@@ -42,7 +42,6 @@ function apply_methods(generic_function::BaseStructure, effective_method_list::V
     check_for_polymorph(generic_function, GenericFunction, ArgumentError)
 
     if isempty(effective_method_list) || target_method_index > length(effective_method_list)
-        #= TODO: call generic_function non_applicable_method =#
         non_applicable_method(generic_function, args)
     end
 
@@ -125,7 +124,6 @@ function create_method(
         length(parent_generic_function.lambda_list),
         length(new_method.specializers))
 
-        #= TODO: call an appropriate generic function =#
         error("Method does not correspond to generic function's signature")
     end
     
@@ -183,16 +181,12 @@ function new_method(
     return generic_function
 end
 
-non_applicable_method = new_generic_function(
-    :non_applicable_method,
-    [:generic_function, :args]
-)
-
+#= This one needs to be here or it will create a ciclic dependency =#
 non_applicable_method = new_method(
-    non_applicable_method,
+    nothing,
     :non_applicable_method,
     [:generic_function, :args],
-    [GenericFunction, Top],
+    [GenericFunction, _Tuple],
     function (call_next_method, generic_function, args)
         error(
             "No applicable method for function ", 
@@ -201,55 +195,3 @@ non_applicable_method = new_method(
             string(args))
     end
 )
-
-
-print_object = BaseStructure(
-    GenericFunction,
-    Dict(
-        :name => :print_object,
-        :lambda_list => [:obj],
-        :methods => []
-    )
-)
-
-#= #################### 2.5 Pre-defined Generic Functions and Methods #################### =#
-create_method(
-    print_object,
-    BaseStructure(
-        MultiMethod,
-        Dict(
-            :lambda_list=>[:class],
-            :specializers=>[Class],
-            :procedure=> function (call_next_method, class)
-                    print("<" ,String(getfield(class, :class_of_reference).name), " ", String(class.name) , ">")
-                end,
-            :generic_function=>print_object
-        )
-    )
-)
-
-create_method(
-    print_object,
-    BaseStructure(
-        MultiMethod,
-        Dict(
-            :lambda_list=>[:obj],
-            :specializers=>[Object],
-            :procedure=> function (call_next_method, obj)
-                    print("<",String(getfield(c1, :class_of_reference).name)," ID-PLACEHOLDER>")
-                end,
-            :generic_function=>print_object
-        )
-    )
-)
-
-
-function Base.show(io::IO, t::BaseStructure)
-   print_object(t)
-end
-#= ########################################################################################## =#
-
-#= ###################### 2.15 Introspection ###################### =#
-generic_methods(method::BaseStructure) = method.methods
-#method_specializers(method::BaseStructure) = method
-#= #################### END 2.15 Introspection #################### =#

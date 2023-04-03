@@ -30,26 +30,31 @@ This project was made for the course "Advanced Programming" by:
   - Redefine them
 - [x] Result of calling `call_next_method()` when there is no next method to call?
   - Error
+- [ ] Which types do we need to support with the built in types? For example, do we need to support Unsigned ints?
 
 ### Current State
 
-- [ ] 2.0 Macros (defclass, defgeneric, defmethod)
+- [x] x Tests
+- [ ] 2.0 Macros
+  - [ ] 2.0.1 defclass
+  - [ ] 2.0.2 defgeneric
+  - [ ] 2.0.3 defmethpd
 - [x] 2.1 Classes
 - [x] 2.2 Instances
-- [x] 2.3 Slot Access - **Juliana**
+- [x] 2.3 Slot Access
 - [x] 2.4 Generic Functions and methods
-- [x] 2.5 Pre-defined Generic Functions and Methods - **Miguel**
+- [x] 2.5 Pre-defined Generic Functions and Methods
 - [ ] 2.6 MetaObjects - **Liliana**
-- [ ] 2.7 Class Options
+- [ ] 2.7 Class Options - **Edu**
 - [ ] 2.8 Readers and Writers - **Liliana**
 - [x] 2.9 Generic Function Calls
-- [ ] 2.10 Multiple Dispatch - **Test/Edu**
+- [x] 2.10 Multiple Dispatch
 - [ ] 2.11 Multiple Inheritance
 - [x] 2.12 Class Hierarchy
 - [ ] 2.13 Class Precedence List - **Miguel**
-- [ ] 2.14 Built-In Classes - **Edu**
+- [x] 2.14 Built-In Classes
 - [ ] 2.15 Introspection - **Juliana**
-- [ ] 2.16 meta-Object Protocols
+- [ ] 2.16 Meta-Object Protocols
 - [ ] 2.16.1 Class Instantiation Protocol
 - [ ] 2.16.2 The Compute Slots Protocol
 - [ ] 2.16.3 Slot Access Protocol
@@ -90,26 +95,53 @@ There are some stuff I will leave to be done, as there are further along that ad
 I can handle these following issues next, weither how, I'll leave a note of the issues to be resolved here:
 
 - [x] At the end of the generic function call, we need to call the first most specific method (first on the `effective_methods` list). For this, we may need to inject an extra argument to a method when we define it (the rest of the list). **Addressed in: 2.9 Generic Function Calls**
-- [ ] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
-  - Kind of done. But throws an error, because we need built in types first, because it receives a Tuple of Arguments as an argument
-
-##### Issues
-
-As of right now, the method `is_method_applicable` will not work with native types. Im not sure if this will be fixed when we implement the `Built-in-types`, if not, this functions will need some modifications.
+- [x] When the called function does not have any applicable method to the arguments given. Currently Im just throwing an error, but we need to call the generic function *non_applicable_method*. **Addressed in: 2.9 Generic Function Calls**
 
 #### 2.9 - Generic Function Calls
 
 Quick sum up. To call a generic function, we compute the effective method list (Done in the 2.4). Then we need to apply the first method. To apply a method, we need to first bind the arguments to variable names, next we need to bind the `call_next_method` function and finally run the methods body.
-
-##### Concerns
-
-The binding of arguments currently is super ugly. But I'm not sure how to improve it.
-
-Not sure if the binding of `call_next_method` is correct.
 
 ##### Extra TODOs
 
 - [x] Make a function to verify if the argument is of the correct type or throw error
 - [x] Make access methods
 - [x] Test `call_next_method`
-- [ ] Make a test module
+- [x] Make a test module
+
+#### 2.4 - Built-In Classes
+
+Really simple. Just an override of the `class_of` that, if it is called with one of Julia's built in types it returns the corresponding JOS class.
+
+I've made for Ints, Floats, Bool, Char, String, Vector and Tuple. We may need to add more in the future if we need it.
+
+#### Tests
+
+Had to play around a bit with the folder structure of the project. Ours wasn't well configurated.
+
+Moved the `\test` folder to the root one. Added the `Project.toml` and `Manifesto.toml` (Auto generated).
+
+Made JuliaObjectSystem into a module. And created the file `runtests.jl` that imports that module and runs the tests.
+
+##### How to run tests
+
+- Simple run the file `runtests.jl`
+- Or run it on the terminal (Its way cooler ;) )
+  - type `julia` then `]`
+  - Something like `(JuliaObjectSystem) pkg>` should be appearing on your terminal
+  - Then type `test`
+  - If this not work, please tell me for me to improve this and try this:
+    - `activate .`
+    - **Try Again or:**
+    - `add Test`
+    - **Try Again or:**
+    - `test JuliaObjectSystem`
+    - **If all of this does not work, send me a message (@Eduardo)**
+
+##### Adding new tests
+
+Add a file in the `\test` folder. In the `runtests.jl` include the new file.
+Try to use `@testset` to organize it.
+
+#### 2.10 Multiple Dispatch
+
+Done. Simply works. Beautiful
