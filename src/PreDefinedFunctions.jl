@@ -27,7 +27,7 @@ new_method(
     [:obj],
     [Object],
     function (call_next_method, obj)
-        print("<",String(getfield(obj, :class_of_reference).name)," ", pointer_from_objref(obj))
+        print("<",String(getfield(obj, :class_of_reference).name)," ", repr(UInt64(pointer_from_objref(obj))) * ">")
     end
 )
 
