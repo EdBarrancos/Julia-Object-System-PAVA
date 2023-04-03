@@ -59,4 +59,13 @@ using Test
         result = @capture_out show(c1)
         @test result == "1+5i"
     end 
+
+    @testset "Introspection" begin
+        @test class_name(ComplexNumber) == :ComplexNumber
+        @test class_direct_slots(ComplexNumber) == [:real, :imag]
+        @test class_slots(ComplexNumber) == [:real, :imag]
+        @test class_direct_superclasses(ComplexNumber) == [Object]
+        @test class_cpl(ComplexNumber) == [ComplexNumber, Object]
+    end
+    
 end

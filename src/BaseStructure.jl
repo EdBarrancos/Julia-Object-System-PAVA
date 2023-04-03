@@ -1,4 +1,5 @@
-export BaseStructure, Top, Object, Class, class_of, check_class, check_for_polymorph
+export BaseStructure, Top, Object, Class, class_of, check_class, check_for_polymorph, 
+class_name, class_direct_slots, class_slots, class_direct_superclasses, class_cpl
 
 mutable struct BaseStructure
     class_of_reference::Any #= Supposed to be another BaseStructure =#

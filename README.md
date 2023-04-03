@@ -145,3 +145,9 @@ Try to use `@testset` to organize it.
 #### 2.10 Multiple Dispatch
 
 Done. Simply works. Beautiful
+
+### Juli - Notes
+
+#### 2.15 Introspection
+
+Implemented functions `class_name`, `class_direct_slots`, `class_slots`, `class_direct_superclasses`, `class_cpl` in `BaseStructure.jl` and added the respectively tests in `ComplexNumber`.
