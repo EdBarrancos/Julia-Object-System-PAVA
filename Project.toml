@@ -1,0 +1,13 @@
+name = "JuliaObjectSystem"
+uuid = "beb21ac1-5488-4e8e-a65a-eed5c6ff7e13"
+authors = ["Eduardo Barrancos <eduardobarrancos11488@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

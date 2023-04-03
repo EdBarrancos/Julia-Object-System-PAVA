@@ -1,6 +1,6 @@
 include("BaseStructure.jl")
-include("BuiltInTypes.jl")
 
+export GenericFunction, MultiMethod, new_method, new_generic_function
 
 GenericFunction = BaseStructure(
     Class,
@@ -32,7 +32,6 @@ function (f::BaseStructure)(x...)
     check_for_polymorph(f, GenericFunction, ArgumentError)
 
     if length(x) != length(f.lambda_list)
-        #= TODO: call generic_function non_applicable_method =#
         non_applicable_method(f, x)
     end
 
@@ -43,7 +42,6 @@ function apply_methods(generic_function::BaseStructure, effective_method_list::V
     check_for_polymorph(generic_function, GenericFunction, ArgumentError)
 
     if isempty(effective_method_list) || target_method_index > length(effective_method_list)
-        #= TODO: call generic_function non_applicable_method =#
         non_applicable_method(generic_function, args)
     end
 
@@ -126,7 +124,6 @@ function create_method(
         length(parent_generic_function.lambda_list),
         length(new_method.specializers))
 
-        #= TODO: call an appropriate generic function =#
         error("Method does not correspond to generic function's signature")
     end
     
@@ -184,16 +181,11 @@ function new_method(
     return generic_function
 end
 
-non_applicable_method = new_generic_function(
-    :non_applicable_method,
-    [:generic_function, :args]
-)
-
 non_applicable_method = new_method(
-    non_applicable_method,
+    nothing,
     :non_applicable_method,
     [:generic_function, :args],
-    [GenericFunction, Top],
+    [GenericFunction, _Tuple],
     function (call_next_method, generic_function, args)
         error(
             "No applicable method for function ", 
@@ -237,7 +229,7 @@ create_method(
             :lambda_list=>[:obj],
             :specializers=>[Object],
             :procedure=> function (call_next_method, obj)
-                    print("<",String(getfield(c1, :class_of_reference).name)," ID-PLACEHOLDER>")
+                    print("<",String(getfield(obj, :class_of_reference).name)," ID-PLACEHOLDER>")
                 end,
             :generic_function=>print_object
         )

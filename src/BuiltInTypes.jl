@@ -1,5 +1,7 @@
 include("BaseStructure.jl")
 
+export _Int8, _Int16, _Int32, _Int128, _Bool, _Char, _String, _Float16, _Float32, _Float64, _Tuple, _Vector, class_of
+
 new_built_in_type(name::Symbol) = begin
     newType = BaseStructure(
         Class,

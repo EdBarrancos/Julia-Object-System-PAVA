@@ -34,18 +34,18 @@ This project was made for the course "Advanced Programming" by:
 
 ### Current State
 
-- [ ] x Tests - **Edu**
+- [x] x Tests - **Edu**
 - [ ] 2.0 Macros (defclass, defgeneric, defmethod)
 - [x] 2.1 Classes
 - [x] 2.2 Instances
-- [x] 2.3 Slot Access - **Juliana**
+- [x] 2.3 Slot Access
 - [x] 2.4 Generic Functions and methods
-- [x] 2.5 Pre-defined Generic Functions and Methods - **Miguel**
+- [x] 2.5 Pre-defined Generic Functions and Methods
 - [ ] 2.6 MetaObjects - **Liliana**
 - [ ] 2.7 Class Options
 - [ ] 2.8 Readers and Writers - **Liliana**
 - [x] 2.9 Generic Function Calls
-- [ ] 2.10 Multiple Dispatch - **Test/Edu**
+- [ ] 2.10 Multiple Dispatch - **Edu**
 - [ ] 2.11 Multiple Inheritance
 - [x] 2.12 Class Hierarchy
 - [ ] 2.13 Class Precedence List - **Miguel**
@@ -103,10 +103,38 @@ Quick sum up. To call a generic function, we compute the effective method list (
 - [x] Make a function to verify if the argument is of the correct type or throw error
 - [x] Make access methods
 - [x] Test `call_next_method`
-- [ ] Make a test module
+- [x] Make a test module
 
 #### 2.4 - Built-In Classes
 
 Really simple. Just an override of the `class_of` that, if it is called with one of Julia's built in types it returns the corresponding JOS class.
 
 I've made for Ints, Floats, Bool, Char, String, Vector and Tuple. We may need to add more in the future if we need it.
+
+#### Tests
+
+Had to play around a bit with the folder structure of the project. Ours wasn't well configurated.
+
+Moved the `\test` folder to the root one. Added the `Project.toml` and `Manifesto.toml` (Auto generated).
+
+Made JuliaObjectSystem into a module. And created the file `runtests.jl` that imports that module and runs the tests.
+
+##### How to run tests
+
+- Simple run the file `runtests.jl`
+- Or run it on the terminal (Its way cooler ;) )
+  - type `julia` then `]`
+  - Something like `(JuliaObjectSystem) pkg>` should be appearing on your terminal
+  - Then type `test`
+  - If this not work, please tell me for me to improve this and try this:
+    - `activate .`
+    - **Try Again or:**
+    - `add Test`
+    - **Try Again or:**
+    - `test JuliaObjectSystem`
+    - **If all of this does not work, send me a message (@Eduardo)**
+
+##### Adding new tests
+
+Add a file in the `\test` folder. In the `runtests.jl` include the new file.
+Try to use `@testset` to organize it.

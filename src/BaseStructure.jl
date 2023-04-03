@@ -1,4 +1,4 @@
-using Printf
+export BaseStructure, Top, Object, Class, class_of, check_class, check_for_polymorph
 
 mutable struct BaseStructure
     class_of_reference::Any #= Supposed to be another BaseStructure =#
