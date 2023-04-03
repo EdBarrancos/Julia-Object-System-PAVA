@@ -181,6 +181,7 @@ function new_method(
     return generic_function
 end
 
+#= This one needs to be here or it will create a ciclic dependency =#
 non_applicable_method = new_method(
     nothing,
     :non_applicable_method,
@@ -194,50 +195,3 @@ non_applicable_method = new_method(
             string(args))
     end
 )
-
-
-print_object = BaseStructure(
-    GenericFunction,
-    Dict(
-        :name => :print_object,
-        :lambda_list => [:obj],
-        :methods => []
-    )
-)
-
-#= #################### 2.5 Pre-defined Generic Functions and Methods #################### =#
-create_method(
-    print_object,
-    BaseStructure(
-        MultiMethod,
-        Dict(
-            :lambda_list=>[:class],
-            :specializers=>[Class],
-            :procedure=> function (call_next_method, class)
-                    print("<" ,String(getfield(class, :class_of_reference).name), " ", String(class.name) , ">")
-                end,
-            :generic_function=>print_object
-        )
-    )
-)
-
-create_method(
-    print_object,
-    BaseStructure(
-        MultiMethod,
-        Dict(
-            :lambda_list=>[:obj],
-            :specializers=>[Object],
-            :procedure=> function (call_next_method, obj)
-                    print("<",String(getfield(obj, :class_of_reference).name)," ID-PLACEHOLDER>")
-                end,
-            :generic_function=>print_object
-        )
-    )
-)
-
-
-function Base.show(io::IO, t::BaseStructure)
-   print_object(t)
-end
-#= ########################################################################################## =#

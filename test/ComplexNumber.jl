@@ -1,3 +1,4 @@
+using Suppressor
 using Test
 
 @testset "Complex Number Creation" begin
@@ -34,25 +35,19 @@ using Test
     imag_value = c1.imag
     c1.imag += 3
     @test c1.imag === imag_value + 3
-end
 
-
-#= #################### 2.5 Pre-defined Generic Functions and Methods #################### =#
-
-#= create_method(
-    print_object,
-    BaseStructure(
-        MultiMethod,
-        Dict(
-            :lambda_list=>[:c],
-            :specializers=>[ComplexNumber],
-            :procedure=> function (call_next_method, c)
-                    print("$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
-                end,
-            :generic_function=>print_object
+    @testset "Printing Complex Numbers" begin
+        new_method(
+            print_object,
+            :print_object,
+            [:c],
+            [ComplexNumber],
+            function (call_next_method, c)
+                print("$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
+            end
         )
-    )
-)
 
-c1 =#
-#= ########################################################################################## =#
+        result = @capture_out show(c1)
+        @test result == "1+5i"
+    end 
+end
