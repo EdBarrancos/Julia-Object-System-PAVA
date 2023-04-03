@@ -5,4 +5,5 @@ using Test
     include("ComplexNumber.jl")
     include("add.jl")
     include("PrintObject_test.jl")
+    include("PrintObject_test.jl")
 end
