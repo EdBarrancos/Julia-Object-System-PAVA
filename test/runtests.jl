@@ -6,4 +6,5 @@ using Test
     include("add.jl")
     include("PrintObject_test.jl")
     include("MultipleDispatch.jl")
+    include("MultipleInheritance.jl")
 end

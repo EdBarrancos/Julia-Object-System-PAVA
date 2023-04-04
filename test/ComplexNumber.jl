@@ -65,7 +65,7 @@ using Test
         @test class_direct_slots(ComplexNumber) == [:real, :imag]
         @test class_slots(ComplexNumber) == [:real, :imag]
         @test class_direct_superclasses(ComplexNumber) == [Object]
-        @test class_cpl(ComplexNumber) == [ComplexNumber, Object]
+        @test class_cpl(ComplexNumber) == [ComplexNumber, Object]        
     end
     
 end

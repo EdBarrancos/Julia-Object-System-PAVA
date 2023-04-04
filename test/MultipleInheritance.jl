@@ -115,7 +115,7 @@ using Test
             :slots=>[:color]
         )
     )
-    pushfirst!(Device.class_precedence_list, ColorMixin)
+    pushfirst!(ColorMixin.class_precedence_list, ColorMixin)
     
     #TODO draw function page 7
 
@@ -124,26 +124,25 @@ using Test
         Dict(
             :name=>:ColoredLine,
             :direct_superclasses=>[ColorMixin, Line], 
-            :direct_slots=>[:color],
+            :direct_slots=>[],
             # TODO class_cpl to check
             :class_precedence_list=>[ColorMixin, Line, Object, Shape, Top],
-            :slots=>[]
+            :slots=>[:color, :from, :to]
         )
     )
-    pushfirst!(Device.class_precedence_list, ColoredLine)
-
+    pushfirst!(ColoredLine.class_precedence_list, ColoredLine)
+    
     ColoredCircle = BaseStructure(
         Class,
         Dict(
             :name=>:ColoredCircle,
             :direct_superclasses=>[ColorMixin, Circle], 
-            :direct_slots=>[:color],
-            # TODO class_cpl to check
-            :class_precedence_list=>[ColoredCircle, Circle, Object, Shape, Top],
-            :slots=>[]
+            :direct_slots=>[],
+            :class_precedence_list=>[ColorMixin, Circle, Object, Shape, Top],
+            :slots=>[:color, :center, :radius]
         )
     )
-    pushfirst!(Device.class_precedence_list, ColoredCircle)
+    pushfirst!(ColoredCircle.class_precedence_list, ColoredCircle)
 
     @testset "Introspection" begin
         @test class_name(Circle) == :Circle
