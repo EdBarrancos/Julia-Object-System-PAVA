@@ -1,14 +1,14 @@
 using Suppressor
 using Test
 
-@testset "Multiple Dispatch test" begin
+@testset "Multiple Inheritance test" begin
     Shape = BaseStructure(
         Class,
         Dict(
             :name=>:Shape,
             :direct_superclasses=>[Object], 
             :direct_slots=>[],
-            :class_precedence_list=>[Object],
+            :class_precedence_list=>[Object, Top],
             :slots=>[]
         )
     )
@@ -20,7 +20,7 @@ using Test
             :name=>:Device,
             :direct_superclasses=>[Object], 
             :direct_slots=>[],
-            :class_precedence_list=>[Object],
+            :class_precedence_list=>[Object, Top],
             :slots=>[]
         )
     )
@@ -32,7 +32,7 @@ using Test
             :name=>:Line,
             :direct_superclasses=>[Shape], 
             :direct_slots=>[:from, :to],
-            :class_precedence_list=>[Shape, Object],
+            :class_precedence_list=>[Shape, Object, Top],
             :slots=>[:from, :to]
         )
     )
@@ -44,7 +44,7 @@ using Test
             :name=>:Circle,
             :direct_superclasses=>[Shape], 
             :direct_slots=>[:center, :radius],
-            :class_precedence_list=>[Shape, Object],
+            :class_precedence_list=>[Shape, Object, Top],
             :slots=>[:center, :radius]
         )
     )
@@ -56,7 +56,7 @@ using Test
             :name=>:Line,
             :direct_superclasses=>[Device], 
             :direct_slots=>[],
-            :class_precedence_list=>[Device, Object],
+            :class_precedence_list=>[Device, Object, Top],
             :slots=>[]
         )
     )
@@ -68,7 +68,7 @@ using Test
             :name=>:Line,
             :direct_superclasses=>[Device], 
             :direct_slots=>[],
-            :class_precedence_list=>[Device, Object],
+            :class_precedence_list=>[Device, Object, Top],
             :slots=>[]
         )
     )
@@ -103,18 +103,54 @@ using Test
             print("Drawing a circle on a printer")
         end
     )
+    
+    #TODO Missing reader and writer 
+    ColorMixin = BaseStructure(
+        Class,
+        Dict(
+            :name=>:ColorMixin,
+            :direct_superclasses=>[Object], 
+            :direct_slots=>[:color],
+            :class_precedence_list=>[Object, Top],
+            :slots=>[:color]
+        )
+    )
+    pushfirst!(Device.class_precedence_list, ColorMixin)
+    
+    #TODO draw function page 7
 
-    screen = BaseStructure(Screen, Dict())
-    printer  = BaseStructure(Printer, Dict())
-    line  = BaseStructure(Line, Dict())
-    circle  = BaseStructure(Circle, Dict())
+    ColoredLine = BaseStructure(
+        Class,
+        Dict(
+            :name=>:ColoredLine,
+            :direct_superclasses=>[ColorMixin, Line], 
+            :direct_slots=>[:color],
+            # TODO class_cpl to check
+            :class_precedence_list=>[ColorMixin, Line, Object, Shape, Top],
+            :slots=>[]
+        )
+    )
+    pushfirst!(Device.class_precedence_list, ColoredLine)
 
-    result = @capture_out draw(line, screen)
-    @test result == "Drawing a line on a screen"
-    result = @capture_out draw(circle, screen)
-    @test result == "Drawing a circle on a screen"
-    result = @capture_out draw(line, printer)
-    @test result == "Drawing a line on a printer"
-    result = @capture_out draw(circle, printer)
-    @test result == "Drawing a circle on a printer"
+    ColoredCircle = BaseStructure(
+        Class,
+        Dict(
+            :name=>:ColoredCircle,
+            :direct_superclasses=>[ColorMixin, Circle], 
+            :direct_slots=>[:color],
+            # TODO class_cpl to check
+            :class_precedence_list=>[ColoredCircle, Circle, Object, Shape, Top],
+            :slots=>[]
+        )
+    )
+    pushfirst!(Device.class_precedence_list, ColoredCircle)
+
+    @testset "Introspection" begin
+        @test class_name(Circle) == :Circle
+        @test class_direct_slots(Circle) == [:center, :radius]
+        @test class_direct_slots(ColoredCircle) == []
+        @test class_slots(ColoredCircle) == [:color, :center, :radius]
+        @test class_direct_superclasses(ColoredCircle) == [ColorMixin, Circle]
+        @test class_cpl(ColoredCircle) == [ColoredCircle, ColorMixin, Circle, Object, Shape, Top]
+    end
 end
