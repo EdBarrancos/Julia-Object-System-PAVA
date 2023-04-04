@@ -1,6 +1,6 @@
 include("BaseStructure.jl")
 
-export GenericFunction, MultiMethod, new_method, new_generic_function
+export GenericFunction, MultiMethod, new_method, new_generic_function, generic_methods, method_specializers
 
 GenericFunction = BaseStructure(
     Class,
@@ -195,3 +195,8 @@ non_applicable_method = new_method(
             string(args))
     end
 )
+
+#= ###################### 2.15 Introspection ###################### =#
+generic_methods(method::BaseStructure) = getfield(method, :slots)[:methods]
+method_specializers(method::BaseStructure) = getfield(method, :slots)[:specializers]
+#= #################### END 2.15 Introspection #################### =#

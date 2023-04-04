@@ -53,7 +53,7 @@ This project was made for the course "Advanced Programming" by:
 - [x] 2.12 Class Hierarchy
 - [ ] 2.13 Class Precedence List - **Miguel**
 - [x] 2.14 Built-In Classes
-- [ ] 2.15 Introspection - **Juliana**
+- [x] 2.15 Introspection - **Juliana**
 - [ ] 2.16 Meta-Object Protocols
 - [ ] 2.16.1 Class Instantiation Protocol
 - [ ] 2.16.2 The Compute Slots Protocol
@@ -151,3 +151,5 @@ Done. Simply works. Beautiful
 #### 2.15 Introspection
 
 Implemented functions `class_name`, `class_direct_slots`, `class_slots`, `class_direct_superclasses`, `class_cpl` in `BaseStructure.jl` and added the respectively tests in `ComplexNumber.jl`. In `MultipleInheritance.jl` added tests that are in the statement of the project and also considered in class_precedence_list that `Top` is also one of the elements.
+
+Implemented functions `generic_methods` and `method_specializers` in `GenericFunctionAndMethods.jl`. **THE TESTS DON'T PASS**, I think the problem is in the output of the classes.

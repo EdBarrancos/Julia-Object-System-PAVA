@@ -149,7 +149,21 @@ using Test
         @test class_direct_slots(Circle) == [:center, :radius]
         @test class_direct_slots(ColoredCircle) == []
         @test class_slots(ColoredCircle) == [:color, :center, :radius]
+
+        result = @capture_out show(class_direct_superclasses(ColoredCircle))
+        @test result == "[<Class ColorMixin>, <Class Circle>]"
         @test class_direct_superclasses(ColoredCircle) == [ColorMixin, Circle]
+
+        result = @capture_out show(class_cpl(ColoredCircle))
+        @test result == "[<Class ColoredCircle>, <Class ColorMixin>, <Class Circle>, <Class Object>, <Class Shape>, <Class Top>]"
         @test class_cpl(ColoredCircle) == [ColoredCircle, ColorMixin, Circle, Object, Shape, Top]
+
+        result = @capture_out show(generic_methods(draw))
+        @test result == "[<MultiMethod draw(Circle, Printer)>, <MultiMethod draw(Line, Printer)>, <MultiMethod draw(Circle, Screen)>, <MultiMethod draw(Line, Screen)>]"
+        @test generic_methods(draw) == draw.methods
+
+        result = @capture_out show(method_specializers(generic_methods(draw)[1]))
+        @test result == "[<Class ColorMixin>, <Class Device>]"
+        @test method_specializers(generic_methods(draw)[1]) == generic_methods(draw)[1].specializers
     end
 end
