@@ -105,6 +105,7 @@ using Test
     )
     
     #TODO Missing reader and writer 
+
     ColorMixin = BaseStructure(
         Class,
         Dict(
@@ -117,7 +118,14 @@ using Test
     )
     pushfirst!(ColorMixin.class_precedence_list, ColorMixin)
     
-    #TODO draw function page 7
+    new_method(draw, :draw, 
+    [:shape, :device], 
+    [ColorMixin, Device], 
+    function (call_next_method, line, device)
+        #TODO função ainda nao estao igual à do enunciado
+        print("Drawing a ColorMixin on a Device")
+    end
+)
 
     ColoredLine = BaseStructure(
         Class,
@@ -159,22 +167,28 @@ using Test
         @test class_cpl(ColoredCircle) == [ColoredCircle, ColorMixin, Circle, Object, Shape, Top]
 
         result = @capture_out show(generic_methods(draw))
-        @test result == "[<MultiMethod draw(Line, Screen)>, <MultiMethod draw(Circle, Screen)>, <MultiMethod draw(Line, Printer)>, <MultiMethod draw(Circle, Printer)>]"
+        @test result == "[<MultiMethod draw(ColorMixin, Device)>, <MultiMethod draw(Circle, Printer)>, <MultiMethod draw(Line, Printer)>, <MultiMethod draw(Circle, Screen)>, <MultiMethod draw(Line, Screen)>]"
         @test generic_methods(draw) == draw.methods
 
-        #= result = @capture_out show(method_specializers(generic_methods(draw)[begin]))
+        result = @capture_out show(method_specializers(generic_methods(draw)[begin]))
         @test result == "[<Class ColorMixin>, <Class Device>]"
-        @test method_specializers(generic_methods(draw)[begin]) == generic_methods(draw)[begin].specializers =#
+        @test method_specializers(generic_methods(draw)[begin]) == generic_methods(draw)[begin].specializers
     end
 
     @testset "Class Hierarchy" begin
         result = ColoredCircle.direct_superclasses
         @test result[1].direct_superclasses == [Object]
+        output = @capture_out show(result[1].direct_superclasses)
+        @test output == "[<Class Object>]"
 
         result = result[1].direct_superclasses
         @test result[1].direct_superclasses == [Top]
+        output = @capture_out show(result[1].direct_superclasses)
+        @test output == "[<Class Top>]"
 
         result = result[1].direct_superclasses
         @test result[1].direct_superclasses == []
+        output = @capture_out show(result[1].direct_superclasses)
+        @test output == "[]"
     end
 end

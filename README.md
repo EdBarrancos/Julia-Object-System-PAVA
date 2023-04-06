@@ -156,4 +156,4 @@ Done. Simply works. Beautiful
 
 Implemented functions `class_name`, `class_direct_slots`, `class_slots`, `class_direct_superclasses`, `class_cpl` in `BaseStructure.jl` and added the respectively tests in `ComplexNumber.jl`. In `MultipleInheritance.jl` added tests that are in the statement of the project and also considered in class_precedence_list that `Top` is also one of the elements.
 
-Implemented functions `generic_methods` and `method_specializers` in `GenericFunctionAndMethods.jl`. **THE TESTS DON'T PASS**, I think the problem is in the output of the classes.
+Implemented functions `generic_methods` and `method_specializers` in `GenericFunctionAndMethods.jl`. ~~THE TESTS DON'T PASS, I think the problem is in the output of the classes.~~ **Change:** Instead of appending a new method **in the end** of the list of methods of a generic functions, append it in the beginning.

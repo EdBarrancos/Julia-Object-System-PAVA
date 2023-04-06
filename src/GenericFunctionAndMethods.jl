@@ -135,7 +135,7 @@ function create_method(
                 method.specializers)),
         parent_generic_function.methods)
         
-    push!(parent_generic_function.methods, new_method)
+    pushfirst!(parent_generic_function.methods, new_method)
 end
 
 function new_generic_function(name::Symbol, lambda_list::Vector)
