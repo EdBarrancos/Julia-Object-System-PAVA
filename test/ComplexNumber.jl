@@ -49,10 +49,10 @@ using Test
         new_method(
             print_object,
             :print_object,
-            [:c],
-            [ComplexNumber],
-            function (call_next_method, c)
-                print("$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
+            [:io, :c],
+            [_IO, ComplexNumber],
+            function (call_next_method, io, c)
+                print(io, "$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
             end
         )
 

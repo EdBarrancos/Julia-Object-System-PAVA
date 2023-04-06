@@ -53,7 +53,7 @@ using Test
     Screen = BaseStructure(
         Class,
         Dict(
-            :name=>:Line,
+            :name=>:Screen,
             :direct_superclasses=>[Device], 
             :direct_slots=>[],
             :class_precedence_list=>[Device, Object],
@@ -65,7 +65,7 @@ using Test
     Printer = BaseStructure(
         Class,
         Dict(
-            :name=>:Line,
+            :name=>:Printer,
             :direct_superclasses=>[Device], 
             :direct_slots=>[],
             :class_precedence_list=>[Device, Object],

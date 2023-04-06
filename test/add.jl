@@ -156,6 +156,5 @@ end
         result = @capture_out add(c1, c1)
         @test result == "Added Two Object\nAdded Two Object\n"
     end
-
 end
 

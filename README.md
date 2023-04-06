@@ -114,6 +114,10 @@ Really simple. Just an override of the `class_of` that, if it is called with one
 
 I've made for Ints, Floats, Bool, Char, String, Vector and Tuple. We may need to add more in the future if we need it.
 
+##### Possible Improvements
+
+We can't specialize based on the type inside the Vector
+
 #### Tests
 
 Had to play around a bit with the folder structure of the project. Ours wasn't well configurated.
