@@ -166,4 +166,15 @@ using Test
         @test result == "[<Class ColorMixin>, <Class Device>]"
         @test method_specializers(generic_methods(draw)[1]) == generic_methods(draw)[1].specializers
     end
+
+    @testset "Class Hierarchy" begin
+        result = ColoredCircle.direct_superclasses
+        @test result[1].direct_superclasses == [Object]
+
+        result = result[1].direct_superclasses
+        @test result[1].direct_superclasses == [Top]
+
+        result = result[1].direct_superclasses
+        @test result[1].direct_superclasses == []
+    end
 end
