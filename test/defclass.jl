@@ -52,10 +52,11 @@ Person = BaseStructure(
     Dict(
         :name=>:Person,
         :direct_superclasses=>[Object], 
-        :direct_slots=>[],
+        :direct_slots=>[name, age, friend],
         :class_precedence_list=>[Object, Top],
-        :slots=>[]
+        :slots=>[name, age, friend]
     )
 )
 pushfirst!(Person.class_precedence_list, Person)
 
+#add readers and writers
