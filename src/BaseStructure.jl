@@ -1,9 +1,13 @@
-export BaseStructure, Top, Object, Class, class_of, check_class, check_for_polymorph, 
-class_name, class_direct_slots, class_slots, class_direct_superclasses, class_cpl
+export BaseStructure, Top, Object, Class, class_of, check_class, check_for_polymorph
 
 mutable struct BaseStructure
     class_of_reference::Any #= Supposed to be another BaseStructure =#
     slots::Dict{Symbol, Any}
+end
+
+mutable struct Slot
+    name::Symbol
+    initForm::Any
 end
 
 Top = BaseStructure(
@@ -37,9 +41,21 @@ Class = BaseStructure(
     Dict(
         :name=>:Class,
         :direct_superclasses=>[Object], 
-        :direct_slots=>[:name, :direct_superclasses, :class_precedence_list, :slots, :direct_subclasses, :direct_methods],
+        :direct_slots=>[
+            Slot(:name, missing), 
+            Slot(:direct_superclasses, missing), 
+            Slot(:class_precedence_list, missing), 
+            Slot(:slots, missing), 
+            Slot(:direct_subclasses, missing)
+        ],
         :class_precedence_list=>[Object, Top],
-        :slots=>[:name, :direct_superclasses, :class_precedence_list, :slots, :direct_subclasses, :direct_methods]
+        :slots=>[
+            Slot(:name, missing), 
+            Slot(:direct_superclasses, missing), 
+            Slot(:class_precedence_list, missing), 
+            Slot(:slots, missing), 
+            Slot(:direct_subclasses, missing)
+        ]
     )
 )
 
@@ -63,7 +79,6 @@ check_class(instance, targetClass, exception) = begin
     end
 end
 
-#= #################### 2.3 Slot Access / 2.6 MetaObjects #################### =#
 function Base.getproperty(obj::BaseStructure, sym::Symbol)
     getfield(obj, :slots)[sym]
 end
@@ -74,13 +89,3 @@ function Base.setproperty!(obj::BaseStructure, name::Symbol, x)
     setfield!(obj, :slots, slots)
     x
 end
-
-#= #################### END 2.3 Slot Access #################### =#
-
-#= ###################### 2.15 Introspection ###################### =#
-class_name(class::BaseStructure) = getfield(class, :slots)[:name]
-class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots]
-class_slots(class::BaseStructure) = getfield(class, :slots)[:slots]
-class_direct_superclasses(class::BaseStructure) = getfield(class, :slots)[:direct_superclasses]
-class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list]
-#= #################### END 2.15 Introspection #################### =#

@@ -150,6 +150,12 @@ Try to use `@testset` to organize it.
 
 Done. Simply works. Beautiful
 
+#### 2.7 Class Options
+
+In order to do the class options I started creating the `defclass` macro. Although it is still incomplete. It does not compute the class_precedence_list, the full slot list and setting readers and writers for slots.
+
+Also, restrucutred the slot section. As now we need to store initforms. And so i created a new struct `Slot` that holds a name and a init value.
+
 ### Juli - Notes
 
 #### 2.15 Introspection
