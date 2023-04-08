@@ -1,4 +1,4 @@
-export BaseStructure, Top, Object, Class, class_of, check_class, check_for_polymorph
+export BaseStructure, Top, Object, Class, Slot, class_of, check_class, check_for_polymorph
 
 mutable struct BaseStructure
     class_of_reference::Any #= Supposed to be another BaseStructure =#
@@ -8,6 +8,18 @@ end
 mutable struct Slot
     name::Symbol
     initForm::Any
+end
+
+function Base.:(==)(one::Slot, another::Slot)
+    return one.name == another.name
+end
+
+function Base.:(==)(one::Symbol, another::Slot)
+    return one == another.name
+end
+
+function Base.:(==)(one::Slot, another::Symbol)
+    return one.name == another
 end
 
 Top = BaseStructure(

@@ -67,9 +67,15 @@ end
         Dict(
             :name=>:ComplexNumber,
             :direct_superclasses=>[Object], 
-            :direct_slots=>[:real, :imag],
+            :direct_slots=>[
+                Slot(:real, missing),
+                Slot(:imag, missing)
+            ],
             :class_precedence_list=>[Object],
-            :slots=>[:real, :imag]
+            :slots=>[
+                Slot(:real, missing),
+                Slot(:imag, missing)
+            ]
         )
     )
     pushfirst!(getfield(ComplexNumber, :slots)[:class_precedence_list], ComplexNumber)

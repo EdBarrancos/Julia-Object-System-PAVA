@@ -5,9 +5,17 @@ GenericFunction = BaseStructure(
     Dict(
         :name=>:GenericFunction,
         :direct_superclasses=>[Object], 
-        :direct_slots=>[:name, :lambda_list, :methods],
+        :direct_slots=>[
+            Slot(:name, missing), 
+            Slot(:lambda_list, missing), 
+            Slot(:methods, missing)
+        ],
         :class_precedence_list=>[Object, Top],
-        :slots=>[:name, :lambda_list, :methods]
+        :slots=>[
+            Slot(:name, missing), 
+            Slot(:lambda_list, missing), 
+            Slot(:methods, missing)
+        ]
     )
 )
 
@@ -18,9 +26,17 @@ MultiMethod = BaseStructure(
     Dict(
         :name=>:MultiMethod,
         :direct_superclasses=>[Object], 
-        :direct_slots=>[:specializers, :procedure, :generic_function],
+        :direct_slots=>[
+            Slot(:specializers, missing), 
+            Slot(:procedure, missing), 
+            Slot(:generic_function, missing)
+        ],
         :class_precedence_list=>[Object, Top],
-        :slots=>[:specializers, :procedure, :generic_function]
+        :slots=>[
+            Slot(:specializers, missing), 
+            Slot(:procedure, missing), 
+            Slot(:generic_function, missing)
+        ]
     )
 )
 

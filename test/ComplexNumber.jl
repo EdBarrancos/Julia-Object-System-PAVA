@@ -7,9 +7,15 @@ using Test
         Dict(
             :name=>:ComplexNumber,
             :direct_superclasses=>[Object], 
-            :direct_slots=>[:real, :imag],
+            :direct_slots=>[
+                Slot(:real, missing),
+                Slot(:imag, missing)
+            ],
             :class_precedence_list=>[Object],
-            :slots=>[:real, :imag]
+            :slots=>[
+                Slot(:real, missing),
+                Slot(:imag, missing)
+            ]
         )
     )
     pushfirst!(getfield(ComplexNumber, :slots)[:class_precedence_list], ComplexNumber)
@@ -28,7 +34,7 @@ using Test
         @test class_of(class_of(class_of(c1))) === Class
 
         @test ComplexNumber.direct_slots == [:real, :imag]
-        @test Class.slots == [:name, :direct_superclasses, :class_precedence_list, :slots, :direct_subclasses, :direct_methods]
+        @test Class.slots == [:name, :direct_superclasses, :class_precedence_list, :slots, :direct_subclasses]
         @test ComplexNumber.name == :ComplexNumber
         @test ComplexNumber.direct_superclasses == [Object]
     end

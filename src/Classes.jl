@@ -48,6 +48,7 @@ macro defclass(name, superclasses, slots)
                 Dict(
                     :name=>$target_name,
                     :direct_superclasses=>length($superclasses) > 0 ? $superclasses : [Object],
+                    :direct_slots=>$slots_definition,
                     :class_precedence_list=>length($superclasses) > 0 ? $superclasses : [Object],
                     :slots=>$slots_definition
                 )
