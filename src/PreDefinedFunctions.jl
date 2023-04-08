@@ -1,5 +1,3 @@
-include("GenericFunctionAndMethods.jl")
-
 export print_object
 
 print_object = BaseStructure(
@@ -136,4 +134,12 @@ end
 
 function Base.show(io::IO, t::Union{BaseStructure, Vector, Tuple})
     print_object(io, t)
+end
+
+function Base.show(io::IO, ::MIME"text/plain", t::Union{Slot})
+    print(io, t.name)
+end
+
+function Base.show(io::IO, t::Union{Slot})
+    print(io, t.name)
 end

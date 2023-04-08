@@ -1,5 +1,3 @@
-include("BaseStructure.jl")
-
 export GenericFunction, MultiMethod, new_method, new_generic_function, generic_methods, method_specializers
 
 GenericFunction = BaseStructure(
