@@ -2,77 +2,12 @@ using Suppressor
 using Test
 
 @testset "Multiple Dispatch test" begin
-    Shape = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Shape,
-            :direct_superclasses=>[Object], 
-            :direct_slots=>[],
-            :class_precedence_list=>[Object],
-            :slots=>[]
-        )
-    )
-    pushfirst!(Shape.class_precedence_list, Shape)
-
-    Device = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Device,
-            :direct_superclasses=>[Object], 
-            :direct_slots=>[],
-            :class_precedence_list=>[Object],
-            :slots=>[]
-        )
-    )
-    pushfirst!(Device.class_precedence_list, Device)
-
-    Line = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Line,
-            :direct_superclasses=>[Shape], 
-            :direct_slots=>[:from, :to],
-            :class_precedence_list=>[Shape, Object],
-            :slots=>[:from, :to]
-        )
-    )
-    pushfirst!(Line.class_precedence_list, Line)
-
-    Circle = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Circle,
-            :direct_superclasses=>[Shape], 
-            :direct_slots=>[:center, :radius],
-            :class_precedence_list=>[Shape, Object],
-            :slots=>[:center, :radius]
-        )
-    )
-    pushfirst!(Circle.class_precedence_list, Circle)
-
-    Screen = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Screen,
-            :direct_superclasses=>[Device], 
-            :direct_slots=>[],
-            :class_precedence_list=>[Device, Object],
-            :slots=>[]
-        )
-    )
-    pushfirst!(Screen.class_precedence_list, Screen)
-
-    Printer = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Printer,
-            :direct_superclasses=>[Device], 
-            :direct_slots=>[],
-            :class_precedence_list=>[Device, Object],
-            :slots=>[]
-        )
-    )
-    pushfirst!(Printer.class_precedence_list, Printer)
+    @defclass(Shape, [Object], [])
+    @defclass(Device, [Object], [])
+    @defclass(Line, [Shape], [])
+    @defclass(Circle, [Shape], [])
+    @defclass(Screen, [Device], [])
+    @defclass(Printer, [Device], [])
 
     draw = new_generic_function(:draw, [:shape, :device])
     new_method(draw, :draw, 

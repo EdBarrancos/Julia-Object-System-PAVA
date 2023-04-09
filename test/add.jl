@@ -62,23 +62,7 @@ end
 @testset "Add" begin
     @defgeneric add(a, b)
 
-    ComplexNumber = BaseStructure(
-        Class,
-        Dict(
-            :name=>:ComplexNumber,
-            :direct_superclasses=>[Object], 
-            :direct_slots=>[
-                Slot(:real, missing),
-                Slot(:imag, missing)
-            ],
-            :class_precedence_list=>[Object],
-            :slots=>[
-                Slot(:real, missing),
-                Slot(:imag, missing)
-            ]
-        )
-    )
-    pushfirst!(getfield(ComplexNumber, :slots)[:class_precedence_list], ComplexNumber)
+    @defclass(ComplexNumber, [Object], [real, imag])
 
     c1 = BaseStructure(
         ComplexNumber,
