@@ -7,7 +7,7 @@ end
 
 mutable struct Slot
     name::Symbol
-    initForm::Any
+    initform::Any
 end
 
 function Base.:(==)(one::Slot, another::Slot)

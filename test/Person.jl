@@ -21,15 +21,32 @@ using Test
 
     @testset "Slot Creation" begin
         @testset "No Slots" begin
-            
+            @test isempty(SuperInt.slots)
         end
 
         @testset "Simple Slots" begin
-            
+            @defclass(SuperInt, [_Int128],[value])
+            @test getfield(SuperInt.slots[begin], :name) == :value
+            @test ismissing(getfield(SuperInt.slots[begin], :initform))
+
+            @defclass(SuperInt, [_Int128],[[value]])
+            @test getfield(SuperInt.slots[begin], :name) == :value
+            @test ismissing(getfield(SuperInt.slots[begin], :initform)) 
         end
 
         @testset "Slots Initform" begin
-            
+            @defclass(SuperInt, [_Int128],[value=2, isSuper=true])
+            @test getfield(SuperInt.slots[begin], :name) == :value
+            @test getfield(SuperInt.slots[begin], :initform) == 2
+            @test getfield(SuperInt.slots[end], :name) == :isSuper
+            @test getfield(SuperInt.slots[end], :initform) == true 
+
+            @test getfield(Person.slots[begin], :name) == :name
+            @test ismissing(getfield(Person.slots[begin], :initform))
+            @test getfield(Person.slots[2], :name) == :age
+            @test getfield(Person.slots[2], :initform) == 0
+            @test getfield(Person.slots[3], :name) == :friend
+            @test ismissing(getfield(Person.slots[3], :initform))
         end
     end
 end

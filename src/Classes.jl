@@ -21,14 +21,14 @@ macro defclass(name, superclasses, slots)
 
             for option in slot.args
                 if typeof(option) != Expr
-                    new_slot.name = option
+                    setfield!(new_slot, :name, option)
                 elseif option.head == :(=)
                     if option.args[begin] == :reader
                         println("TODO, define reader")
                     elseif option.args[begin] == :writer
                         println("TODO, define writer")
                     elseif option.args[begin] == :initform
-                        new_slot.initForm = option.args[end]
+                        setfield!(new_slot, :initform, option.args[end])
                     else
                         new_slot = Slot(option.args[begin], option.args[end])
                     end
