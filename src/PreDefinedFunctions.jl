@@ -1,13 +1,6 @@
 export print_object
 
-print_object = BaseStructure(
-    GenericFunction,
-    Dict(
-        :name => :print_object,
-        :lambda_list => [:io, :obj],
-        :methods => []
-    )
-)
+@defgeneric print_object(io, obj)
 
 new_method(
     print_object,

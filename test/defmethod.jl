@@ -1,5 +1,4 @@
-# @defgeneric add(a, b)
-add = new_generic_function(:add, [:a, :b])
+@defgeneric add(a, b)
 
 #= @defmethod add(a::ComplexNumber, b::ComplexNumber) =
   new(ComplexNumber, real=(a.real + b.real), imag=(a.imag + b.imag)) =#

@@ -4,7 +4,7 @@ using Test
 
 @testset "Create Method and Generic Functions" begin
     @testset "Create Generic Function and Method" begin
-        gen = new_generic_function(:gen, [:a, :b])
+        @defgeneric gen(a, b)
         @test class_of(gen) == GenericFunction
         @test class_of(class_of(gen)) == Class
         @test gen.name == :gen
@@ -60,7 +60,7 @@ using Test
 end
 
 @testset "Add" begin
-    add = new_generic_function(:add, [:a, :b])
+    @defgeneric add(a, b)
 
     ComplexNumber = BaseStructure(
         Class,

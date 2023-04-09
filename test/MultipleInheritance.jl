@@ -74,7 +74,8 @@ using Test
     )
     pushfirst!(Printer.class_precedence_list, Printer)
 
-    draw = new_generic_function(:draw, [:shape, :device])
+    @defgeneric draw(shape, device)
+
     new_method(draw, :draw, 
         [:shape, :device], 
         [Line, Screen], 

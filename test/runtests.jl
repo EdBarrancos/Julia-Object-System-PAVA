@@ -8,4 +8,5 @@ using Test
     include("MultipleDispatch.jl")
     include("MultipleInheritance.jl")
     include("Person.jl")
+    include("defgeneric.jl")
 end
