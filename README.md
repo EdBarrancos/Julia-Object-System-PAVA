@@ -36,7 +36,7 @@ This project was made for the course "Advanced Programming" by:
 
 - [x] x Tests
 - [ ] 2.0 Macros
-  - [ ] 2.0.1 defclass
+  - [x] 2.0.1 defclass [Not complete yet]
   - [ ] 2.0.2 defgeneric
   - [ ] 2.0.3 defmethpd
 - [x] 2.1 Classes
@@ -45,7 +45,7 @@ This project was made for the course "Advanced Programming" by:
 - [x] 2.4 Generic Functions and methods
 - [x] 2.5 Pre-defined Generic Functions and Methods
 - [ ] 2.6 MetaObjects - **Liliana**
-- [ ] 2.7 Class Options - **Edu**
+- [x] 2.7 Class Options
 - [ ] 2.8 Readers and Writers - **Liliana**
 - [x] 2.9 Generic Function Calls
 - [x] 2.10 Multiple Dispatch
@@ -154,7 +154,121 @@ Done. Simply works. Beautiful
 
 In order to do the class options I started creating the `defclass` macro. Although it is still incomplete. It does not compute the class_precedence_list, the full slot list and setting readers and writers for slots.
 
-Also, restrucutred the slot section. As now we need to store initforms. And so i created a new struct `Slot` that holds a name and a init value.
+Also, restrucutred the slot section. As now we need to store initforms. And so i created a new struct `Slot` that holds a name and a init value. This new value will be used later on when we need to create new instances of classes.
+
+Some classes don't really need this new Slot (e.g. `Class`, `GenericFunction` and `MultiMethod`) as all new instances default to missing and require a value. But I added it anyway for consistency.
+
+I also overridden the `show` for `Slot` to show only the slot name.
+
+##### 2.7 - Creating Slots
+
+There are different type of slot definitions and so the macro needs todeal with them.
+
+|ID|Actual|Result|
+|---|---|---|
+|0|`[hello]`|Creates the slot `hello` with initform as `missing`|
+|1|`[hello=1]`|Creates the slot `hello` with initform as `1`|
+|2|`[[hello]]`|Creates the slot `hello` with initform as `missing`|
+|3|`[[hello=1]]`|Creates the slot `hello` with initform as `1`|
+|4|`[[hello, initform=5]]`|Creates the slot `hello` with initform as `5`|
+
+Code that gives us the intended result by id:
+**0**
+
+```Julia
+if typeof(slot) != Expr
+     push!(direct_slots_definition, Slot(slot, missing))
+```
+
+**1**
+
+```Julia
+if typeof(slot) != Expr
+    ...
+elseif 
+  ...
+elseif slot.head == :(=)
+    push!(direct_slots_definition, Slot(slot.args[begin], slot.args[end]))
+end
+```
+
+**2**
+
+```Julia
+if typeof(slot) != Expr
+    ...
+elseif slot.head == :vect
+    new_slot = Slot(:missing, missing)
+
+    for option in slot.args
+        if typeof(option) != Expr
+            setfield!(new_slot, :name, option)
+        ...
+        end
+    end
+
+    push!(direct_slots_definition, new_slot)
+...
+end
+```
+
+**3**
+
+```Julia
+if typeof(slot) != Expr
+    ...
+elseif slot.head == :vect
+    new_slot = Slot(:missing, missing)
+
+    for option in slot.args
+        if typeof(option) != Expr
+            setfield!(new_slot, :name, option)
+        elseif option.head == :(=)
+            if option.args[begin] == ...
+                ...
+            elseif option.args[begin] == ...
+                ...
+            elseif option.args[begin] == ...
+                ...
+            else
+                new_slot = Slot(option.args[begin], option.args[end])
+            end
+        end
+    end
+
+    push!(direct_slots_definition, new_slot)
+...
+end
+```
+
+**4**
+
+```Julia
+if typeof(slot) != Expr
+    ...
+elseif slot.head == :vect
+    new_slot = Slot(:missing, missing)
+
+    for option in slot.args
+        if typeof(option) != Expr
+            setfield!(new_slot, :name, option)
+        elseif option.head == :(=)
+            if option.args[begin] == ...
+                ...
+            elseif option.args[begin] == ...
+                ...
+            elseif option.args[begin] == :initform
+                setfield!(new_slot, :initform, option.args[end])
+            else
+                ...
+            end
+        end
+    end
+
+    push!(direct_slots_definition, new_slot)
+...
+end
+```
 
 ### Juli - Notes
 
