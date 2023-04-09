@@ -1,4 +1,6 @@
-export GenericFunction, MultiMethod, new_method, new_generic_function, generic_methods, method_specializers
+export GenericFunction, MultiMethod, new_method, 
+new_generic_function, generic_methods, method_specializers,
+@defgeneric
 
 GenericFunction = BaseStructure(
     Class,
@@ -152,6 +154,34 @@ function create_method(
     pushfirst!(parent_generic_function.methods, new_method)
 end
 
+macro defgeneric(function_call)
+    if typeof(function_call) != Expr
+        error("Invalid syntax for defining generic function")
+    end
+
+    if function_call.head != :call
+        error("Invalid syntax for defining generic function")
+    end
+
+    target_name = QuoteNode(function_call.args[begin])
+
+    dump(function_call.args[begin])
+
+    return esc(
+        quote
+            $(function_call.args[begin]) = BaseStructure(
+                GenericFunction,
+                Dict(
+                    :name=>$target_name,
+                    :lambda_list=>$(function_call.args[2:end]),
+                    :methods=>[]
+                )
+            )
+        end
+    )
+end
+
+#= Deprecated, to be here until we have defmethod =#
 function new_generic_function(name::Symbol, lambda_list::Vector)
     return BaseStructure(
         GenericFunction,
