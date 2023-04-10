@@ -60,10 +60,11 @@ macro defclass(name, superclasses, slots, options...)
                     :direct_superclasses=>length($superclasses) > 0 ? $superclasses : [Object],
                     :direct_slots=>$direct_slots_definition,
                     :class_precedence_list=>length($superclasses) > 0 ? $superclasses : [Object],
-                    :slots=>$direct_slots_definition
+                    :slots=>[]
                 )
             )
             pushfirst!(getfield($name, :slots)[:class_precedence_list], $name)
+            $name.slots = compute_slots($name)
             $name
         end
     )

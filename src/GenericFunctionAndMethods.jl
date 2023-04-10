@@ -245,14 +245,6 @@ macro defmethod(method)
     end)
 end
 
-@defmethod non_applicable_method(generic_function::GenericFunction, args::_Tuple) = begin
-    error(
-        "No applicable method for function ", 
-        generic_function.name, 
-        " with arguments ",  
-        string(args))
-end
-
 
 #= ###################### 2.15 Introspection ###################### =#
 generic_methods(method::BaseStructure) = getfield(method, :slots)[:methods]

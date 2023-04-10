@@ -40,6 +40,7 @@ This project was made for the course "Advanced Programming" by:
   - [x] 2.0.1 defclass [Not complete yet]
   - [x] 2.0.2 defgeneric
   - [x] 2.0.3 defmethod
+    - [ ] Change defmethod so we can more easily define empty methods
 - [x] 2.1 Classes
 - [x] 2.2 Instances
 - [x] 2.3 Slot Access
@@ -56,16 +57,16 @@ This project was made for the course "Advanced Programming" by:
 - [x] 2.14 Built-In Classes
 - [x] 2.15 Introspection - **Juliana**
 - [ ] 2.16 Meta-Object Protocols
-- [ ] 2.16.1 Class Instantiation Protocol
-- [ ] 2.16.2 The Compute Slots Protocol
-- [ ] 2.16.3 Slot Access Protocol
-- [ ] 2.16.4 Class Precedence List protocol
+  - [ ] 2.16.1 Class Instantiation Protocol
+  - [x] 2.16.2 The Compute Slots Protocol
+  - [ ] 2.16.3 Slot Access Protocol - **Edu**
+  - [ ] 2.16.4 Class Precedence List protocol
 - [ ] 2.17 Multiple Meta-Class Inheritance
 - [ ] 2.18 *Extensions*
-- [ ] 2.18.1 Meta-Objects for slot definitions
-- [ ] 2.18.2 CLOS-like method combination for generic functions
-- [ ] 2.18.3 CLOS or Dylan's strategy for computing the class precedence list
-- [ ] 2.18.4 Additional Metaobject protocols
+  - [ ] 2.18.1 Meta-Objects for slot definitions
+  - [ ] 2.18.2 CLOS-like method combination for generic functions
+  - [ ] 2.18.3 CLOS or Dylan's strategy for computing the class precedence list
+  - [ ] 2.18.4 Additional Metaobject protocols
 
 ### Edu - Notes
 
@@ -317,10 +318,6 @@ create_method(
     )
 )
 ```
-
-##### Extra TODOs
-
-- [ ] Change defmethod so we can more easily define empty methods
 
 ### Juli - Notes
 
