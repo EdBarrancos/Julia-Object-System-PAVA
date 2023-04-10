@@ -1,5 +1,5 @@
-export GenericFunction, MultiMethod, new_method, 
-new_generic_function, generic_methods, method_specializers, create_method,
+export GenericFunction, MultiMethod, 
+generic_methods, method_specializers, create_method,
 @defgeneric, @defmethod
 
 GenericFunction = BaseStructure(
@@ -227,7 +227,8 @@ macro defmethod(method)
         if ! @isdefined $(method.args[begin].args[begin])
             @defgeneric $(method.args[begin].args[begin])($(lambda_list)...)
         end
-
+        
+        #= Maybe we shouldn't be calling the function? =#
         create_method(
             $(method.args[begin].args[begin]),
             BaseStructure(
@@ -242,51 +243,6 @@ macro defmethod(method)
 
         $(method.args[begin].args[begin])
     end)
-end
-
-#= Deprecated, to be here until we have defmethod =#
-function new_generic_function(name::Symbol, lambda_list::Vector)
-    return BaseStructure(
-        GenericFunction,
-        Dict(
-            :name=>name,
-            :lambda_list=>lambda_list,
-            :methods=>[]
-        )
-    )
-end
-
-#= Depercated, to be deleted =#
-function new_method(
-    generic_function, 
-    name::Symbol, 
-    lambda_list::Vector, 
-    specializers::Vector,
-    procedure)
-
-    if isnothing(generic_function)
-        generic_function = new_generic_function(name, lambda_list)
-    end
-
-    for i in range(1, length(specializers), step=1)
-        if ismissing(specializers[i])
-            specializers[i] = Top
-        end
-    end
-
-    create_method(
-        generic_function,
-        BaseStructure(
-            MultiMethod,
-            Dict(
-                :generic_function=>generic_function,
-                :specializers=>specializers,
-                :procedure=>procedure
-            )
-        )
-    )
-
-    return generic_function
 end
 
 @defmethod non_applicable_method(generic_function::GenericFunction, args::_Tuple) = begin
