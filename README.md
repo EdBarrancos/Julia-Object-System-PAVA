@@ -39,7 +39,7 @@ This project was made for the course "Advanced Programming" by:
 - [ ] 2.0 Macros
   - [x] 2.0.1 defclass [Not complete yet]
   - [x] 2.0.2 defgeneric
-  - [x] 2.0.3 defmethod - **Edu**
+  - [x] 2.0.3 defmethod
 - [x] 2.1 Classes
 - [x] 2.2 Instances
 - [x] 2.3 Slot Access
