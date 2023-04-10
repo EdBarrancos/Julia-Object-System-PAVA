@@ -75,11 +75,11 @@ function apply_method(
     check_for_polymorph(methods[target_method_index], MultiMethod, ArgumentError)
 
     method = methods[target_method_index]
-
-
+    
+    
     let 
         call_next_method = () -> apply_methods(generic_function, methods, target_method_index + 1, args)
-
+        
         return method.procedure(call_next_method, args...)
     end
 end
@@ -165,7 +165,12 @@ macro defgeneric(function_call)
 
     target_name = QuoteNode(function_call.args[begin])
 
-    dump(function_call.args[begin])
+    lambda_list = []
+    if typeof(function_call.args[end]) == Expr && function_call.args[end].head == :(...)
+        lambda_list = [lambda for lambda in function_call.args[end].args[begin]]
+    else
+        lambda_list = [lambda for lambda in function_call.args[2:end]]
+    end
 
     return esc(
         quote
@@ -173,12 +178,74 @@ macro defgeneric(function_call)
                 GenericFunction,
                 Dict(
                     :name=>$target_name,
-                    :lambda_list=>$(function_call.args[2:end]),
+                    :lambda_list=>$(lambda_list),
                     :methods=>[]
                 )
             )
         end
     )
+end
+
+macro create_function(expr, args)
+    return :($args->expr)
+end
+
+macro defmethod(method)
+    if typeof(method) != Expr
+        error("Invalid syntax for defining method")
+    end
+
+    if method.head != :(=)
+        error("Missing body in method definition")
+    end
+
+    if typeof(method.args[begin]) != Expr && methpd.args[begin].head != :call
+        error("Invalid syntax for defining method signature")
+    end
+
+    if typeof(method.args[end]) != Expr && methpd.args[end].head != :block
+        error("Invalid syntax for defining method body")
+    end
+
+    lambda_list = []
+
+    specializers = []
+
+    for lambda in method.args[begin].args[2:end]
+        if typeof(lambda) == Symbol
+            push!(lambda_list, lambda)
+            push!(specializers, Top)
+        else
+            if lambda.head != :(::)
+                error("Invalid syntax for method lambda_list")
+            end
+
+            push!(lambda_list, lambda.args[begin])
+            push!(specializers, lambda.args[end])
+        end
+    end
+
+    lambda_list = Tuple(lambda_list)
+
+    return esc(quote
+        if ! @isdefined $(method.args[begin].args[begin])
+            @defgeneric $(method.args[begin].args[begin])($(lambda_list)...)
+        end
+
+        create_method(
+            $(method.args[begin].args[begin]),
+            BaseStructure(
+                MultiMethod,
+                Dict(
+                    :generic_function=>$(method.args[begin].args[begin]),
+                    :specializers=>[$(specializers...)],
+                    :procedure=>(call_next_method, $(lambda_list...))->$(method.args[end])
+                )
+            )
+        )
+
+        $(method.args[begin].args[begin])
+    end)
 end
 
 #= Deprecated, to be here until we have defmethod =#

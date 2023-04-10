@@ -4,7 +4,7 @@ new_built_in_type(name::Symbol) = begin
     newType = BaseStructure(
         Class,
         Dict(
-            :name=>:name,
+            :name=>name,
             :direct_superclasses=>[Top], 
             :direct_slots=>[],
             :class_precedence_list=>[Top],
