@@ -1,6 +1,6 @@
 export GenericFunction, MultiMethod, new_method, 
-new_generic_function, generic_methods, method_specializers,
-@defgeneric
+new_generic_function, generic_methods, method_specializers, create_method,
+@defgeneric, @defmethod
 
 GenericFunction = BaseStructure(
     Class,
@@ -186,10 +186,6 @@ macro defgeneric(function_call)
     )
 end
 
-macro create_function(expr, args)
-    return :($args->expr)
-end
-
 macro defmethod(method)
     if typeof(method) != Expr
         error("Invalid syntax for defining method")
@@ -260,6 +256,7 @@ function new_generic_function(name::Symbol, lambda_list::Vector)
     )
 end
 
+#= Depercated, to be deleted =#
 function new_method(
     generic_function, 
     name::Symbol, 
@@ -292,20 +289,14 @@ function new_method(
     return generic_function
 end
 
-#= This one needs to be here or it will create a ciclic dependency =#
-non_applicable_method = new_method(
-    nothing,
-    :non_applicable_method,
-    [:generic_function, :args],
-    [GenericFunction, _Tuple],
-    function (call_next_method, generic_function, args)
-        error(
-            "No applicable method for function ", 
-            generic_function.name, 
-            " with arguments ",  
-            string(args))
-    end
-)
+@defmethod non_applicable_method(generic_function::GenericFunction, args::_Tuple) = begin
+    error(
+        "No applicable method for function ", 
+        generic_function.name, 
+        " with arguments ",  
+        string(args))
+end
+
 
 #= ###################### 2.15 Introspection ###################### =#
 generic_methods(method::BaseStructure) = getfield(method, :slots)[:methods]

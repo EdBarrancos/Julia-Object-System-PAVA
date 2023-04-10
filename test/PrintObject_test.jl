@@ -21,14 +21,7 @@ using Test
     end
 
     @testset "Print Generic Functions and Methods" begin
-        gen = new_method(
-            nothing,
-            :gen,
-            [:a],
-            [Object],
-            function (call_next_method, a)
-            end
-        )
+        @defmethod gen(a::Object) = begin end
 
         result = @capture_out show(gen)
         @test result == "<GenericFunction gen with 1 methods>"

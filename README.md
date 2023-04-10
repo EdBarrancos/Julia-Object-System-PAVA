@@ -31,6 +31,7 @@ This project was made for the course "Advanced Programming" by:
 - [x] Result of calling `call_next_method()` when there is no next method to call?
   - Error
 - [ ] Which types do we need to support with the built in types? For example, do we need to support Unsigned ints?
+- [ ] Check `QUESTION` in `ComplexNumber.jl`
 
 ### Current State
 
@@ -38,7 +39,7 @@ This project was made for the course "Advanced Programming" by:
 - [ ] 2.0 Macros
   - [x] 2.0.1 defclass [Not complete yet]
   - [x] 2.0.2 defgeneric
-  - [ ] 2.0.3 defmethod - **Edu**
+  - [x] 2.0.3 defmethod - **Edu**
 - [x] 2.1 Classes
 - [x] 2.2 Instances
 - [x] 2.3 Slot Access
@@ -269,6 +270,57 @@ elseif slot.head == :vect
 ...
 end
 ```
+
+#### defgeneric and defmethod
+
+The `defgeneric` macro is pretty simple. It takes what looks like a function call and creates a generic from it.
+
+The `defmethod` on the other hand is a bit more complicated. 
+First we build the lambda list and the specializers. If a specializer is not defined we assume it is `Top`
+
+```Julia
+for lambda in method.args[begin].args[2:end]
+        if typeof(lambda) == Symbol
+            push!(lambda_list, lambda)
+            push!(specializers, Top)
+        else
+            if lambda.head != :(::)
+                error("Invalid syntax for method lambda_list")
+            end
+
+            push!(lambda_list, lambda.args[begin])
+            push!(specializers, lambda.args[end])
+        end
+    end
+```
+
+Then we check if there is already a correspondant generic function defined. If not, we create a new one.
+
+```Julia
+if ! @isdefined $(method.args[begin].args[begin])
+    @defgeneric $(method.args[begin].args[begin])($(lambda_list)...)
+end
+```
+
+Finally we call the create_method function which takes the generic function and the method built. The function will add the new method to the list of methods of the generic function and override any if necessary
+
+```Julia
+create_method(
+    $(method.args[begin].args[begin]),
+    BaseStructure(
+        MultiMethod,
+        Dict(
+            :generic_function=>$(method.args[begin].args[begin]),
+            :specializers=>[$(specializers...)],
+            :procedure=>(call_next_method, $(lambda_list...))->$(method.args[end])
+        )
+    )
+)
+```
+
+##### Extra TODOs
+
+- [ ] Change defmethod so we can more easily define empty methods
 
 ### Juli - Notes
 

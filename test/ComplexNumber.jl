@@ -1,3 +1,4 @@
+using JuliaObjectSystem
 using Suppressor
 using Test
 
@@ -36,15 +37,10 @@ using Test
     @test c1.imag === imag_value + 3
 
     @testset "Printing Complex Numbers" begin
-        new_method(
-            print_object,
-            :print_object,
-            [:io, :c],
-            [_IO, ComplexNumber],
-            function (call_next_method, io, c)
-                print(io, "$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
-            end
-        )
+        #= QUESTION: Wtf, why do i need to do this? 
+            Outside of @testset it works fine, here it does not recognize `print_object`=#
+        print_object = JuliaObjectSystem.print_object 
+        @defmethod print_object(io::_IO, c::ComplexNumber) = print(io, "$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
 
         result = @capture_out show(c1)
         @test result == "1+5i"

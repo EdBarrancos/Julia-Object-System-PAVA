@@ -76,34 +76,10 @@ using Test
 
     @defgeneric draw(shape, device)
 
-    new_method(draw, :draw, 
-        [:shape, :device], 
-        [Line, Screen], 
-        function (call_next_method, line, device)
-            print("Drawing a line on a screen")
-        end
-    )
-    new_method(draw, :draw, 
-        [:shape, :device], 
-        [Circle, Screen], 
-        function (call_next_method, line, device)
-            print("Drawing a circle on a screen")
-        end
-    )
-    new_method(draw, :draw, 
-        [:shape, :device], 
-        [Line, Printer], 
-        function (call_next_method, line, device)
-            print("Drawing a line on a printer")
-        end
-    )
-    new_method(draw, :draw, 
-        [:shape, :device], 
-        [Circle, Printer], 
-        function (call_next_method, line, device)
-            print("Drawing a circle on a printer")
-        end
-    )
+    @defmethod draw(shape::Line, device::Screen) = print("Drawing a line on a screen")
+    @defmethod draw(shape::Circle, device::Screen) = print("Drawing a circle on a screen")
+    @defmethod draw(shape::Line, device::Printer) = print("Drawing a line on a printer")
+    @defmethod draw(shape::Circle, device::Printer) = print("Drawing a circle on a printer")
     
     #TODO Missing reader and writer 
 
@@ -119,14 +95,7 @@ using Test
     )
     pushfirst!(ColorMixin.class_precedence_list, ColorMixin)
     
-    new_method(draw, :draw, 
-    [:shape, :device], 
-    [ColorMixin, Device], 
-    function (call_next_method, line, device)
-        #TODO função ainda nao estao igual à do enunciado
-        print("Drawing a ColorMixin on a Device")
-    end
-)
+    @defmethod draw(shape::ColorMixin, device::Device) = print("Drawing a ColorMixin on a Device")
 
     ColoredLine = BaseStructure(
         Class,

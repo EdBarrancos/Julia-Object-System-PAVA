@@ -2,124 +2,82 @@ export print_object
 
 @defgeneric print_object(io, obj)
 
-new_method(
-    print_object,
-    :print_object,
-    [:io, :class],
-    [_IO, Class],
-    function (call_next_method, io, class)
-        print(
-            io, 
-            "<" ,
-            String(getfield(class, :class_of_reference).name), 
-            " ", 
-            String(class.name), 
-            ">")
+@defmethod print_object(io::_IO, class::Class) = begin
+    print(io, 
+        "<" ,
+        String(getfield(class, :class_of_reference).name), 
+        " ", 
+        String(class.name), 
+        ">")
+end
+
+@defmethod print_object(io::_IO, obj::Object) = begin
+    print(io, 
+        "<",
+        String(getfield(obj, :class_of_reference).name),
+        " ", 
+        repr(UInt64(pointer_from_objref(obj))), 
+        ">")
+end
+
+@defmethod print_object(io::_IO, generic_func::GenericFunction) = begin
+    print(io,
+        "<", 
+        String(getfield(generic_func, :class_of_reference).name), 
+        " ", 
+        generic_func.name, 
+        " with ", 
+        length(generic_func.methods),
+        " methods>")
+end
+
+@defmethod print_object(io::_IO, method::MultiMethod) = begin
+    print(io,
+        "<",
+        String(getfield(method, :class_of_reference).name),
+        " ",
+        String(method.generic_function.name))
+    
+    print(io, "(")
+    if length(method.specializers) > 0
+        print(io, method.specializers[begin].name)
     end
-)
 
-new_method(
-    print_object,
-    :print_object,
-    [:io, :obj],
-    [_IO, Object],
-    function (call_next_method, io, obj)
-        print(
-            io, 
-            "<",
-            String(getfield(obj, :class_of_reference).name),
-            " ", 
-            repr(UInt64(pointer_from_objref(obj))), 
-            ">")
+    for elem in method.specializers[2:end]
+        print(io, ", ")
+        print(io, elem.name)
     end
-)
 
-new_method(
-    print_object,
-    :print_object,
-    [:io, :generic_func],
-    [_IO, GenericFunction],
-    function (call_next_method, io, gen)
-        print(
-            io,
-            "<", 
-            String(getfield(gen, :class_of_reference).name), 
-            " ", 
-            gen.name, 
-            " with ", 
-            length(gen.methods),
-            " methods>")
+    print(io, ")", ">")
+end
+
+@defmethod print_object(io::_IO, vector::_Vector) = begin
+    print(io, "[")
+    if length(vector) > 0
+        print(io, vector[begin])
     end
-)
 
-new_method(
-    print_object,
-    :print_object,
-    [:io, :method],
-    [_IO, MultiMethod],
-    function (call_next_method, io, method)
-        print(io, "<")
-        print(
-            io,
-            String(getfield(method, :class_of_reference).name),
-            " ",
-            String(method.generic_function.name))
-        
-        print(io, "(")
-        if length(method.specializers) > 0
-            print(io, method.specializers[begin].name)
-        end
-
-        for elem in method.specializers[2:end]
-            print(io, ", ")
-            print(io, elem.name)
-        end
-
-        print(io, ")")
-
-        print(io, ">")
+    for elem in vector[2:end]
+        print(io, ", ")
+        print(io, elem)
     end
-)
 
-new_method(
-    print_object,
-    :print_object,
-    [:io, :vector],
-    [_IO, _Vector],
-    function (call_next_method, io, vector)
-        print(io, "[")
-        if length(vector) > 0
-            print(io, vector[begin])
-        end
+    print(io, "]")
+end
 
-        for elem in vector[2:end]
-            print(io, ", ")
-            print(io, elem)
-        end
-
-        print(io, "]")
+@defmethod print_object(io::_IO, tuple::_Tuple) = begin
+    print(io, "(")
+    if length(tuple) > 0
+        print(io, tuple[begin])
     end
-)
 
-new_method(
-    print_object,
-    :print_object,
-    [:io, :tuple],
-    [_IO, _Tuple],
-    function (call_next_method, io, tuple)
-        print(io, "(")
-        if length(tuple) > 0
-            print(io, tuple[begin])
-        end
-
-        for elem in tuple[2:end]
-            print(io, ", ")
-            print(io, elem)
-        end
-
-        print(io, ")")
+    for elem in tuple[2:end]
+        print(io, ", ")
+        print(io, elem)
     end
-)
+
+    print(io, ")")
+end
 
 function Base.show(io::IO, ::MIME"text/plain", t::Union{BaseStructure, Vector, Tuple})
     print_object(io, t)

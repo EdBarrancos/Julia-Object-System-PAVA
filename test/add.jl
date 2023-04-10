@@ -12,15 +12,7 @@ using Test
         @test length(gen.methods) == 0
 
         @testset "Method" begin
-            new_method(
-                gen,
-                :gen,
-                [:a, :b],
-                [Object, Object],
-                function (call_next_method, a, b)
-                    "generic function"
-                end
-            )
+            @defmethod gen(a::Object, b::Object) = "generic function"
     
             @test class_of(gen) === GenericFunction
             @test class_of(class_of(gen)) === Class
@@ -36,26 +28,18 @@ using Test
     end
 
     @testset "Create Only Method" begin
-        gen = new_method(
-            nothing,
-            :gen,
-            [:a, :b],
-            [Object, Object],
-            function (call_next_method, a, b)
-                "generic function"
-            end
-        )
+        @defmethod only_method(a::Object, b::Object) = "generic function"
 
-        @test class_of(gen) === GenericFunction
-        @test class_of(class_of(gen)) === Class
-        @test gen.name == :gen
-        @test gen.lambda_list == [:a, :b]
-        @test length(gen.methods) == 1
+        @test class_of(only_method) === GenericFunction
+        @test class_of(class_of(only_method)) === Class
+        @test only_method.name == :only_method
+        @test only_method.lambda_list == [:a, :b]
+        @test length(only_method.methods) == 1
 
-        @test class_of(gen.methods[1]) == MultiMethod            
-        @test gen.methods[1].generic_function === gen
-        @test length(gen.methods[1].specializers) == 2
-        @test gen.methods[1].specializers[1] === Object
+        @test class_of(only_method.methods[1]) == MultiMethod            
+        @test only_method.methods[1].generic_function === only_method
+        @test length(only_method.methods[1].specializers) == 2
+        @test only_method.methods[1].specializers[1] === Object
     end
 end
 
@@ -72,21 +56,15 @@ end
         )
     )
 
-    add = new_method(
-        add, 
-        :add, 
-        [:a, :b], 
-        [ComplexNumber, ComplexNumber], 
-        function (call_next_method, a, b)
-            BaseStructure(
-                ComplexNumber,
-                Dict(
-                    :real=>a.real + b.real,
-                    :imag=>a.imag + b.imag
-                )
+    @defmethod add(a::ComplexNumber, b::ComplexNumber) = begin
+        BaseStructure(
+            ComplexNumber,
+            Dict(
+                :real=>a.real + b.real,
+                :imag=>a.imag + b.imag
             )
-        end
-    )
+        )
+    end
 
     @test_throws ErrorException add(1,2)
     @test_throws ArgumentError c1(1)
@@ -105,15 +83,7 @@ end
     end
     
     @testset "Test Effective method" begin
-        new_method(
-            add,
-            :add,
-            [:a, :b],
-            [Object, Object],
-            function (call_next_method, a, b)
-                println("Added Two Object")
-            end
-        )
+        @defmethod add(a::Object, b::Object) = println("Added Two Object")
 
         @test length(add.methods) == 2
         c = add(c1, c1)
@@ -123,23 +93,17 @@ end
     end
 
     @testset "Call next method" begin
-        new_method(
-            add,
-            :add,
-            [:a, :b],
-            [ComplexNumber, ComplexNumber],
-            function (call_next_method, a, b)
-                call_next_method()
-                call_next_method()
-                BaseStructure(
-                    ComplexNumber,
-                    Dict(
-                        :real=>a.real + b.real,
-                        :imag=>a.imag + b.imag
-                    )
+        @defmethod add(a::ComplexNumber, b::ComplexNumber) = begin
+            call_next_method()
+            call_next_method()
+            BaseStructure(
+                ComplexNumber,
+                Dict(
+                    :real=>a.real + b.real,
+                    :imag=>a.imag + b.imag
                 )
-            end
-        )
+            )
+        end
     
         @test length(add.methods) == 2
     

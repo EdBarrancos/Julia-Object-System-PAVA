@@ -9,35 +9,12 @@ using Test
     @defclass(Screen, [Device], [])
     @defclass(Printer, [Device], [])
 
-    draw = new_generic_function(:draw, [:shape, :device])
-    new_method(draw, :draw, 
-        [:shape, :device], 
-        [Line, Screen], 
-        function (call_next_method, line, device)
-            print("Drawing a line on a screen")
-        end
-    )
-    new_method(draw, :draw, 
-        [:shape, :device], 
-        [Circle, Screen], 
-        function (call_next_method, line, device)
-            print("Drawing a circle on a screen")
-        end
-    )
-    new_method(draw, :draw, 
-        [:shape, :device], 
-        [Line, Printer], 
-        function (call_next_method, line, device)
-            print("Drawing a line on a printer")
-        end
-    )
-    new_method(draw, :draw, 
-        [:shape, :device], 
-        [Circle, Printer], 
-        function (call_next_method, line, device)
-            print("Drawing a circle on a printer")
-        end
-    )
+    @defgeneric draw(shape, device)
+
+    @defmethod draw(shape::Line, device::Screen) = print("Drawing a line on a screen")
+    @defmethod draw(shape::Circle, device::Screen) = print("Drawing a circle on a screen")
+    @defmethod draw(shape::Line, device::Printer) = print("Drawing a line on a printer")
+    @defmethod draw(shape::Circle, device::Printer) = print("Drawing a circle on a printer")
 
     screen = BaseStructure(Screen, Dict())
     printer  = BaseStructure(Printer, Dict())
