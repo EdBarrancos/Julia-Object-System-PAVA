@@ -1,4 +1,4 @@
-export print_object
+export print_object, compute_cpl
 
 @defgeneric print_object(io, obj)
 
@@ -93,4 +93,22 @@ end
 
 function Base.show(io::IO, t::Union{Slot})
     print(io, t.name)
+end
+
+
+@defgeneric compute_cpl(class)
+
+@defmethod compute_cpl(class::Class) = begin 
+    queue = copy(class_direct_superclasses(class))
+    class_precedence_list_definition = []
+    while !isempty(queue)
+        superclass = popfirst!(queue) 
+        push!(class_precedence_list_definition, superclass)
+        for direct_superclass in superclass.direct_superclasses
+            if !(direct_superclass in queue) 
+                push!(queue, direct_superclass)
+            end
+        end
+    end
+    return class_precedence_list_definition
 end
