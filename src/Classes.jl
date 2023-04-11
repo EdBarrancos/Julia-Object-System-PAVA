@@ -10,6 +10,21 @@ class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list
 macro defclass(name, superclasses, slots, options...)
     target_name = QuoteNode(name)
     #= Calculate Class Precedence List =#
+    class_precedence_list_definition = []
+    q1 = quote
+        queue = $superclasses
+        while !isempty(queue)
+            let superclass = popfirst!(queue) 
+                println("superclass = $superclass")
+                push!($class_precedence_list_definition, superclass)
+                for direct_superclass in superclass.direct_superclasses
+                    if !(direct_superclass in queue) 
+                        push!(queue, direct_superclass)
+                    end
+                end
+            end
+        end
+    end   
     #= Calculate Slots =#
     direct_slots_definition = []
     for slot in slots.args
@@ -51,20 +66,30 @@ macro defclass(name, superclasses, slots, options...)
         end
     end
 
-    return esc(
-        quote 
-            $name = BaseStructure(
-                $metaclass,
-                Dict(
-                    :name=>$target_name,
-                    :direct_superclasses=>length($superclasses) > 0 ? $superclasses : [Object],
-                    :direct_slots=>$direct_slots_definition,
-                    :class_precedence_list=>length($superclasses) > 0 ? $superclasses : [Object],
-                    :slots=>$direct_slots_definition
-                )
+    q2 = quote        
+        $name = BaseStructure(
+            $metaclass,
+            Dict(
+                :name=>$target_name,
+                :direct_superclasses=>length($superclasses) > 0 ? $superclasses : [Object],
+                :direct_slots=>$direct_slots_definition,
+                :class_precedence_list=>length($superclasses) > 0 ? $class_precedence_list_definition : [Object],
+                :slots=>$direct_slots_definition
             )
-            pushfirst!(getfield($name, :slots)[:class_precedence_list], $name)
-            $name
+        )
+        pushfirst!(getfield($name, :slots)[:class_precedence_list], $name)
+        $name
+    end
+
+    return esc(
+        quote
+            $q1
+            $q2
         end
     )
+end
+
+function compute_cpl(superclasses)
+    
+    return cpl
 end
