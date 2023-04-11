@@ -53,7 +53,7 @@ This project was made for the course "Advanced Programming" by:
 - [x] 2.3 Slot Access
 - [x] 2.4 Generic Functions and methods
 - [x] 2.5 Pre-defined Generic Functions and Methods
-- [ ] 2.6 MetaObjects - **Liliana**
+- [x] 2.6 MetaObjects
 - [x] 2.7 Class Options
 - [ ] 2.8 Readers and Writers - **Liliana**
 - [x] 2.9 Generic Function Calls
