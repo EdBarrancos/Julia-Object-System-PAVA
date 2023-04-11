@@ -100,7 +100,7 @@ end
 
 @defmethod compute_cpl(class::Class) = begin 
     queue = copy(class_direct_superclasses(class))
-    class_precedence_list_definition = []
+    class_precedence_list_definition = [class]
     while !isempty(queue)
         superclass = popfirst!(queue) 
         push!(class_precedence_list_definition, superclass)
