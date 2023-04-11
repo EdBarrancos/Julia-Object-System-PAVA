@@ -1,4 +1,4 @@
-export print_object, compute_cpl
+export print_object, compute_cpl, non_applicable_method
 
 @defgeneric print_object(io, obj)
 
@@ -95,17 +95,24 @@ function Base.show(io::IO, t::Union{Slot})
     print(io, t.name)
 end
 
+@defmethod non_applicable_method(generic_function::GenericFunction, args::_Tuple) = begin
+    error(
+        "No applicable method for function ",
+        generic_function.name,
+        " with arguments ",
+        string(args))
+end
 
 @defgeneric compute_cpl(class)
 
-@defmethod compute_cpl(class::Class) = begin 
+@defmethod compute_cpl(class::Class) = begin
     queue = copy(class_direct_superclasses(class))
     class_precedence_list_definition = [class]
     while !isempty(queue)
-        superclass = popfirst!(queue) 
+        superclass = popfirst!(queue)
         push!(class_precedence_list_definition, superclass)
         for direct_superclass in superclass.direct_superclasses
-            if !(direct_superclass in queue) 
+            if !(direct_superclass in queue)
                 push!(queue, direct_superclass)
             end
         end

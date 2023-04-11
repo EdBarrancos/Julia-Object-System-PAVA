@@ -2,8 +2,10 @@ using JuliaObjectSystem
 using Suppressor
 using Test
 
+@defclass(ComplexNumber, [Object], [real, imag])
+@defmethod print_object(io::_IO, c::ComplexNumber) = print(io, "$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
+
 @testset "Complex Number Creation" begin
-    @defclass(ComplexNumber, [Object], [real, imag])
 
     c1 = BaseStructure(
         ComplexNumber,
@@ -37,11 +39,6 @@ using Test
     @test c1.imag === imag_value + 3
 
     @testset "Printing Complex Numbers" begin
-        #= QUESTION: Wtf, why do i need to do this? 
-            Outside of @testset it works fine, here it does not recognize `print_object`=#
-        print_object = JuliaObjectSystem.print_object 
-        @defmethod print_object(io::_IO, c::ComplexNumber) = print(io, "$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
-
         result = @capture_out show(c1)
         @test result == "1+5i"
     end 
@@ -54,4 +51,12 @@ using Test
         @test class_cpl(ComplexNumber) == [ComplexNumber, Object]        
     end
     
+    @testset "Compute Getter and Setter" begin
+        (getter, setter) = compute_getter_and_setter(ComplexNumber, :real)
+
+        @test getter(c1) == 1
+
+        setter(c1, 11)
+        @test getter(c1) == 11
+    end
 end

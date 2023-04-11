@@ -9,4 +9,5 @@ using Test
     include("MultipleInheritance.jl")
     include("Person.jl")
     include("defgeneric.jl")
+    include("computeSlots.jl")
 end

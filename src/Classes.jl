@@ -1,11 +1,30 @@
 export class_name, class_direct_slots, class_slots, 
-class_direct_superclasses, class_cpl, @defclass
+class_direct_superclasses, class_cpl, compute_slots, compute_getter_and_setter,
+@defclass
 
 class_name(class::BaseStructure) = getfield(class, :slots)[:name]
 class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots]
 class_slots(class::BaseStructure) = getfield(class, :slots)[:slots]
 class_direct_superclasses(class::BaseStructure) = getfield(class, :slots)[:direct_superclasses]
 class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list]
+
+@defgeneric compute_slots(class)
+
+@defmethod compute_slots(class::Class) = begin
+    return vcat(class.direct_slots, map((elem) -> elem.slots, class.direct_superclasses)...)
+end
+
+@defgeneric compute_getter_and_setter(class, slot_name)
+
+@defmethod compute_getter_and_setter(class::Class, slot_name) = begin
+    getter = (instance) -> return getfield(instance, :slots)[slot_name]
+    setter = (instance, new_value) -> begin
+        slot = getfield(instance, :slots)
+        slot[slot_name] = new_value
+        return setfield!(instance, :slots, slot)
+    end
+    return (getter, setter)
+end
 
 macro defclass(name, superclasses, slots, options...)
     target_name = QuoteNode(name)
@@ -41,12 +60,14 @@ macro defclass(name, superclasses, slots, options...)
 
     metaclass = Class
     for option in options
-        if typeof(option) == Expr
-            if option.head == :(=)
-                if option.args[begin] == :metaclass
-                    metaclass = option.args[end]
-                end
+        if typeof(option) == Expr && option.head == :(=)
+            if option.args[begin] == :metaclass
+                metaclass = option.args[end]
+            else
+                error("Unrecognized option")
             end
+        else
+            error("Invalid Option Syntax. Example: @defclass(SuperHuman, [], [], metaclass=SuperMetaClass)")
         end
     end
     return esc(
@@ -58,11 +79,12 @@ macro defclass(name, superclasses, slots, options...)
                     :direct_superclasses=>length($superclasses) > 0 ? $superclasses : [Object],
                     :direct_slots=>$direct_slots_definition,
                     :class_precedence_list=>[],
-                    :slots=>$direct_slots_definition
+                    :slots=>[]
                 )
             )
             pushfirst!(getfield($name, :slots)[:class_precedence_list], $name)
             $name.class_precedence_list = compute_cpl($name)
+            $name.slots = compute_slots($name)
             $name
         end
     )
