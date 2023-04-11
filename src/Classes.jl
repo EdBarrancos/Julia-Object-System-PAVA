@@ -69,11 +69,14 @@ macro defclass(name, superclasses, slots, options...)
     )
 end
 
-#= new(class; initargs...) = 
-    let instance = allocate_instance(class)
-        initialize(instance, initargs)
-        instance
-    end =#
+
+#= @defmethod initialize(obj::Object, initargs) = begin
+    for slot in keys(initargs)
+        slots = getfield(obj, :slots)
+        slots[slot] = initargs[slot]
+        setfield!(obj, :slots, slots)
+    end
+end =#
 
 @defmethod allocate_instance(class::Class) = begin
     slots = [slot.name for slot in class_slots(class)]
@@ -82,3 +85,32 @@ end
         Dict(zip(slots, [missing for i in class_slots(class)]))
     )
 end
+
+new(class; initargs...) = 
+    let instance = allocate_instance(class)
+        println(initargs)
+        #initialize(instance, initargs)
+        for slot in keys(initargs)
+            slots = getfield(instance, :slots)
+            slots[slot] = initargs[slot]
+            setfield!(instance, :slots, slots)
+        end
+        instance
+    end
+
+#= 
+
+c1 = BaseStructure(
+        ComplexNumber,
+        Dict(
+            :real=>1,
+            :imag=>2
+        )
+    )
+=#
+
+@defclass(ComplexNumber, [Object], [real, imag])
+c1 = new(ComplexNumber, real=1, imag=2)
+c1.real
+c1.imag
+
