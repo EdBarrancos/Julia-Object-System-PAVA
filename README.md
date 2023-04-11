@@ -54,9 +54,9 @@ This project was made for the course "Advanced Programming" by:
 - [x] 2.12 Class Hierarchy
 - [ ] 2.13 Class Precedence List - **Miguel**
 - [x] 2.14 Built-In Classes
-- [x] 2.15 Introspection - **Juliana**
+- [x] 2.15 Introspection
 - [ ] 2.16 Meta-Object Protocols
-- [ ] 2.16.1 Class Instantiation Protocol
+- [ ] 2.16.1 Class Instantiation Protocol - **Juliana**
 - [ ] 2.16.2 The Compute Slots Protocol
 - [ ] 2.16.3 Slot Access Protocol
 - [ ] 2.16.4 Class Precedence List protocol

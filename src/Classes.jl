@@ -68,3 +68,17 @@ macro defclass(name, superclasses, slots, options...)
         end
     )
 end
+
+#= new(class; initargs...) = 
+    let instance = allocate_instance(class)
+        initialize(instance, initargs)
+        instance
+    end =#
+
+@defmethod allocate_instance(class::Class) = begin
+    slots = [slot.name for slot in class_slots(class)]
+    return BaseStructure(
+        class,
+        Dict(zip(slots, [missing for i in class_slots(class)]))
+    )
+end
