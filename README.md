@@ -30,8 +30,14 @@ This project was made for the course "Advanced Programming" by:
   - Redefine them
 - [x] Result of calling `call_next_method()` when there is no next method to call?
   - Error
-- [ ] Which types do we need to support with the built in types? For example, do we need to support Unsigned ints?
-- [ ] Check `QUESTION` in `ComplexNumber.jl`
+- [x] Which types do we need to support with the built in types? For example, do we need to support Unsigned ints?
+  - Os referidos no enunciado e explicar como se cria um novo na apresentacao
+- [x] 2.16.3 Slot Access `The generic function must return a tuple of non-generic functions` -> Methods or Julia regular functions?
+  - Julia functions
+- [x] Metaobject for slot definition?
+  - Olhar para CLOS
+- [x] Do we deliver the `test` module too?
+  - Tudo
 
 ### Current State
 
