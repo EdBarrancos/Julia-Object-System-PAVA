@@ -47,7 +47,7 @@ This project was made for the course "Advanced Programming" by:
   - [x] 2.0.2 defgeneric
   - [x] 2.0.3 defmethod
     - [ ] Change defmethod so we can more easily define empty methods
-  - [ ] 2.0.4 defbuiltin - **Edu**
+  - [x] 2.0.4 defbuiltin - **Edu**
 - [x] 2.1 Classes
 - [x] 2.2 Instances
 - [x] 2.3 Slot Access

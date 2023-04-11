@@ -1,4 +1,4 @@
-export print_object, compute_slots, non_applicable_method
+export print_object, non_applicable_method
 
 @defgeneric print_object(io, obj)
 
@@ -101,10 +101,4 @@ end
         generic_function.name, 
         " with arguments ",  
         string(args))
-end
-
-@defgeneric compute_slots(class)
-
-@defmethod compute_slots(class::Class) = begin
-    return vcat(class.direct_slots, map((elem) -> elem.slots, class.direct_superclasses)...)
 end

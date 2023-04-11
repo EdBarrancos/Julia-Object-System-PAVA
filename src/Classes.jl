@@ -1,11 +1,18 @@
 export class_name, class_direct_slots, class_slots, 
-class_direct_superclasses, class_cpl, @defclass
+class_direct_superclasses, class_cpl, compute_slots,
+@defclass
 
 class_name(class::BaseStructure) = getfield(class, :slots)[:name]
 class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots]
 class_slots(class::BaseStructure) = getfield(class, :slots)[:slots]
 class_direct_superclasses(class::BaseStructure) = getfield(class, :slots)[:direct_superclasses]
 class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list]
+
+@defgeneric compute_slots(class)
+
+@defmethod compute_slots(class::Class) = begin
+    return vcat(class.direct_slots, map((elem) -> elem.slots, class.direct_superclasses)...)
+end
 
 macro defclass(name, superclasses, slots, options...)
     target_name = QuoteNode(name)
