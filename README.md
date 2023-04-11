@@ -66,7 +66,7 @@ This project was made for the course "Advanced Programming" by:
 - [ ] 2.16 Meta-Object Protocols
   - [ ] 2.16.1 Class Instantiation Protocol
   - [x] 2.16.2 The Compute Slots Protocol
-  - [ ] 2.16.3 Slot Access Protocol - **Edu**
+  - [x] 2.16.3 Slot Access Protocol
   - [ ] 2.16.4 Class Precedence List protocol
 - [ ] 2.17 Multiple Meta-Class Inheritance
 - [ ] 2.18 *Extensions*

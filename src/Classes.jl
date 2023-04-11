@@ -1,5 +1,5 @@
 export class_name, class_direct_slots, class_slots, 
-class_direct_superclasses, class_cpl, compute_slots,
+class_direct_superclasses, class_cpl, compute_slots, compute_getter_and_setter,
 @defclass
 
 class_name(class::BaseStructure) = getfield(class, :slots)[:name]
@@ -12,6 +12,18 @@ class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list
 
 @defmethod compute_slots(class::Class) = begin
     return vcat(class.direct_slots, map((elem) -> elem.slots, class.direct_superclasses)...)
+end
+
+@defgeneric compute_getter_and_setter(class, slot_name)
+
+@defmethod compute_getter_and_setter(class::Class, slot_name) = begin
+    getter = (instance) -> return getfield(instance, :slots)[slot_name]
+    setter = (instance, new_value) -> begin
+        slot = getfield(instance, :slots)
+        slot[slot_name] = new_value
+        return setfield!(instance, :slots, slot)
+    end
+    return (getter, setter)
 end
 
 macro defclass(name, superclasses, slots, options...)
@@ -49,12 +61,14 @@ macro defclass(name, superclasses, slots, options...)
 
     metaclass = Class
     for option in options
-        if typeof(option) == Expr
-            if option.head == :(=)
-                if option.args[begin] == :metaclass
-                    metaclass = option.args[end]
-                end
+        if typeof(option) == Expr && option.head == :(=)
+            if option.args[begin] == :metaclass
+                metaclass = option.args[end]
+            else
+                error("Unrecognized option")
             end
+        else
+            error("Invalid Option Syntax. Example: @defclass(SuperHuman, [], [], metaclass=SuperMetaClass)")
         end
     end
 

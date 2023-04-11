@@ -51,6 +51,12 @@ using Test
         @test class_cpl(ComplexNumber) == [ComplexNumber, Object]        
     end
     
-end
+    @testset "Compute Getter and Setter" begin
+        (getter, setter) = compute_getter_and_setter(ComplexNumber, :real)
 
-print_object
+        @test getter(c1) == 1
+
+        setter(c1, 11)
+        @test getter(c1) == 11
+    end
+end
