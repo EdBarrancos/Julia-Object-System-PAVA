@@ -26,6 +26,23 @@ end
     return (getter, setter)
 end
 
+@defgeneric compute_cpl(class)
+
+@defmethod compute_cpl(class::Class) = begin
+    queue = copy(class_direct_superclasses(class))
+    class_precedence_list_definition = [class]
+    while !isempty(queue)
+        superclass = popfirst!(queue)
+        push!(class_precedence_list_definition, superclass)
+        for direct_superclass in superclass.direct_superclasses
+            if !(direct_superclass in queue)
+                push!(queue, direct_superclass)
+            end
+        end
+    end
+    return class_precedence_list_definition
+end
+
 macro defclass(name, superclasses, slots, options...)
     target_name = QuoteNode(name)
     #= Calculate Slots =#

@@ -10,4 +10,5 @@ using Test
     include("Person.jl")
     include("defgeneric.jl")
     include("computeSlots.jl")
+    include("ClassPrecedenceList.jl")
 end
