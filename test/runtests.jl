@@ -11,4 +11,5 @@ using Test
     include("defgeneric.jl")
     include("computeSlots.jl")
     include("ClassPrecedenceList.jl")
+    #include("ClassInstantiation.jl")
 end

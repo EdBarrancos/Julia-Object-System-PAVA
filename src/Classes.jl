@@ -45,7 +45,6 @@ end
 
 macro defclass(name, superclasses, slots, options...)
     target_name = QuoteNode(name)
-    #= Calculate Class Precedence List =#
     #= Calculate Slots =#
     direct_slots_definition = []
     readers_writers= []
@@ -93,15 +92,17 @@ macro defclass(name, superclasses, slots, options...)
 
     metaclass = Class
     for option in options
-        if typeof(option) == Expr
-            if option.head == :(=)
-                if option.args[begin] == :metaclass
-                    metaclass = option.args[end]
-                end
+        if typeof(option) == Expr && option.head == :(=)
+            if option.args[begin] == :metaclass
+                metaclass = option.args[end]
+            else
+                error("Unrecognized option")
             end
+        else
+            error("Invalid Option Syntax. Example: @defclass(SuperHuman, [], [], metaclass=SuperMetaClass)")
         end
     end
-
+    
     return esc(
         quote 
             $name = BaseStructure(
@@ -110,92 +111,15 @@ macro defclass(name, superclasses, slots, options...)
                     :name=>$target_name,
                     :direct_superclasses=>length($superclasses) > 0 ? $superclasses : [Object],
                     :direct_slots=>$direct_slots_definition,
-                    :class_precedence_list=>length($superclasses) > 0 ? $superclasses : [Object],
-                    :slots=>$direct_slots_definition
+                    :class_precedence_list=>[],
+                    :slots=>[]
                 )
             )
             pushfirst!(getfield($name, :slots)[:class_precedence_list], $name)
+            $name.class_precedence_list = compute_cpl($name)
+            $name.slots = compute_slots($name)
             $methods
             $name
         end
     )
 end
-
-
-@defmethod initialize(obj::Object, initargs::_Pairs) = begin
-    slots = getfield(obj, :slots)
-    for slot in keys(initargs)
-        if !(slot in keys(slots))
-            error("AttributeError: $(class_name(class_of(obj))) object has no attribute $slot")
-        else
-            slots[slot] = initargs[slot]
-            setfield!(obj, :slots, slots)
-        end
-    end
-end
-
-@defmethod initialize(class::Class, initargs::_Pairs) = begin
-    slots = getfield(class, :slots)
-    for slot in keys(initargs)
-        if !(slot in keys(slots))
-            error("AttributeError: $(class_name(class_of(class))) object has no attribute $slot")
-        else
-            slots[slot] = initargs[slot]
-            setfield!(class, :slots, slots)
-        end
-    end
-end
-
-@defmethod initialize(generic::GenericFunction, initargs::_Pairs) = begin
-    slots = getfield(generic, :slots)
-    for slot in keys(initargs)
-        if !(slot in keys(slots))
-            error("AttributeError: $(class_name(class_of(generic))) object has no attribute $slot")
-        else
-            slots[slot] = initargs[slot]
-            setfield!(generic, :slots, slots)
-        end
-    end
-end
-
-@defmethod initialize(method::MultiMethod, initargs::_Pairs) = begin
-    slots = getfield(method, :slots)
-    for slot in keys(initargs)
-        if !(slot in keys(slots))
-            error("AttributeError: $(class_name(class_of(method))) object has no attribute $slot")
-        else
-            slots[slot] = initargs[slot]
-            setfield!(method, :slots, slots)
-        end
-    end
-end
-
-@defmethod allocate_instance(class::Class) = begin
-    slots = [slot.name for slot in class_slots(class)]
-    return BaseStructure(
-        class,
-        Dict(zip(slots, [slot.initform for slot in class_slots(class)]))
-    )
-end
-
-new(class; initargs...) = 
-    let instance = allocate_instance(class)
-        dump(initargs)
-        initialize(instance, initargs)
-        instance
-    end
-
-#= 
-c1 = BaseStructure(
-        ComplexNumber,
-        Dict(
-            :real=>1,
-            :imag=>2
-        )
-    )
-=#
-
-@defclass(ComplexNumber, [Object], [[real, initform=5], imag])
-c1 = new(ComplexNumber, imag=2)
-c1.real
-c1.imag
