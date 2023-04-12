@@ -12,10 +12,6 @@ class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots
 class_slots(class::BaseStructure) = getfield(class, :slots)[:slots]
 class_direct_superclasses(class::BaseStructure) = getfield(class, :slots)[:direct_superclasses]
 class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list]
-get_readers_writers(array) =
-    for method in array
-        method
-    end
 
 macro defclass(name, superclasses, slots, options...)
     target_name = QuoteNode(name)
@@ -40,7 +36,7 @@ macro defclass(name, superclasses, slots, options...)
                             quote
                                 @defmethod $get(o::$name) = o.$read
                             end
-                        push!(readers_writers, reader)
+                        push!(readers_writers, :(reader))
                     elseif option.args[begin] == :writer
                         set = option.args[end]
                         write = slot.args[begin]
@@ -48,7 +44,7 @@ macro defclass(name, superclasses, slots, options...)
                             quote
                                 @defmethod $set(o::$name, v) = o.$write = v
                             end
-                        push!(readers_writers, writer)
+                        push!(readers_writers, :(writer))
                     elseif option.args[begin] == :initform
                         setfield!(new_slot, :initform, option.args[end])
                     else
@@ -62,6 +58,8 @@ macro defclass(name, superclasses, slots, options...)
             push!(direct_slots_definition, Slot(slot.args[begin], slot.args[end]))
         end
     end
+
+    methods = Expr(:block, readers_writers...)
 
     metaclass = Class
     for option in options
@@ -87,9 +85,7 @@ macro defclass(name, superclasses, slots, options...)
                 )
             )
             pushfirst!(getfield($name, :slots)[:class_precedence_list], $name)
-            for method in $readers_writers
-                method
-            end
+            $methods
             $name
         end
     )
