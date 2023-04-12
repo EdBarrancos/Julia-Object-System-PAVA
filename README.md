@@ -55,20 +55,20 @@ This project was made for the course "Advanced Programming" by:
 - [x] 2.5 Pre-defined Generic Functions and Methods
 - [x] 2.6 MetaObjects
 - [x] 2.7 Class Options
-- [ ] 2.8 Readers and Writers - **Liliana**
+- [x] 2.8 Readers and Writers
 - [x] 2.9 Generic Function Calls
 - [x] 2.10 Multiple Dispatch
-- [ ] 2.11 Multiple Inheritance
+- [ ] 2.11 Multiple Inheritance - **Juliana Testes**
 - [x] 2.12 Class Hierarchy
-- [x] 2.13 Class Precedence List - **Miguel**
+- [x] 2.13 Class Precedence List
 - [x] 2.14 Built-In Classes
-- [x] 2.15 Introspection - **Juliana**
+- [x] 2.15 Introspection
 - [ ] 2.16 Meta-Object Protocols
-  - [ ] 2.16.1 Class Instantiation Protocol
+  - [ ] 2.16.1 Class Instantiation Protocol - **Juliana**
   - [x] 2.16.2 The Compute Slots Protocol
   - [x] 2.16.3 Slot Access Protocol
   - [x] 2.16.4 Class Precedence List protocol
-- [ ] 2.17 Multiple Meta-Class Inheritance
+- [ ] 2.17 Multiple Meta-Class Inheritance - **Liliana Testes**
 - [ ] 2.18 *Extensions*
   - [ ] 2.18.1 Meta-Objects for slot definitions
   - [ ] 2.18.2 CLOS-like method combination for generic functions

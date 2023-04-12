@@ -1,5 +1,6 @@
 export class_name, class_direct_slots, class_slots, 
-class_direct_superclasses, class_cpl, @defclass
+class_direct_superclasses, class_cpl, compute_slots, 
+compute_getter_and_setter, @defclass
 
 class_name(class::BaseStructure) = getfield(class, :slots)[:name]
 class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots]
