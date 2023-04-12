@@ -10,6 +10,10 @@ mutable struct Slot
     initform::Any
 end
 
+function Base.hash(one::Slot)
+    return hash(one.name) + hash(one.initform)
+end
+
 function Base.:(==)(one::Slot, another::Slot)
     return one.name == another.name
 end

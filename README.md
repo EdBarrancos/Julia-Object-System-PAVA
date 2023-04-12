@@ -30,8 +30,14 @@ This project was made for the course "Advanced Programming" by:
   - Redefine them
 - [x] Result of calling `call_next_method()` when there is no next method to call?
   - Error
-- [ ] Which types do we need to support with the built in types? For example, do we need to support Unsigned ints?
-- [ ] Check `QUESTION` in `ComplexNumber.jl`
+- [x] Which types do we need to support with the built in types? For example, do we need to support Unsigned ints?
+  - Os referidos no enunciado e explicar como se cria um novo na apresentacao
+- [x] 2.16.3 Slot Access `The generic function must return a tuple of non-generic functions` -> Methods or Julia regular functions?
+  - Julia functions
+- [x] Metaobject for slot definition?
+  - Olhar para CLOS
+- [x] Do we deliver the `test` module too?
+  - Tudo
 
 ### Current State
 
@@ -40,32 +46,34 @@ This project was made for the course "Advanced Programming" by:
   - [x] 2.0.1 defclass [Not complete yet]
   - [x] 2.0.2 defgeneric
   - [x] 2.0.3 defmethod
+    - [ ] Change defmethod so we can more easily define empty methods
+  - [x] 2.0.4 defbuiltin
 - [x] 2.1 Classes
 - [x] 2.2 Instances
 - [x] 2.3 Slot Access
 - [x] 2.4 Generic Functions and methods
 - [x] 2.5 Pre-defined Generic Functions and Methods
-- [ ] 2.6 MetaObjects - **Liliana**
+- [x] 2.6 MetaObjects
 - [x] 2.7 Class Options
-- [ ] 2.8 Readers and Writers - **Liliana**
+- [x] 2.8 Readers and Writers
 - [x] 2.9 Generic Function Calls
 - [x] 2.10 Multiple Dispatch
-- [ ] 2.11 Multiple Inheritance
+- [ ] 2.11 Multiple Inheritance - **Juliana Testes**
 - [x] 2.12 Class Hierarchy
-- [ ] 2.13 Class Precedence List - **Miguel**
+- [x] 2.13 Class Precedence List
 - [x] 2.14 Built-In Classes
 - [x] 2.15 Introspection
 - [ ] 2.16 Meta-Object Protocols
-- [ ] 2.16.1 Class Instantiation Protocol - **Juliana**
-- [ ] 2.16.2 The Compute Slots Protocol
-- [ ] 2.16.3 Slot Access Protocol
-- [ ] 2.16.4 Class Precedence List protocol
-- [ ] 2.17 Multiple Meta-Class Inheritance
+  - [ ] 2.16.1 Class Instantiation Protocol - **Juliana**
+  - [x] 2.16.2 The Compute Slots Protocol
+  - [x] 2.16.3 Slot Access Protocol
+  - [x] 2.16.4 Class Precedence List protocol
+- [ ] 2.17 Multiple Meta-Class Inheritance - **Liliana Testes**
 - [ ] 2.18 *Extensions*
-- [ ] 2.18.1 Meta-Objects for slot definitions
-- [ ] 2.18.2 CLOS-like method combination for generic functions
-- [ ] 2.18.3 CLOS or Dylan's strategy for computing the class precedence list
-- [ ] 2.18.4 Additional Metaobject protocols
+  - [ ] 2.18.1 Meta-Objects for slot definitions
+  - [ ] 2.18.2 CLOS-like method combination for generic functions
+  - [ ] 2.18.3 CLOS or Dylan's strategy for computing the class precedence list
+  - [ ] 2.18.4 Additional Metaobject protocols
 
 ### Edu - Notes
 
@@ -317,10 +325,6 @@ create_method(
     )
 )
 ```
-
-##### Extra TODOs
-
-- [ ] Change defmethod so we can more easily define empty methods
 
 ### Juli - Notes
 

@@ -1,4 +1,4 @@
-export print_object
+export print_object, compute_cpl, non_applicable_method
 
 @defgeneric print_object(io, obj)
 
@@ -94,3 +94,12 @@ end
 function Base.show(io::IO, t::Union{Slot})
     print(io, t.name)
 end
+
+@defmethod non_applicable_method(generic_function::GenericFunction, args::_Tuple) = begin
+    error(
+        "No applicable method for function ",
+        generic_function.name,
+        " with arguments ",
+        string(args))
+end
+
