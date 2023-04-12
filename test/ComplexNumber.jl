@@ -48,7 +48,7 @@ using Test
         @test class_direct_slots(ComplexNumber) == [:real, :imag]
         @test class_slots(ComplexNumber) == [:real, :imag]
         @test class_direct_superclasses(ComplexNumber) == [Object]
-        @test class_cpl(ComplexNumber) == [ComplexNumber, Object]        
+        @test class_cpl(ComplexNumber) == [ComplexNumber, Object, Top]        
     end
     
     @testset "Compute Getter and Setter" begin
