@@ -1,9 +1,3 @@
-
-include("BaseStructure.jl")
-include("BuiltInTypes.jl")
-include("GenericFunctionAndMethods.jl")
-include("PreDefinedFunctions.jl")
-
 export class_name, class_direct_slots, class_slots, 
 class_direct_superclasses, class_cpl, @defclass
 
@@ -71,7 +65,7 @@ macro defclass(name, superclasses, slots, options...)
                             quote
                                 @defmethod $get(o::$name) = o.$read
                             end
-                        push!(readers_writers, :(reader))
+                        push!(readers_writers, :($reader))
                     elseif option.args[begin] == :writer
                         set = option.args[end]
                         write = slot.args[begin]
@@ -79,7 +73,7 @@ macro defclass(name, superclasses, slots, options...)
                             quote
                                 @defmethod $set(o::$name, v) = o.$write = v
                             end
-                        push!(readers_writers, :(writer))
+                        push!(readers_writers, :($writer))
                     elseif option.args[begin] == :initform
                         setfield!(new_slot, :initform, option.args[end])
                     else
@@ -125,22 +119,3 @@ macro defclass(name, superclasses, slots, options...)
         end
     )
 end
-
-@defclass(ComplexNumber, [Object], [[real], 
-                                    [imag, reader=as]])
-@defmethod ola(o::ComplexNumber) = o.real
-
-c1 = BaseStructure(
-    ComplexNumber,
-    Dict(
-        :real=>1,
-        :imag=>2
-    )
-)
-
-as(c1)
-ola = [@defmethod as(o::ComplexNumber) = begin
-    o.imag
-end]
-
-get_readers_writers(ola)
