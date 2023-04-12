@@ -70,13 +70,53 @@ macro defclass(name, superclasses, slots, options...)
 end
 
 
-#= @defmethod initialize(obj::Object, initargs) = begin
+@defmethod initialize(obj::Object, initargs::_Pairs) = begin
+    slots = getfield(obj, :slots)
     for slot in keys(initargs)
-        slots = getfield(obj, :slots)
-        slots[slot] = initargs[slot]
-        setfield!(obj, :slots, slots)
+        if !(slot in keys(slots))
+            error("AttributeError: $(class_name(class_of(obj))) object has no attribute $slot")
+        else
+            slots[slot] = initargs[slot]
+            setfield!(obj, :slots, slots)
+        end
     end
-end =#
+end
+
+@defmethod initialize(class::Class, initargs::_Pairs) = begin
+    slots = getfield(class, :slots)
+    for slot in keys(initargs)
+        if !(slot in keys(slots))
+            error("AttributeError: $(class_name(class_of(class))) object has no attribute $slot")
+        else
+            slots[slot] = initargs[slot]
+            setfield!(class, :slots, slots)
+        end
+    end
+end
+
+@defmethod initialize(generic::GenericFunction, initargs::_Pairs) = begin
+    slots = getfield(generic, :slots)
+    for slot in keys(initargs)
+        if !(slot in keys(slots))
+            error("AttributeError: $(class_name(class_of(generic))) object has no attribute $slot")
+        else
+            slots[slot] = initargs[slot]
+            setfield!(generic, :slots, slots)
+        end
+    end
+end
+
+@defmethod initialize(method::MultiMethod, initargs::_Pairs) = begin
+    slots = getfield(method, :slots)
+    for slot in keys(initargs)
+        if !(slot in keys(slots))
+            error("AttributeError: $(class_name(class_of(method))) object has no attribute $slot")
+        else
+            slots[slot] = initargs[slot]
+            setfield!(method, :slots, slots)
+        end
+    end
+end
 
 @defmethod allocate_instance(class::Class) = begin
     slots = [slot.name for slot in class_slots(class)]
@@ -88,17 +128,8 @@ end
 
 new(class; initargs...) = 
     let instance = allocate_instance(class)
-        #initialize(instance, initargs)
-        slots = getfield(instance, :slots)
-        print(typeof(slots))
-        for slot in keys(initargs)
-            if !(slot in keys(slots))
-                error("AttributeError: $(class_name(class_of(instance))) object has no attribute $slot")
-            else
-                slots[slot] = initargs[slot]
-                setfield!(instance, :slots, slots)
-            end
-        end
+        dump(initargs)
+        initialize(instance, initargs)
         instance
     end
 
@@ -116,65 +147,3 @@ c1 = BaseStructure(
 c1 = new(ComplexNumber, imag=2)
 c1.real
 c1.imag
-
-#= 
-ComplexNumber = new(Class, name=ComplexNumber, )
-ComplexNumber = BaseStructure(
-        Class,
-        Dict(
-            :name=>:ComplexNumber,
-            :direct_superclasses=>[Object], 
-            :direct_slots=>[:real, :imag],
-            :class_precedence_list=>[Object, Top],
-            :slots=>[:real, :imag]
-        )
-    )
-=#
-
-#= @defmethod initialize(class::Class, initargs) = begin
-    for slot in keys(initargs)
-        slots = getfield(obj, :slots)
-        slots[slot] = initargs[slot]
-        setfield!(obj, :slots, slots)
-    end
-end =#
-
-#= 
-add = new(GenericFunction, name=:add, lambda_list=[:a, :b], :methods=[])
-add = BaseStructure(
-    GenericFunction,
-    Dict(
-        :name=>:add,
-        :lambda_list=>[:a, :b],
-        :methods=>[]
-    )
-)
-=#
-
-#= @defmethod initialize(generic_methods::GenericFunction, initargs) = begin
-    for slot in keys(initargs)
-        slots = getfield(obj, :slots)
-        slots[slot] = initargs[slot]
-        setfield!(obj, :slots, slots)
-    end
-end  =#
-
-#= 
-add = new(MultiMethod, specializers=[ComplexNumber, ComplexNumber], procedure=[], generic_function=add)
-add = BaseStructure(
-        MultiMethod,
-        Dict(
-            :specializers=>[ComplexNumber, ComplexNumber], 
-            :procedure=>[], 
-            :generic_function=>add
-        )
-    )
-=#
-
-#= @defmethod initialize(generic_methods::GenericFunction, initargs) = begin
-    for slot in keys(initargs)
-        slots = getfield(obj, :slots)
-        slots[slot] = initargs[slot]
-        setfield!(obj, :slots, slots)
-    end
-end  =#
