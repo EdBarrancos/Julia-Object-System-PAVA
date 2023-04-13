@@ -19,13 +19,11 @@ class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list
 end
 
 @defgeneric compute_slots(class)
-
 @defmethod compute_slots(class::Class) = begin
     return vcat(class.direct_slots, map((elem) -> elem.slots, class.direct_superclasses)...)
 end
 
 @defgeneric compute_getter_and_setter(class, slot_name)
-
 @defmethod compute_getter_and_setter(class::Class, slot_name) = begin
     getter = (instance) -> return getfield(instance, :slots)[slot_name]
     setter = (instance, new_value) -> begin
@@ -37,19 +35,22 @@ end
 end
 
 @defgeneric compute_cpl(class)
-
 @defmethod compute_cpl(class::Class) = begin
     queue = copy(class_direct_superclasses(class))
     class_precedence_list_definition = [class]
     while !isempty(queue)
         superclass = popfirst!(queue)
+        if superclass == Top
+            continue;
+        end
         push!(class_precedence_list_definition, superclass)
         for direct_superclass in superclass.direct_superclasses
-            if !(direct_superclass in queue)
+            if !(direct_superclass in queue) && !(direct_superclass in class_precedence_list_definition)
                 push!(queue, direct_superclass)
             end
         end
     end
+    push!(class_precedence_list_definition, Top)
     return class_precedence_list_definition
 end
 
