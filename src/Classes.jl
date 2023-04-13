@@ -1,6 +1,6 @@
 export class_name, class_direct_slots, class_slots, 
-class_direct_superclasses, class_cpl, compute_slots, compute_getter_and_setter,
-@defclass
+class_direct_superclasses, class_cpl, compute_slots, 
+compute_getter_and_setter, @defclass
 
 class_name(class::BaseStructure) = getfield(class, :slots)[:name]
 class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots]
@@ -44,6 +44,7 @@ macro defclass(name, superclasses, slots, options...)
     target_name = QuoteNode(name)
     #= Calculate Slots =#
     direct_slots_definition = []
+    readers_writers= []
     for slot in slots.args
         if typeof(slot) != Expr
             push!(direct_slots_definition, Slot(slot, missing))
@@ -55,9 +56,21 @@ macro defclass(name, superclasses, slots, options...)
                     setfield!(new_slot, :name, option)
                 elseif option.head == :(=)
                     if option.args[begin] == :reader
-                        println("TODO, define reader")
+                        get = option.args[end]
+                        read = slot.args[begin]
+                        reader = 
+                            quote
+                                @defmethod $get(o::$name) = o.$read
+                            end
+                        push!(readers_writers, :($reader))
                     elseif option.args[begin] == :writer
-                        println("TODO, define writer")
+                        set = option.args[end]
+                        write = slot.args[begin]
+                        writer = 
+                            quote
+                                @defmethod $set(o::$name, v) = o.$write = v
+                            end
+                        push!(readers_writers, :($writer))
                     elseif option.args[begin] == :initform
                         setfield!(new_slot, :initform, option.args[end])
                     else
@@ -72,6 +85,8 @@ macro defclass(name, superclasses, slots, options...)
         end
     end
 
+    methods = Expr(:block, readers_writers...)
+
     metaclass = Class
     for option in options
         if typeof(option) == Expr && option.head == :(=)
@@ -84,6 +99,7 @@ macro defclass(name, superclasses, slots, options...)
             error("Invalid Option Syntax. Example: @defclass(SuperHuman, [], [], metaclass=SuperMetaClass)")
         end
     end
+    
     return esc(
         quote 
             $name = BaseStructure(
@@ -98,6 +114,7 @@ macro defclass(name, superclasses, slots, options...)
             )
             $name.class_precedence_list = compute_cpl($name)
             $name.slots = compute_slots($name)
+            $methods
             $name
         end
     )

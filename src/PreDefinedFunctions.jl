@@ -1,4 +1,4 @@
-export print_object, compute_cpl, non_applicable_method
+export print_object, compute_cpl, non_applicable_method, new
 
 @defgeneric print_object(io, obj)
 
@@ -103,3 +103,65 @@ end
         string(args))
 end
 
+
+@defmethod initialize(obj::Object, initargs::_Pairs) = begin
+    slots = getfield(obj, :slots)
+    for slot in keys(initargs)
+        if !(slot in keys(slots))
+            error("AttributeError: $(class_name(class_of(obj))) object has no attribute $slot")
+        else
+            slots[slot] = initargs[slot]
+            setfield!(obj, :slots, slots)
+        end
+    end
+end
+
+@defmethod initialize(class::Class, initargs::_Pairs) = begin
+    slots = getfield(class, :slots)
+    for slot in keys(initargs)
+        if !(slot in keys(slots))
+            error("AttributeError: $(class_name(class_of(class))) object has no attribute $slot")
+        else
+            slots[slot] = initargs[slot]
+            setfield!(class, :slots, slots)
+        end
+    end
+end
+
+@defmethod initialize(generic::GenericFunction, initargs::_Pairs) = begin
+    slots = getfield(generic, :slots)
+    for slot in keys(initargs)
+        if !(slot in keys(slots))
+            error("AttributeError: $(class_name(class_of(generic))) object has no attribute $slot")
+        else
+            slots[slot] = initargs[slot]
+            setfield!(generic, :slots, slots)
+        end
+    end
+end
+
+@defmethod initialize(method::MultiMethod, initargs::_Pairs) = begin
+    slots = getfield(method, :slots)
+    for slot in keys(initargs)
+        if !(slot in keys(slots))
+            error("AttributeError: $(class_name(class_of(method))) object has no attribute $slot")
+        else
+            slots[slot] = initargs[slot]
+            setfield!(method, :slots, slots)
+        end
+    end
+end
+
+@defmethod allocate_instance(class::Class) = begin
+    slots = [slot.name for slot in class_slots(class)]
+    return BaseStructure(
+        class,
+        Dict(zip(slots, [slot.initform for slot in class_slots(class)]))
+    )
+end
+
+new(class; initargs...) = 
+    let instance = allocate_instance(class)
+        initialize(instance, initargs)
+        instance
+    end

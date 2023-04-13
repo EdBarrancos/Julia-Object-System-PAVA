@@ -56,4 +56,23 @@ using Test
             @test ismissing(getfield(Person.slots[3], :initform))
         end
     end
+    
+    @testset "Readers and Writers creation" begin
+
+        p1 = BaseStructure(
+            Person,
+            Dict(
+                :name=>missing,
+                :age=>0,
+                :friend=>""
+            )
+        )
+
+        @test get_age(p1) == 0
+        @test ismissing(get_name(p1))
+
+        set_name!(p1, "Pessoa")
+        @test get_name(p1) == "Pessoa"
+    end
+
 end

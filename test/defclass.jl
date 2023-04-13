@@ -60,3 +60,63 @@ Person = BaseStructure(
 pushfirst!(Person.class_precedence_list, Person)
 
 #add readers and writers
+
+#= 
+ComplexNumber = new(Class, 
+                    name=ComplexNumber, 
+                    direct_superclasses=[Object], 
+                    direct_slots=[:real, :imag],
+                    class_precedence_list=[Object, Top],
+                    slots=[real, imag])
+ComplexNumber = BaseStructure(
+        Class,
+        Dict(
+            :name=>:ComplexNumber,
+            :direct_superclasses=>[Object], 
+            :direct_slots=>[:real, :imag],
+            :class_precedence_list=>[Object, Top],
+            :slots=>[:real, :imag]
+        )
+    )
+=#
+
+
+#= 
+add = new(GenericFunction, name=:add, lambda_list=[:a, :b], :methods=[])
+add = BaseStructure(
+    GenericFunction,
+    Dict(
+        :name=>:add,
+        :lambda_list=>[:a, :b],
+        :methods=>[]
+    )
+)
+=#
+
+
+#= 
+add = new(MultiMethod, specializers=[ComplexNumber, ComplexNumber], procedure=[], generic_function=add)
+add = BaseStructure(
+        MultiMethod,
+        Dict(
+            :specializers=>[ComplexNumber, ComplexNumber], 
+            :procedure=>[], 
+            :generic_function=>add
+        )
+    )
+=#
+
+#= 
+c1 = BaseStructure(
+        ComplexNumber,
+        Dict(
+            :real=>1,
+            :imag=>2
+        )
+    )
+=#
+
+@defclass(ComplexNumber, [Object], [[real, initform=5], imag])
+c1 = new(ComplexNumber, imag=2)
+c1.real
+c1.imag
