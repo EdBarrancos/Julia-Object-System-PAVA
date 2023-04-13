@@ -76,7 +76,6 @@ function apply_method(
 
     method = methods[target_method_index]
     
-    
     let 
         call_next_method = () -> apply_methods(generic_function, methods, target_method_index + 1, args)
         
@@ -96,15 +95,15 @@ function is_method_applicable(method::BaseStructure, x)
     return true
 end
 
-function is_method_more_specific(method1::BaseStructure, method2::BaseStructure)
-    for i in range(1, length(method1.specializers), step=1)
+function is_method_more_specific(method1::BaseStructure, method2::BaseStructure, lambda)
+    for i in range(1, length(lambda), step=1)
         index_spec1 = findfirst(
-            (class) -> class === method2.specializers[i],
-            method1.specializers[i].class_precedence_list)
+            (class) -> class === method1.specializers[i],
+            class_of(lambda[i]).class_precedence_list)
 
         index_spec2 = findfirst(
-            (class) -> class === method1.specializers[i],
-            method2.specializers[i].class_precedence_list)
+            (class) -> class === method2.specializers[i],
+            class_of(lambda[i]).class_precedence_list)
 
         if isnothing(index_spec2)
             return true
@@ -126,7 +125,7 @@ function compute_effective_method(f::BaseStructure, x)
         method -> is_method_applicable(method, x), 
         f.methods)
 
-    return sort(applicable_methods, lt=is_method_more_specific)
+    return sort(applicable_methods, lt=(method1, method2) -> is_method_more_specific(method1, method2, x))
 end
 
 function create_method(
