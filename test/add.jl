@@ -98,8 +98,13 @@ end
     end
 
     @testset "BuiltIn Classes" begin
-        @test class_of(1) == "<BuiltInClass _Int64>"
-        @test class_of("Foo") == "<BuiltInClass _String>"
+        result = @capture_out show(class_of(1))
+        @test result == "<BuiltInClass _Int64>"
+        @test class_of(1) == _Int64
+
+        result = @capture_out show(class_of("Foo"))
+        @test result == "<BuiltInClass _String>"
+        @test class_of("Foo") == _String
 
         @defmethod add(a::_Int64, b::_Int64) = a + b
         @defmethod add(a::_String, b::_String) = a * b
