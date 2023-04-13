@@ -1,12 +1,23 @@
 export class_name, class_direct_slots, class_slots, 
-class_direct_superclasses, class_cpl, compute_slots, 
-compute_getter_and_setter, @defclass
+class_direct_superclasses, class_cpl, allocate_instance,
+compute_slots, compute_getter_and_setter, @defclass
 
 class_name(class::BaseStructure) = getfield(class, :slots)[:name]
 class_direct_slots(class::BaseStructure) = getfield(class, :slots)[:direct_slots]
 class_slots(class::BaseStructure) = getfield(class, :slots)[:slots]
 class_direct_superclasses(class::BaseStructure) = getfield(class, :slots)[:direct_superclasses]
 class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list]
+
+@defgeneric allocate_instance(class)
+
+@defmethod allocate_instance(class::Class) = begin
+    slots = [slot.name for slot in class_slots(class)]
+    print(slots)
+    return BaseStructure(
+        class,
+        Dict(zip(slots, [slot.initform for slot in class_slots(class)]))
+    )
+end
 
 @defgeneric compute_slots(class)
 
@@ -103,19 +114,13 @@ macro defclass(name, superclasses, slots, options...)
         end
     end
     
+    
     return esc(
         quote 
-            $name = BaseStructure(
-                $metaclass,
-                Dict(
-                    :name=>$target_name,
-                    :direct_superclasses=>length($superclasses) > 0 ? $superclasses : [Object],
-                    :direct_slots=>$direct_slots_definition,
-                    :class_precedence_list=>[],
-                    :slots=>[]
-                )
-            )
-            pushfirst!(getfield($name, :slots)[:class_precedence_list], $name)
+            $name = allocate_instance($metaclass)
+            $name.name = $target_name
+            $name.direct_superclasses = length($superclasses) > 0 ? $superclasses : [Object]
+            $name.direct_slots = $direct_slots_definition
             $name.class_precedence_list = compute_cpl($name)
             $name.slots = compute_slots($name)
             $methods
