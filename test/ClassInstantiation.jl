@@ -8,7 +8,8 @@ using Test
 end
 @defclass(Foo, [], [], metaclass=CountingClass)
 @defclass(Bar, [], [], metaclass=CountingClass)
-class_slots(Foo)
+
+
 @testset "Class Instantiation" begin
     new(Foo)
     new(Foo)
