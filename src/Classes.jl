@@ -33,13 +33,17 @@ end
     class_precedence_list_definition = [class]
     while !isempty(queue)
         superclass = popfirst!(queue)
+        if superclass == Top
+            continue;
+        end
         push!(class_precedence_list_definition, superclass)
         for direct_superclass in superclass.direct_superclasses
-            if !(direct_superclass in queue)
+            if !(direct_superclass in queue) && !(direct_superclass in class_precedence_list_definition)
                 push!(queue, direct_superclass)
             end
         end
     end
+    push!(class_precedence_list_definition, Top)
     return class_precedence_list_definition
 end
 
