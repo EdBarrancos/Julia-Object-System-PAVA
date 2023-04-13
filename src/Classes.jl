@@ -71,18 +71,22 @@ macro defclass(name, superclasses, slots, options...)
                 elseif option.head == :(=)
                     if option.args[begin] == :reader
                         get = option.args[end]
-                        read = slot.args[begin]
+                        read = QuoteNode(getfield(new_slot, :name)) #= Not the best fix 
+                            as it will fail if the user defines the slots out of order. 
+                                E.g. [reader=get_name, :name]=#
                         reader = 
                             quote
-                                @defmethod $get(o::$name) = o.$read
+                                @defmethod $get(o::$name) = compute_getter_and_setter($name, $read)[begin](o)
                             end
                         push!(readers_writers, :($reader))
                     elseif option.args[begin] == :writer
                         set = option.args[end]
-                        write = slot.args[begin]
+                        write = QuoteNode(getfield(new_slot, :name)) #= Not the best fix 
+                        as it will fail if the user defines the slots out of order. 
+                            E.g. [writer=set_name, :name]=#
                         writer = 
                             quote
-                                @defmethod $set(o::$name, v) = o.$write = v
+                                @defmethod $set(o::$name, v) = compute_getter_and_setter($name, $write)[end](o, v)
                             end
                         push!(readers_writers, :($writer))
                     elseif option.args[begin] == :initform
