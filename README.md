@@ -46,7 +46,7 @@ This project was made for the course "Advanced Programming" by:
   - [x] 2.0.1 defclass [Not complete yet]
   - [x] 2.0.2 defgeneric
   - [x] 2.0.3 defmethod
-    - [ ] Change defmethod so we can more easily define empty methods
+    - [ ] Change defmethod so we can more easily define empty methods *Extra*
   - [x] 2.0.4 defbuiltin
 - [x] 2.1 Classes
 - [x] 2.2 Instances
@@ -76,6 +76,116 @@ This project was made for the course "Advanced Programming" by:
   - [ ] 2.18.4 Additional Metaobject protocols
 
 ### Edu - Notes
+
+#### Presentation Notes
+
+##### BaseStructure
+
+`BaseStructure` is the main struct of the project and its cornerstone. The goal of it is that every instance is our JOS is, behind the scenes, an instanciation of this struct.
+
+```Julia
+mutable struct BaseStructure
+    class_of_reference::Any
+    slots::Dict{Symbol, Any}
+end
+```
+
+The `class_of_reference` field simulates the relationship between an instance and its class. A relation present all over the object system. E.g. the class ComplexNumber. For an instance of this class , for example "1+2i", the `class_of_reference` field points to ComplexNumber (which is also an instanciation of `BaseStructure`). For ComplexNumber, its `class_of_reference` field points to Class. Every class is a class of Class including itself.
+
+The `slots` field will then hold any information and properties of the object/class/instance/function/...
+
+##### Slot
+
+Every class has slots, a entry in the field `slots` named "slots" (confunsing, i'm sorry). Instanciations of that class will have an entry on its field `slots` for each entry in the class's slots.
+
+For example:
+
+We have the ComplexNumber class:
+
+```Julia
+ComplexNumber = BaseStructure{
+    Class,
+    Dict(
+        ...,
+        slots=>[:real, :imag]
+    )
+}
+```
+
+Instances of ComplexNumber will look like:
+
+```Julia
+c1 = BaseStructure(
+    ComplexNumber,
+    Dict(
+        :real=>1,
+        :imag=>2
+    )
+)
+```
+
+In order to assign initial values to slots we created a second struct.
+
+```Julia
+mutable struct Slot
+    name::Symbol
+    initform::Any
+end
+```
+
+##### Object, Top and Class
+
+With the structs `BaseStructure` and `Slot` as our building blocks we can start creating the base of the class hierarcky. Every class is an Instance of the Class class, including itself. And every class is subclass of Object and as a consequence Top (except for built in classes which only inherit from Top and not Object).
+
+However, these have to be built in parts as each depend on each other.
+
+##### Generic Funtions and Methods
+
+Generic Functions and Methods are both built using `BaseStructure`, both inherit from Object and are both classes of Class.
+
+```Julia
+GenericFunction = BaseStructure(
+    Class,
+    Dict(
+        :name=>:GenericFunction,
+        :direct_superclasses=>[Object], 
+        :direct_slots=>[
+            Slot(:name, missing), 
+            Slot(:lambda_list, missing), 
+            Slot(:methods, missing)
+        ],
+        :class_precedence_list=>[Object, Top],
+        :slots=>[
+            Slot(:name, missing), 
+            Slot(:lambda_list, missing), 
+            Slot(:methods, missing)
+        ]
+    )
+)
+
+MultiMethod = BaseStructure(
+    Class,
+    Dict(
+        :name=>:MultiMethod,
+        :direct_superclasses=>[Object], 
+        :direct_slots=>[
+            Slot(:specializers, missing), 
+            Slot(:procedure, missing), 
+            Slot(:generic_function, missing)
+        ],
+        :class_precedence_list=>[Object, Top],
+        :slots=>[
+            Slot(:specializers, missing), 
+            Slot(:procedure, missing), 
+            Slot(:generic_function, missing)
+        ]
+    )
+)
+```
+
+Generic functions work as containers for methods. When we create a method we can specify its specializers and, when a call is made, the methods are ordered by specifity.
+
+That allows us to use the `call_next_method` function to call the next method in the specialization order. This is injected into the arguments body so it can be used easily.
 
 #### ClassStructure - 24-03
 
