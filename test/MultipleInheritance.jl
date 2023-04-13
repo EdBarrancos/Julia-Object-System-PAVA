@@ -1,78 +1,11 @@
 using Suppressor
 using Test
-
-@testset "Multiple Inheritance test" begin
-    Shape = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Shape,
-            :direct_superclasses=>[Object], 
-            :direct_slots=>[],
-            :class_precedence_list=>[Object, Top],
-            :slots=>[]
-        )
-    )
-    pushfirst!(Shape.class_precedence_list, Shape)
-
-    Device = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Device,
-            :direct_superclasses=>[Object], 
-            :direct_slots=>[],
-            :class_precedence_list=>[Object, Top],
-            :slots=>[]
-        )
-    )
-    pushfirst!(Device.class_precedence_list, Device)
-
-    Line = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Line,
-            :direct_superclasses=>[Shape], 
-            :direct_slots=>[:from, :to],
-            :class_precedence_list=>[Shape, Object, Top],
-            :slots=>[:from, :to]
-        )
-    )
-    pushfirst!(Line.class_precedence_list, Line)
-
-    Circle = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Circle,
-            :direct_superclasses=>[Shape], 
-            :direct_slots=>[:center, :radius],
-            :class_precedence_list=>[Shape, Object, Top],
-            :slots=>[:center, :radius]
-        )
-    )
-    pushfirst!(Circle.class_precedence_list, Circle)
-
-    Screen = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Screen,
-            :direct_superclasses=>[Device], 
-            :direct_slots=>[],
-            :class_precedence_list=>[Device, Object, Top],
-            :slots=>[]
-        )
-    )
-    pushfirst!(Screen.class_precedence_list, Screen)
-
-    Printer = BaseStructure(
-        Class,
-        Dict(
-            :name=>:Printer,
-            :direct_superclasses=>[Device], 
-            :direct_slots=>[],
-            :class_precedence_list=>[Device, Object, Top],
-            :slots=>[]
-        )
-    )
-    pushfirst!(Printer.class_precedence_list, Printer)
+@defclass(Shape, [Object], [])
+    @defclass(Device, [Object], [])
+    @defclass(Line, [Shape], [from, to])
+    @defclass(Circle, [Shape], [center, radius])
+    @defclass(Screen, [Device], [])
+    @defclass(Printer, [Device], [])
 
     @defgeneric draw(shape, device)
 
@@ -81,46 +14,68 @@ using Test
     @defmethod draw(shape::Line, device::Printer) = print("Drawing a line on a printer")
     @defmethod draw(shape::Circle, device::Printer) = print("Drawing a circle on a printer")
     
-    #TODO Missing reader and writer 
-
-    ColorMixin = BaseStructure(
-        Class,
-        Dict(
-            :name=>:ColorMixin,
-            :direct_superclasses=>[Object], 
-            :direct_slots=>[:color],
-            :class_precedence_list=>[Object, Top],
-            :slots=>[:color]
-        )
-    )
-    pushfirst!(ColorMixin.class_precedence_list, ColorMixin)
+    @defclass(ColorMixin, [], [[color, reader=get_color, writer=set_color!]])
     
-    @defmethod draw(shape::ColorMixin, device::Device) = print("Drawing a ColorMixin on a Device")
+    @defmethod draw(shape::ColorMixin, device::Device) =
+        let previous_color = get_device_color(d)
+            set_device_color!(d, get_color(s))
+            call_next_method()
+            set_device_color!(d, previous_color)
+        end
 
-    ColoredLine = BaseStructure(
-        Class,
-        Dict(
-            :name=>:ColoredLine,
-            :direct_superclasses=>[ColorMixin, Line], 
-            :direct_slots=>[],
-            # TODO class_cpl to check
-            :class_precedence_list=>[ColorMixin, Line, Object, Shape, Top],
-            :slots=>[:color, :from, :to]
-        )
-    )
-    pushfirst!(ColoredLine.class_precedence_list, ColoredLine)
+    @defclass(ColoredLine, [ColorMixin, Line], [])
+    @defclass(ColoredCircle, [ColorMixin, Circle], [])
+
+    @defclass(ColoredPrinter, [Printer], 
+            [[ink=:black, reader=get_device_color, writer=_set_device_color!]])
     
-    ColoredCircle = BaseStructure(
-        Class,
-        Dict(
-            :name=>:ColoredCircle,
-            :direct_superclasses=>[ColorMixin, Circle], 
-            :direct_slots=>[],
-            :class_precedence_list=>[ColorMixin, Circle, Object, Shape, Top],
-            :slots=>[:color, :center, :radius]
-        )
-    )
-    pushfirst!(ColoredCircle.class_precedence_list, ColoredCircle)
+    @defmethod set_device_color!(d::ColoredPrinter, color) = begin
+        println("Changing printer ink color to $color")
+        _set_device_color!(d, color)
+    end
+    let shapes = [new(Line), new(ColoredCircle, color=:red), new(ColoredLine, color=:blue)], printer = new(ColoredPrinter, ink=:black)
+        for shape in shapes
+            draw(shape, printer)
+        end
+    end
+    
+    draw.methods[1].procedure
+
+@testset "Multiple Inheritance test" begin
+    @defclass(Shape, [Object], [])
+    @defclass(Device, [Object], [])
+    @defclass(Line, [Shape], [from, to])
+    @defclass(Circle, [Shape], [center, radius])
+    @defclass(Screen, [Device], [])
+    @defclass(Printer, [Device], [])
+
+    @defgeneric draw(shape, device)
+
+    @defmethod draw(shape::Line, device::Screen) = print("Drawing a line on a screen")
+    @defmethod draw(shape::Circle, device::Screen) = print("Drawing a circle on a screen")
+    @defmethod draw(shape::Line, device::Printer) = print("Drawing a line on a printer")
+    @defmethod draw(shape::Circle, device::Printer) = print("Drawing a circle on a printer")
+    
+    @defclass(ColorMixin, [], [[color, reader=get_color, writer=set_color!]])
+    
+    @defmethod draw(shape::ColorMixin, device::Device) = begin
+        let previous_color = get_device_color(d)
+            set_device_color!(d, get_color(s))
+            call_next_method()
+            set_device_color!(d, previous_color)
+        end
+    end
+
+    @defclass(ColoredLine, [ColorMixin, Line], [])
+    @defclass(ColoredCircle, [ColorMixin, Circle], [])
+
+    @defclass(ColoredPrinter, [Printer], 
+            [[ink=:black, reader=get_device_color, writer=_set_device_color!]])
+    
+    @defmethod set_device_color!(d::ColoredPrinter, color) = begin
+        println("Changing printer ink color to $color")
+        _set_device_color!(d, color)
+    end
 
     @testset "Introspection" begin
         @test class_name(Circle) == :Circle
@@ -160,5 +115,19 @@ using Test
         @test result[1].direct_superclasses == []
         output = @capture_out show(result[1].direct_superclasses)
         @test output == "[]"
+    end
+
+    @testset "Multiple Inheritance" begin
+        line  = new(Line)
+        red = new(ColoredCircle, color=:red)
+        blue = new(ColoredLine, color=:blue)
+        printer = new(ColoredPrinter, ink=:black)
+
+        result = @capture_out draw(line, printer)
+        @test result == "Drawing a line on a printer"
+        result = @capture_out draw(red, printer)
+        @test result == "Changing printer ink color to red\nDrawing a circle on a printer\nChanging printer ink color to black"
+        result = @capture_out draw(blue, printer)
+        @test result == "Changing printer ink color to blue\nDrawing a line on a printer\nChanging printer ink color to black"
     end
 end

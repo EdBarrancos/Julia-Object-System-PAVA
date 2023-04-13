@@ -48,23 +48,9 @@ end
 
     @defclass(ComplexNumber, [Object], [real, imag])
 
-    c1 = BaseStructure(
-        ComplexNumber,
-        Dict(
-            :real=>1,
-            :imag=>2
-        )
-    )
+    c1 = new(ComplexNumber, real=1, imag=2)
 
-    @defmethod add(a::ComplexNumber, b::ComplexNumber) = begin
-        BaseStructure(
-            ComplexNumber,
-            Dict(
-                :real=>a.real + b.real,
-                :imag=>a.imag + b.imag
-            )
-        )
-    end
+    @defmethod add(a::ComplexNumber, b::ComplexNumber) = new(ComplexNumber, real=(a.real + b.real), imag=(a.imag + b.imag))
 
     @test_throws ErrorException add(1,2)
     @test_throws ArgumentError c1(1)
@@ -109,6 +95,17 @@ end
     
         result = @capture_out add(c1, c1)
         @test result == "Added Two Object\nAdded Two Object\n"
+    end
+
+    @testset "BuiltIn Classes" begin
+        @test class_of(1) == "<BuiltInClass _Int64>"
+        @test class_of("Foo") == "<BuiltInClass _String>"
+
+        @defmethod add(a::_Int64, b::_Int64) = a + b
+        @defmethod add(a::_String, b::_String) = a * b
+
+        @test add(1, 3) == 4
+        @test add("Foo", "Bar") == "FooBar"
     end
 end
 

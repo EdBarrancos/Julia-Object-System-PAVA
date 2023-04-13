@@ -1,6 +1,8 @@
 using Suppressor
 using Test
 
+@defclass(ComplexNumber, [], [real, imag])
+
 @testset "Print object test" begin
     @testset "Print Instance" begin
         obj1 = BaseStructure(
@@ -10,6 +12,10 @@ using Test
 
         result = @capture_out show(obj1)
         @test result == "<Object " * repr(UInt64(pointer_from_objref(obj1))) * ">"
+
+        c2 = new(ComplexNumber, real=3, imag=4)
+        result = @capture_out show(c2)
+        @test result == "<ComplexNumber " * repr(UInt64(pointer_from_objref(c2))) * ">"
     end
 
     @testset "Print Classes" begin

@@ -1,4 +1,4 @@
-export _Int8, _Int16, _Int32, _Int128, _Bool, _Char, _String, _Float16, _Float32, _Float64, _Tuple, _Vector, _Pairs, _Pair, _NamedTuple, class_of, _IO, _Symbol,
+export _Int8, _Int16, _Int32, _Int64, _Int128, _Bool, _Char, _String, _Float16, _Float32, _Float64, _Tuple, _Vector, _Pairs, _Pair, _NamedTuple, class_of, _IO, _Symbol,
 @defbuiltin
 
 macro defbuiltin(typeDefinition) 

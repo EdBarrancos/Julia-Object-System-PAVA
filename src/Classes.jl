@@ -12,7 +12,6 @@ class_cpl(class::BaseStructure) = getfield(class, :slots)[:class_precedence_list
 
 @defmethod allocate_instance(class::Class) = begin
     slots = [slot.name for slot in class_slots(class)]
-    print(slots)
     return BaseStructure(
         class,
         Dict(zip(slots, [slot.initform for slot in class_slots(class)]))

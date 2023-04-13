@@ -59,14 +59,7 @@ using Test
     
     @testset "Readers and Writers creation" begin
 
-        p1 = BaseStructure(
-            Person,
-            Dict(
-                :name=>missing,
-                :age=>0,
-                :friend=>""
-            )
-        )
+        p1 = new(Person)
 
         @test get_age(p1) == 0
         @test ismissing(get_name(p1))

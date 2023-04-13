@@ -7,13 +7,7 @@ using Test
 
 @testset "Complex Number Creation" begin
 
-    c1 = BaseStructure(
-        ComplexNumber,
-        Dict(
-            :real=>1,
-            :imag=>2
-        )
-    )
+    c1 = new(ComplexNumber, real=1, imag=2)
 
     @testset "Meta Object tests" begin
         @test class_of(c1) === ComplexNumber
@@ -30,6 +24,8 @@ using Test
 
     @test getproperty(c1, :real) === c1.real
     @test c1.real == getfield(c1, :slots)[:real]
+    @test getproperty(c1, :real) == 1
+    
 
     @test getproperty(c1, :imag) === c1.imag
     @test c1.imag === getfield(c1, :slots)[:imag]
