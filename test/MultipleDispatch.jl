@@ -11,10 +11,10 @@ using Test
 
     @defgeneric draw(shape, device)
 
-    @defmethod draw(shape::Line, device::Screen) = print("Drawing a line on a screen")
-    @defmethod draw(shape::Circle, device::Screen) = print("Drawing a circle on a screen")
-    @defmethod draw(shape::Line, device::Printer) = print("Drawing a line on a printer")
-    @defmethod draw(shape::Circle, device::Printer) = print("Drawing a circle on a printer")
+    @defmethod draw(shape::Line, device::Screen) = println("Drawing a line on a screen")
+    @defmethod draw(shape::Circle, device::Screen) = println("Drawing a circle on a screen")
+    @defmethod draw(shape::Line, device::Printer) = println("Drawing a line on a printer")
+    @defmethod draw(shape::Circle, device::Printer) = println("Drawing a circle on a printer")
 
     screen = new(Screen)
     printer  = new(Printer)
@@ -22,11 +22,11 @@ using Test
     circle  = new(Circle)
 
     result = @capture_out draw(line, screen)
-    @test result == "Drawing a line on a screen"
+    @test result == "Drawing a line on a screen\n"
     result = @capture_out draw(circle, screen)
-    @test result == "Drawing a circle on a screen"
+    @test result == "Drawing a circle on a screen\n"
     result = @capture_out draw(line, printer)
-    @test result == "Drawing a line on a printer"
+    @test result == "Drawing a line on a printer\n"
     result = @capture_out draw(circle, printer)
-    @test result == "Drawing a circle on a printer"
+    @test result == "Drawing a circle on a printer\n"
 end
