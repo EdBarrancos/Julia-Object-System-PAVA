@@ -23,7 +23,7 @@ using Test
         let previous_color = get_device_color(d)
             set_device_color!(d, get_color(s))
             call_next_method()
-            set_device_color!(d, previous_color)
+            set_device_color!(device, previous_color)
         end
     end
 
@@ -51,7 +51,6 @@ using Test
         result = @capture_out show(class_cpl(ColoredCircle))
         @test result == "[<Class ColoredCircle>, <Class ColorMixin>, <Class Circle>, <Class Object>, <Class Shape>, <Class Top>]"
         @test class_cpl(ColoredCircle) == [ColoredCircle, ColorMixin, Circle, Object, Shape, Top]
-        println(class_cpl(ColoredCircle))
 
         result = @capture_out show(generic_methods(draw))
         @test result == "[<MultiMethod draw(ColorMixin, Device)>, <MultiMethod draw(Circle, Printer)>, <MultiMethod draw(Line, Printer)>, <MultiMethod draw(Circle, Screen)>, <MultiMethod draw(Line, Screen)>]"
