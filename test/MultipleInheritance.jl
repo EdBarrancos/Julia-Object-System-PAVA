@@ -19,9 +19,9 @@ using Test
     
     @defclass(ColorMixin, [], [[color, reader=get_color, writer=set_color!]])
     
-    @defmethod draw(s::ColorMixin, d::Device) = begin
-        let previous_color = get_device_color(d)
-            set_device_color!(d, get_color(s))
+    @defmethod draw(shape::ColorMixin, device::Device) = begin
+        let previous_color = get_device_color(device)
+            set_device_color!(device, get_color(shape))
             call_next_method()
             set_device_color!(device, previous_color)
         end
