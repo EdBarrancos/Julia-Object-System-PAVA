@@ -1,7 +1,9 @@
 using Suppressor
 using Test
 
+@defclass(Metaclass, [Class], [])
 @defclass(ComplexNumber, [], [real, imag])
+@defclass(AnotherClass, [], [], metaclass=Metaclass)
 
 @testset "Print object test" begin
     @testset "Print Instance" begin
@@ -16,6 +18,10 @@ using Test
         c2 = new(ComplexNumber, real=3, imag=4)
         result = @capture_out show(c2)
         @test result == "<ComplexNumber " * repr(UInt64(pointer_from_objref(c2))) * ">"
+
+        instance = new(AnotherClass)
+        result = @capture_out show(instance)
+        @test result == "<AnotherClass " * repr(UInt64(pointer_from_objref(instance))) * ">"
     end
 
     @testset "Print Classes" begin
@@ -24,6 +30,9 @@ using Test
 
         result = @capture_out show(Class)
         @test result == "<Class Class>"
+
+        result = @capture_out show(AnotherClass)
+        @test result == "<Metaclass AnotherClass>"
     end
 
     @testset "Print Generic Functions and Methods" begin

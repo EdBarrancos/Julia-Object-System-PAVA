@@ -58,7 +58,6 @@ using Test
     end
     
     @testset "Readers and Writers creation" begin
-
         p1 = new(Person)
 
         @test get_age(p1) == 0
