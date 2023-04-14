@@ -34,7 +34,7 @@ restore(object, slot, value) =
 
 @defclass(Person, [], [name, age, friend], metaclass=UndoableClass)
 
-@defmethod print_object(io::_IO, p::Person) =
+@defmethod print_object(p::Person, io::_IO) =
     print(io, "[$(p.name), $(p.age)$(ismissing(p.friend) ? "" : " with friend $(p.friend)")]")
 
 @testset "Slot Access Protocol" begin

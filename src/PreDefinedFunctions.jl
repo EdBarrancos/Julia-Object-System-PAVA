@@ -1,8 +1,8 @@
 export print_object, compute_cpl, non_applicable_method, new
 
-@defgeneric print_object(io, obj)
+@defgeneric print_object(obj, io)
 
-@defmethod print_object(io::_IO, class::Class) = begin
+@defmethod print_object(class::Class, io::_IO) = begin
     print(io, 
         "<" ,
         String(getfield(class, :class_of_reference).name), 
@@ -11,7 +11,7 @@ export print_object, compute_cpl, non_applicable_method, new
         ">")
 end
 
-@defmethod print_object(io::_IO, obj::Object) = begin
+@defmethod print_object(obj::Object, io::_IO) = begin
     print(io, 
         "<",
         String(getfield(obj, :class_of_reference).name),
@@ -20,7 +20,7 @@ end
         ">")
 end
 
-@defmethod print_object(io::_IO, generic_func::GenericFunction) = begin
+@defmethod print_object(generic_func::GenericFunction, io::_IO) = begin
     print(io,
         "<", 
         String(getfield(generic_func, :class_of_reference).name), 
@@ -31,7 +31,7 @@ end
         " methods>")
 end
 
-@defmethod print_object(io::_IO, method::MultiMethod) = begin
+@defmethod print_object(method::MultiMethod, io::_IO) = begin
     print(io,
         "<",
         String(getfield(method, :class_of_reference).name),
@@ -51,7 +51,7 @@ end
     print(io, ")", ">")
 end
 
-@defmethod print_object(io::_IO, vector::_Vector) = begin
+@defmethod print_object(vector::_Vector, io::_IO) = begin
     print(io, "[")
     if length(vector) > 0
         print(io, vector[begin])
@@ -65,7 +65,7 @@ end
     print(io, "]")
 end
 
-@defmethod print_object(io::_IO, tuple::_Tuple) = begin
+@defmethod print_object(tuple::_Tuple, io::_IO) = begin
     print(io, "(")
     if length(tuple) > 0
         print(io, tuple[begin])
@@ -80,11 +80,11 @@ end
 end
 
 function Base.show(io::IO, ::MIME"text/plain", t::Union{BaseStructure, Vector, Tuple})
-    print_object(io, t)
+    print_object(t, io)
 end
 
 function Base.show(io::IO, t::Union{BaseStructure, Vector, Tuple})
-    print_object(io, t)
+    print_object(t, io)
 end
 
 function Base.show(io::IO, ::MIME"text/plain", t::Union{Slot})

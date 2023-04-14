@@ -3,7 +3,7 @@ using Suppressor
 using Test
 
 @defclass(ComplexNumber, [Object], [real, imag])
-@defmethod print_object(io::_IO, c::ComplexNumber) = print(io, "$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
+@defmethod print_object(c::ComplexNumber, io::_IO) = print(io, "$(c.real)$(c.imag < 0 ? "-" : "+")$(abs(c.imag))i")
 
 @testset "Complex Number Creation" begin
 

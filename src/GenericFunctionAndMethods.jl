@@ -155,11 +155,11 @@ end
 
 macro defgeneric(function_call)
     if typeof(function_call) != Expr
-        error("Invalid syntax for defining generic function. Example: @defgeneric print_object(io, obj)")
+        error("Invalid syntax for defining generic function. Example: @defgeneric print_object(obj, io)")
     end
 
     if function_call.head != :call
-        error("Invalid syntax for defining generic function. Example: @defgeneric print_object(io, obj)")
+        error("Invalid syntax for defining generic function. Example: @defgeneric print_object(obj, io)")
     end
 
     target_name = QuoteNode(function_call.args[begin])
