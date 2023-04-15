@@ -1,3 +1,4 @@
+#= This file contains the base structure of JOS =#
 export BaseStructure, Top, Object, Class, Slot, class_of, check_class, check_for_polymorph
 
 mutable struct BaseStructure

@@ -1,3 +1,5 @@
+#= This file is responsible for defining some pre defined functions that exists in JOS. =#
+
 export print_object, compute_cpl, non_applicable_method, new
 
 @defgeneric print_object(obj, io)

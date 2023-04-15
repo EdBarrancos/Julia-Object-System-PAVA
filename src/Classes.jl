@@ -1,3 +1,4 @@
+#= This file is responsible for defining Class and related functions =#
 export class_name, class_direct_slots, class_slots, 
 class_direct_superclasses, class_cpl, allocate_instance,
 compute_slots, compute_getter_and_setter, @defclass

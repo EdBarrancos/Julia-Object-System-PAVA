@@ -1,3 +1,4 @@
+#= This file is responsible for defining generic function, method and related functions and how to deal with function calls=#
 export GenericFunction, MultiMethod, 
 generic_methods, method_specializers, create_method,
 @defgeneric, @defmethod
