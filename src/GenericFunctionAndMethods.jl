@@ -47,7 +47,7 @@ pushfirst!(getfield(MultiMethod, :slots)[:class_precedence_list], MultiMethod)
 function (f::BaseStructure)(x...)
     check_for_polymorph(f, GenericFunction, ArgumentError)
 
-    if length(x) != length(f.lambda_list)
+    if length(x) != length(getfield(f, :slots)[:lambda_list])
         non_applicable_method(f, x)
     end
 
@@ -86,8 +86,8 @@ end
 function is_method_applicable(method::BaseStructure, x) 
     for i in range(1, length(x), step=1)
         if !any(
-                (class) -> class === method.specializers[i],
-                class_of(x[i]).class_precedence_list)
+                (class) -> class === getfield(method, :slots)[:specializers][i],
+                getfield(class_of(x[i]), :slots)[:class_precedence_list])
             return false
         end
     end
@@ -98,12 +98,12 @@ end
 function is_method_more_specific(method1::BaseStructure, method2::BaseStructure, lambda)
     for i in range(1, length(lambda), step=1)
         index_spec1 = findfirst(
-            (class) -> class === method1.specializers[i],
-            class_of(lambda[i]).class_precedence_list)
+            (class) -> class === getfield(method1, :slots)[:specializers][i],
+            getfield(class_of(lambda[i]), :slots)[:class_precedence_list])
 
         index_spec2 = findfirst(
-            (class) -> class === method2.specializers[i],
-            class_of(lambda[i]).class_precedence_list)
+            (class) -> class === getfield(method2, :slots)[:specializers][i],
+            getfield(class_of(lambda[i]), :slots)[:class_precedence_list])
 
         if isnothing(index_spec2)
             return true
@@ -123,7 +123,7 @@ function compute_effective_method(f::BaseStructure, x)
 
     applicable_methods = filter(
         method -> is_method_applicable(method, x), 
-        f.methods)
+        getfield(f, :slots)[:methods])
 
     return sort(applicable_methods, lt=(method1, method2) -> is_method_more_specific(method1, method2, x))
 end
@@ -136,8 +136,8 @@ function create_method(
     check_for_polymorph(new_method, MultiMethod, ArgumentError)
 
     if !isequal(
-        length(parent_generic_function.lambda_list),
-        length(new_method.specializers))
+        length(getfield(parent_generic_function, :slots)[:lambda_list]),
+        length(getfield(new_method, :slots)[:specializers]))
 
         error("Method does not correspond to generic function's signature")
     end
@@ -146,11 +146,11 @@ function create_method(
     filter!(
         (method) -> 
             !(isequal(
-                new_method.specializers,
-                method.specializers)),
-        parent_generic_function.methods)
+                getfield(new_method, :slots)[:specializers],
+                getfield(method, :slots)[:specializers])),
+                getfield(parent_generic_function, :slots)[:methods])
         
-    pushfirst!(parent_generic_function.methods, new_method)
+    pushfirst!(getfield(parent_generic_function, :slots)[:methods], new_method)
 end
 
 macro defgeneric(function_call)

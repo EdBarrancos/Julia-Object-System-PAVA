@@ -1,7 +1,21 @@
 export _Int8, _Int16, _Int32, _Int64, _Int128, _Bool, _Char, _String, _Float16, _Float32, _Float64, _Tuple, _Vector, _Pairs, _Pair, _NamedTuple, class_of, _IO, _Symbol,
 @defbuiltin
 
-@defclass(BuiltInClass, [Class], [])
+new_built_in_type(name::Symbol) = begin
+    newType = BaseStructure(
+        BuiltInClass,
+        Dict(
+            :name=>name,
+            :direct_superclasses=>[Top], 
+            :direct_slots=>[],
+            :class_precedence_list=>[Top],
+            :slots=>[]
+        )
+    )
+
+    pushfirst!(getfield(newType, :slots)[:class_precedence_list], newType)
+    return newType
+end
 
 macro defbuiltin(typeDefinition) 
     if typeof(typeDefinition) != Expr
@@ -11,9 +25,10 @@ macro defbuiltin(typeDefinition)
     if typeDefinition.head != :call
         error("Invalid macro signature. Example @defbuiltin _Int8(Int8)")
     end
-
+    target_name = QuoteNode(typeDefinition.args[begin])
     return esc(quote
-        @defclass($(typeDefinition.args[begin]), [Top], [], metaclass=BuiltInClass)
+        $(typeDefinition.args[begin]) = $new_built_in_type($target_name)
+        #@defclass($(typeDefinition.args[begin]), [Top], [], metaclass=BuiltInClass)
         class_of(instance::$(typeDefinition.args[end])) = $(typeDefinition.args[begin])
         $(typeDefinition.args[begin])
     end)

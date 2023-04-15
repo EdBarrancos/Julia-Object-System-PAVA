@@ -1,4 +1,4 @@
-export BaseStructure, Top, Object, Class, Slot, class_of, check_class, check_for_polymorph
+export BaseStructure, Top, Object, Class, BuiltInClass, Slot, class_of, check_class, check_for_polymorph
 
 mutable struct BaseStructure
     class_of_reference::Any #= Supposed to be another BaseStructure =#
@@ -77,6 +77,26 @@ Class = BaseStructure(
 
 pushfirst!(getfield(Class, :slots)[:class_precedence_list], Class)
 
+BuiltInClass = BaseStructure(
+    nothing,
+    Dict(
+        :name=>:BuiltInClass,
+        :direct_superclasses=>[Class], 
+        :direct_slots=>[],
+        :class_precedence_list=>[Object, Top],
+        :slots=>[
+            Slot(:name, missing), 
+            Slot(:direct_superclasses, missing), 
+            Slot(:class_precedence_list, missing), 
+            Slot(:slots, missing), 
+            Slot(:direct_subclasses, missing)
+        ]
+    )
+)
+
+pushfirst!(getfield(BuiltInClass, :slots)[:class_precedence_list], BuiltInClass)
+
+setfield!(BuiltInClass, :class_of_reference, Class)
 setfield!(Class, :class_of_reference, Class)
 setfield!(Object, :class_of_reference, Class)
 setfield!(Top, :class_of_reference, Class)
@@ -84,18 +104,19 @@ setfield!(Top, :class_of_reference, Class)
 class_of(instance::BaseStructure) = getfield(instance, :class_of_reference)
 
 check_for_polymorph(instance, targetClass, exception) = begin
-    if !(targetClass in class_of(instance).class_precedence_list)
-        throw(exception("Given '" * String(targetClass.name) * "' is not a " * String(targetClass.name)))
+    if !(targetClass in getfield(class_of(instance), :slots)[:class_precedence_list])
+        throw(exception("Given '" * String(getfield(targetClass, :slots)[:name]) * "' is not a " * String(getfield(targetClass, :slots)[:name])))
     end
 end
 
 check_class(instance, targetClass, exception) = begin
     if class_of(instance) != targetClass
-        throw(exception("Given '" * String(targetClass.name) * "' is not a " * String(targetClass.name)))
+        throw(exception("Given '" * String(getfield(targetClass, :slots)[:name]) * "' is not a " * String(getfield(targetClass, :slots)[:name])))
     end
 end
 
-function Base.getproperty(obj::BaseStructure, sym::Symbol)
+#= function Base.getproperty(obj::BaseStructure, sym::Symbol)
+    print("ola1")
     getfield(obj, :slots)[sym]
 end
 
@@ -105,3 +126,4 @@ function Base.setproperty!(obj::BaseStructure, name::Symbol, x)
     setfield!(obj, :slots, slots)
     x
 end
+ =#

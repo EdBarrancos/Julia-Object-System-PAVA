@@ -12,4 +12,5 @@ using Test
     include("computeSlots.jl")
     include("ClassPrecedenceList.jl")
     include("ClassInstantiation.jl")
+    include("SlotAccessProtocol.jl")
 end

@@ -21,7 +21,8 @@ restore(object, slot, value) =
     end
 @defclass(UndoableClass, [Class], [])
 
-@defmethod compute_getter_and_setter(class::UndoableClass, slot) =
+@defmethod compute_getter_and_setter(class::UndoableClass, slot) = begin
+    print("ola\n")
     let (getter, setter) = call_next_method()
         (getter,
          (o, v)->begin
@@ -31,13 +32,14 @@ restore(object, slot, value) =
                 setter(o, v)
                 end)
     end
+end
 
 @defclass(Person, [], [name, age, friend], metaclass=UndoableClass)
 
 @defmethod print_object(p::Person, io::_IO) =
     print(io, "[$(p.name), $(p.age)$(ismissing(p.friend) ? "" : " with friend $(p.friend)")]")
 
-@testset "Slot Access Protocol" begin
+    @testset "Slot Access Protocol" begin
     p0 = new(Person, name="John", age=21)
     p1 = new(Person, name="Paul", age=23)
     p1.friend = p0

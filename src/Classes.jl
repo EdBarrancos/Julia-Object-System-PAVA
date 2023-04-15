@@ -34,6 +34,55 @@ end
     return (getter, setter)
 end
 
+@defmethod compute_getter_and_setter(class::Top, slot_name) = begin
+    getter = (instance) -> return getfield(instance, :slots)[slot_name]
+    setter = (instance, new_value) -> begin
+        slot = getfield(instance, :slots)
+        slot[slot_name] = new_value
+        return setfield!(instance, :slots, slot)
+    end
+    return (getter, setter)
+end
+
+#= @defmethod compute_getter_and_setter(class::Symbol, slot_name) = begin
+    getter = (instance) -> return getfield(instance, :slots)[slot_name]
+    setter = (instance, new_value) -> begin
+        slot = getfield(instance, :slots)
+        slot[slot_name] = new_value
+        setfield!(instance, :slots, slot)
+        return new_value
+    end
+    return (getter, setter)
+end =#
+
+function Base.getproperty(obj::BaseStructure, sym::Symbol)
+    if getfield(obj, :class_of_reference) == Class
+        print("ola\n")
+        getfield(obj, :slots)[sym]
+    else
+        print(obj)
+        #(getter, _) = compute_getter_and_setter(obj, sym)
+        #getter(obj)
+    end
+    
+end
+
+getfield(Class, :class_of_reference)
+
+function Base.setproperty!(obj::BaseStructure, name::Symbol, x)
+    if getfield(obj, :class_of_reference) == Class
+        slots = getfield(obj, :slots)
+        slots[name] = x
+        setfield!(obj, :slots, slots)
+        x
+    else
+        (_, setter) = compute_getter_and_setter(obj, name)
+        setter(obj, x)
+    end
+end
+
+class_of(Class)
+
 @defgeneric compute_cpl(class)
 @defmethod compute_cpl(class::Class) = begin
     queue = copy(class_direct_superclasses(class))
@@ -117,11 +166,17 @@ macro defclass(name, superclasses, slots, options...)
             error("Invalid Option Syntax. Example: @defclass(SuperHuman, [], [], metaclass=SuperMetaClass)")
         end
     end
-    
-    
+#=     slots = [slot.name for slot in class_slots(metaclass)]
+    final_slots = zip(slots, [slot.initform for slot in class_slots(metaclass)])
+    print(final_slots) =#
     return esc(
         quote 
+#=             $name = BaseStructure(
+                        $metaclass,
+                        Dict($final_slots)
+                    ) =#
             $name = allocate_instance($metaclass)
+            #$getfield($name, :slots)[:name] = $target_name
             $name.name = $target_name
             $name.direct_superclasses = length($superclasses) > 0 ? $superclasses : [Object]
             $name.direct_slots = $direct_slots_definition

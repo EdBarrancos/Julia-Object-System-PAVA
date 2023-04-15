@@ -2,6 +2,16 @@ export print_object, compute_cpl, non_applicable_method, new
 
 @defgeneric print_object(obj, io)
 
+@defmethod print_object(class::BuiltInClass, io::_IO) = begin
+    print(io, 
+        "<" ,
+        String(getfield(class, :class_of_reference).name), 
+        " ", 
+        String(class.name), 
+        ">")
+end
+
+
 @defmethod print_object(class::Class, io::_IO) = begin
     print(io, 
         "<" ,
