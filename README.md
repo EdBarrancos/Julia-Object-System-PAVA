@@ -14,3 +14,17 @@ This project was made for the course "Advanced Programming" by:
 - Juliana Yang 95617
 - Xin Zheng 97073
 - Miguel Faria 105704
+
+### How to run tests
+
+- Simple run the file `runtests.jl`
+- Or run it on the terminal
+  - type `julia` then `]`
+  - Something like `(JuliaObjectSystem) pkg>` should be appearing on your terminal
+  - Then type `test`
+  - If this not work, try this:
+    - `activate .`
+    - **Try Again or:**
+    - `add Test`
+    - **Try Again or:**
+    - `test JuliaObjectSystem`
